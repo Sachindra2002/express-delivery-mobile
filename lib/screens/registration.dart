@@ -1,5 +1,6 @@
 import 'package:email_validator/email_validator.dart';
-import 'package:express_delivery/screens/login.dart';
+import 'package:express_delivery/screens/customer/homescreen_customer.dart';
+//import 'package:express_delivery/screens/login.dart';
 import 'package:flutter/material.dart';
 
 class Registration extends StatefulWidget {
@@ -257,7 +258,7 @@ class _RegistrationState extends State<Registration> {
                   InkWell(
                     onTap: () {
                       Navigator.of(context)
-                          .push(MaterialPageRoute(builder: (_) => Login()));
+                          .push(MaterialPageRoute(builder: (_) => HomePageCustomer()));
                     },
                     child: Text(
                       'Login',
