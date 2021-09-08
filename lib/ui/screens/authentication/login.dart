@@ -1,5 +1,5 @@
 import 'package:email_validator/email_validator.dart';
-import 'package:express_delivery/screens/registration.dart';
+import 'package:express_delivery/ui/screens/authentication/registration.dart';
 import 'package:flutter/material.dart';
 
 class Login extends StatefulWidget {

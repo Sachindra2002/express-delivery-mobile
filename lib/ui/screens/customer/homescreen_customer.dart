@@ -135,8 +135,18 @@ class _HomePageCustomerState extends State<HomePageCustomer> {
                       press: () {},
                     ),
                     CategoryCard(
+                      title: "Partner Stores",
+                      svgSrc: "assets/icons/shop.svg",
+                      press: () {},
+                    ),
+                    CategoryCard(
                       title: "Completed",
-                      svgSrc: "assets/icons/box.svg",
+                      svgSrc: "assets/icons/completed.svg",
+                      press: () {},
+                    ),
+                    CategoryCard(
+                      title: "Service Centers",
+                      svgSrc: "assets/icons/location2.svg",
                       press: () {},
                     ),
                   ],
@@ -235,8 +245,9 @@ class CategoryCard extends StatelessWidget {
                     title,
                     textAlign: TextAlign.center,
                     style: TextStyle(
-                      fontSize: 15,
-                    ),
+                        // fontFamily: 'TruneoCompany',
+                        fontSize: 15,
+                        fontWeight: FontWeight.bold),
                   ),
                 ],
               ),

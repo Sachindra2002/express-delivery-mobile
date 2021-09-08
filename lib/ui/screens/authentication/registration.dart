@@ -1,7 +1,12 @@
+import 'dart:convert';
+import 'dart:io';
 import 'package:email_validator/email_validator.dart';
-import 'package:express_delivery/screens/customer/homescreen_customer.dart';
+import 'package:express_delivery/models/user.dart';
+import 'package:express_delivery/ui/screens/customer/homescreen_customer.dart';
+import 'package:express_delivery/ui/screens/authentication/login.dart';
 //import 'package:express_delivery/screens/login.dart';
 import 'package:flutter/material.dart';
+import 'package:http/http.dart' as http;
 
 class Registration extends StatefulWidget {
   const Registration({Key? key}) : super(key: key);
@@ -19,7 +24,66 @@ class _RegistrationState extends State<Registration> {
   String? password;
   String? password2;
 
+  User user = User("", "", "", "", "", "");
+  String url = "http://10.0.2.2:8080/api/register";
+  Future register() async {
+    var response = await http.post(Uri.parse(url),
+        headers: {'Content-Type': 'application/json'},
+        body: json.encode({
+          'email': user.email,
+          'firstName': user.firstName,
+          'lastName': user.lastName,
+          'location': user.location,
+          'phoneNumber': user.phoneNumber,
+          'password': user.password,
+        }));
+    print(response.body);
+    if (response.statusCode == HttpStatus.badRequest) {
+      print("Failed");
+      showDialog(
+          context: context,
+          builder: (BuildContext context) {
+            return AlertDialog(
+              title: new Text("Warning!"),
+              content: new Text("Email already in use!"),
+              actions: <Widget>[
+                // usually buttons at the bottom of the dialog
+                new TextButton(
+                  child: new Text("Close"),
+                  onPressed: () {
+                    Navigator.of(context).pop();
+                  },
+                ),
+              ],
+            );
+          });
+    } else if (response.statusCode == HttpStatus.created) {
+      print("Success");
+      // Navigator.of(context)
+      //     .pushReplacement(MaterialPageRoute(builder: (_) => Login()));
+      showDialog(
+          context: context,
+          builder: (BuildContext context) {
+            return AlertDialog(
+              title: new Text("Success!"),
+              content: new Text("Account created successfully"),
+              actions: <Widget>[
+                // usually buttons at the bottom of the dialog
+                new TextButton(
+                  child: new Text("Sign In"),
+                  onPressed: () {
+                    Navigator.of(context).pushReplacement(
+                        MaterialPageRoute(builder: (_) => Login()));
+                  },
+                ),
+              ],
+            );
+          });
+    }
+  }
+
   final GlobalKey<FormState> formKey = GlobalKey<FormState>();
+
   final TextEditingController _pass = TextEditingController();
 
   RegExp regExp = new RegExp(r'(^(?:[+0]9)?[0-9]{10,12}$)');
@@ -30,6 +94,7 @@ class _RegistrationState extends State<Registration> {
 
   Widget buildEmail() {
     return TextFormField(
+      controller: TextEditingController(text: user.email),
       decoration: InputDecoration(
           labelText: 'Email',
           border: OutlineInputBorder(),
@@ -45,11 +110,15 @@ class _RegistrationState extends State<Registration> {
       onSaved: (String? value) {
         email = value;
       },
+      onChanged: (val) {
+        user.email = val;
+      },
     );
   }
 
   Widget buildFirstName() {
     return TextFormField(
+      controller: TextEditingController(text: user.firstName),
       decoration: InputDecoration(
           labelText: 'First Name',
           border: OutlineInputBorder(),
@@ -63,11 +132,15 @@ class _RegistrationState extends State<Registration> {
       onSaved: (String? value) {
         firstName = value;
       },
+      onChanged: (val) {
+        user.firstName = val;
+      },
     );
   }
 
   Widget buildLastName() {
     return TextFormField(
+      controller: TextEditingController(text: user.lastName),
       decoration: InputDecoration(
           labelText: 'Last Name',
           border: OutlineInputBorder(),
@@ -81,6 +154,9 @@ class _RegistrationState extends State<Registration> {
       onSaved: (String? value) {
         lastname = value;
       },
+      onChanged: (val) {
+        user.lastName = val;
+      },
     );
   }
 
@@ -93,7 +169,7 @@ class _RegistrationState extends State<Registration> {
       value: location,
       onChanged: (String? newValue) {
         setState(() {
-          location = newValue!;
+          user.location = newValue!;
         });
       },
       items: <String>['Colombo', 'Negombo', 'Galle', 'Kandy']
@@ -108,6 +184,7 @@ class _RegistrationState extends State<Registration> {
 
   Widget buildPhoneNumber() {
     return TextFormField(
+      controller: TextEditingController(text: user.phoneNumber),
       decoration: InputDecoration(
           labelText: 'Phone number',
           border: OutlineInputBorder(),
@@ -122,6 +199,9 @@ class _RegistrationState extends State<Registration> {
       },
       onSaved: (String? value) {
         phoneNumber = value;
+      },
+      onChanged: (val) {
+        user.phoneNumber = val;
       },
     );
   }
@@ -153,6 +233,9 @@ class _RegistrationState extends State<Registration> {
       },
       onSaved: (String? value) {
         password = value;
+      },
+      onChanged: (val) {
+        user.password = val;
       },
     );
   }
@@ -231,6 +314,7 @@ class _RegistrationState extends State<Registration> {
                   if (formKey.currentState!.validate()) {
                     ScaffoldMessenger.of(context)
                         .showSnackBar(SnackBar(content: Text(' Signing up')));
+                    register();
                   }
                 },
                 child: Container(
@@ -257,8 +341,8 @@ class _RegistrationState extends State<Registration> {
                   SizedBox(width: 5.0),
                   InkWell(
                     onTap: () {
-                      Navigator.of(context)
-                          .push(MaterialPageRoute(builder: (_) => HomePageCustomer()));
+                      Navigator.of(context).push(MaterialPageRoute(
+                          builder: (_) => HomePageCustomer()));
                     },
                     child: Text(
                       'Login',

@@ -22,6 +22,14 @@ environment:
 
 dependencies:
   email_validator: ^2.0.1
+  http: ^0.13.3
+  flutter_bloc: ^7.2.0
+  formz: ^0.4.0
+  equatable: ^2.0.0
+  authentication_repository:
+    path: packages/authentication_repository
+  user_repository:
+    path: packages/user_repository
   flutter:
     sdk: flutter
 
@@ -34,6 +42,8 @@ dependencies:
 dev_dependencies:
   flutter_test:
     sdk: flutter
+  bloc_test: ^8.1.0
+  mocktail: ^0.1.0
 
 # For information on the generic Dart part of this file, see the
 # following page: https://dart.dev/tools/pub/pubspec
@@ -60,6 +70,11 @@ flutter:
     - assets/icons/tome2.svg
     - assets/icons/home.svg
     - assets/icons/settings.svg
+    - assets/icons/completed.svg
+    - assets/icons/shop.svg
+    - assets/icons/truck.svg
+    - assets/icons/location.svg
+    - assets/icons/location2.svg
   #   - images/a_dot_ham.jpeg
 
   # An image asset can refer to one or more resolution-specific "variants", see
