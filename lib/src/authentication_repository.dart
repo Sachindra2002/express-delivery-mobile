@@ -14,7 +14,7 @@ class AuthenticationRepository {
   Future<void> logIn({
     required String email,
     required String password,
-  }) async {
+  }) async {      
     await Future.delayed(
       const Duration(milliseconds: 300),
       () => _controller.add(AuthenticationStatus.authenticated),

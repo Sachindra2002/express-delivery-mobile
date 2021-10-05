@@ -1,22 +1,8 @@
 import 'package:flutter/material.dart';
-import 'package:express_delivery/ui/screens/authentication/login.dart';
-import 'dart:async';
 
-class SplashScreen extends StatefulWidget {
-  const SplashScreen({Key? key}) : super(key: key);
-
-  @override
-  _SplashScreenState createState() => _SplashScreenState();
-}
-
-class _SplashScreenState extends State<SplashScreen> {
-  @override
-  void initState() {
-    super.initState();
-    Timer(Duration(seconds: 3), () {
-      Navigator.of(context)
-          .pushReplacement(MaterialPageRoute(builder: (_) => Login()));
-    });
+class SplashScreen extends StatelessWidget {
+  static Route route() {
+    return MaterialPageRoute<void>(builder: (_) => SplashScreen());
   }
 
   @override

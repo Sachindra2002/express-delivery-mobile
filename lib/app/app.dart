@@ -1,10 +1,7 @@
-import 'dart:js';
-
 import 'package:express_delivery/authentication/bloc/authentication_bloc.dart';
 import 'package:express_delivery/authentication_repository.dart';
 import 'package:express_delivery/ui/components/splash_screen.dart';
-import 'package:express_delivery/ui/screens/authentication/login.dart';
-import 'package:express_delivery/ui/screens/authentication/registration.dart';
+import 'package:express_delivery/ui/screens/authentication/login/view/login_page.dart';
 import 'package:express_delivery/ui/screens/customer/homescreen_customer.dart';
 import 'package:express_delivery/user_repository.dart';
 import 'package:flutter/material.dart';
@@ -50,20 +47,29 @@ class _AppViewState extends State<AppView> {
     return MaterialApp(
       navigatorKey: _navigatorKey,
       builder: (context, child) {
-          return BlocListener<AuthenticationBloc, AuthenticationState>(
-            listener: (context, state) {
-              switch (state.status) {
-                case AuthenticationStatus.authenticated :
-                _navigator.pushAndRemoveUntil<void> (
+        return BlocListener<AuthenticationBloc, AuthenticationState>(
+          listener: (context, state) {
+            switch (state.status) {
+              case AuthenticationStatus.authenticated:
+                _navigator.pushAndRemoveUntil<void>(
                   HomePageCustomer.route(),
                   (route) => false,
                 );
                 break;
-              }
-            },
-          );
-        }
+              case AuthenticationStatus.unauthenticated:
+                _navigator.pushAndRemoveUntil<void>(
+                  LoginPage.route(),
+                  (route) => false,
+                );
+                break;
+              default:
+                break;
+            }
+          },
+          child: child,
+        );
+      },
+      onGenerateRoute: (_) => SplashScreen.route(),
     );
   }
-  
 }

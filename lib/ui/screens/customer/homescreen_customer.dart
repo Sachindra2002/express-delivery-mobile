@@ -2,14 +2,12 @@ import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:intl/intl.dart';
 
-class HomePageCustomer extends StatefulWidget {
-  const HomePageCustomer({Key? key}) : super(key: key);
+// ignore: must_be_immutable
+class HomePageCustomer extends StatelessWidget {
+  static Route route() {
+    return MaterialPageRoute<void>(builder: (_) => HomePageCustomer());
+  }
 
-  @override
-  _HomePageCustomerState createState() => _HomePageCustomerState();
-}
-
-class _HomePageCustomerState extends State<HomePageCustomer> {
   Color companyYellow = Color(0xFFFEBC17);
 
   DateTime now = DateTime.now();
