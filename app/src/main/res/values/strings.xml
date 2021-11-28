@@ -1,0 +1,9 @@
+<resources>
+    <string name="app_name">Express Delivery</string>
+    <string name="email">Email</string>
+    <string name="last_name">Last Name</string>
+    <string name="first_name">First Name</string>
+    <string name="password">Password</string>
+    <string name="app_description">Hassle Free Courier Service</string>
+    <string name="logo">Logo</string>
+</resources>
