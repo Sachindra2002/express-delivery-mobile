@@ -42,7 +42,7 @@ public class LoginActivity extends AppCompatActivity {
         //Initialize views
         mEmailEditText = findViewById(R.id.input_email);
         mPasswordEditText = findViewById(R.id.input_password);
-        mLoginButton = findViewById(R.id.login_button);
+        mLoginButton = (Button) findViewById(R.id.login_button);
         mProgressDialog = new ProgressDialog(this);
 
         //When login button is clicked
@@ -55,16 +55,16 @@ public class LoginActivity extends AppCompatActivity {
     }
 
     private void loginUser(){
-        String username = mEmailEditText.getText().toString();
+        String email = mEmailEditText.getText().toString();
         String password = mPasswordEditText.getText().toString();
 
         //If there are empty fields
-        if(TextUtils.isEmpty(username) || TextUtils.isEmpty(password)) {
+        if(TextUtils.isEmpty(email) || TextUtils.isEmpty(password)) {
             Toast.makeText(this, "Please enter valid data!", Toast.LENGTH_SHORT).show();
         }else{
 
             //Create login credentials
-            LoginCredentials loginCredentials = new LoginCredentials(username, password);
+            LoginCredentials loginCredentials = new LoginCredentials(email, password);
             Call<User> call = userClient.login(loginCredentials);
 
             //Show progress
@@ -93,17 +93,15 @@ public class LoginActivity extends AppCompatActivity {
                         //Direct user to respective home page
                         String role = response.body().getUserRole();
 
-                        Intent homePageIntent = new Intent();
+                        Intent homePageIntent = null;
 
                         if(role.equals("customer")){
                             homePageIntent = new Intent(LoginActivity.this, MainActivity.class);
                         }else if(role.equals("admin")) {
-//                            homePageIntent = new Intent(LoginActivity.this, ManageAdminActivity.class);
                         }else if(role.equals("agent")){
-//                            homePageIntent = new Intent(LoginActivity.this, ManageAgentActivity.class);
                         }else{
-//                            homePageIntent = new Intent(LoginActivity.this, ManageDriverActivity.class);
                         }
+
                         homePageIntent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
                         startActivity(homePageIntent);
                         finish();
@@ -120,7 +118,7 @@ public class LoginActivity extends AppCompatActivity {
                 @Override
                 public void onFailure(Call<User> call, Throwable t) {
                     mProgressDialog.dismiss();
-                    Toast.makeText(LoginActivity.this, "Invalid username or password!", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(LoginActivity.this, "Something! went wrong", Toast.LENGTH_SHORT).show();
                 }
             });
 
@@ -140,6 +138,8 @@ public class LoginActivity extends AppCompatActivity {
 
             }else if(role.equals("agent")){
 
+            }else if(role.equals("driver")){
+
             }
         }
     }
@@ -148,5 +148,10 @@ public class LoginActivity extends AppCompatActivity {
     public void onBackPressed() {
         // super.onBackPressed();
         // Not calling **super**, disables back button in current screen.
+    }
+
+    @Override
+    protected void onNightModeChanged(int mode) {
+        super.onNightModeChanged(mode);
     }
 }

@@ -4,12 +4,19 @@
     <option name="filePathToZoomLevelMap">
       <map>
         <entry key="..\:/Express Delivery/Express_Delivery_Mobile/app/src/main/res/drawable/buttons.xml" value="0.37864583333333335" />
+        <entry key="..\:/Express Delivery/Express_Delivery_Mobile/app/src/main/res/drawable/home_bg.xml" value="0.37864583333333335" />
+        <entry key="..\:/Express Delivery/Express_Delivery_Mobile/app/src/main/res/drawable/ic_baseline_settings_24.xml" value="0.37864583333333335" />
+        <entry key="..\:/Express Delivery/Express_Delivery_Mobile/app/src/main/res/drawable/ic_boxes.xml" value="0.37864583333333335" />
+        <entry key="..\:/Express Delivery/Express_Delivery_Mobile/app/src/main/res/drawable/icons8_open_box_64.xml" value="0.21875" />
         <entry key="..\:/Express Delivery/Express_Delivery_Mobile/app/src/main/res/drawable/input_field.xml" value="0.37864583333333335" />
         <entry key="..\:/Express Delivery/Express_Delivery_Mobile/app/src/main/res/drawable/view_bg.xml" value="0.37864583333333335" />
         <entry key="..\:/Express Delivery/Express_Delivery_Mobile/app/src/main/res/layout/activity_login.xml" value="0.3625" />
         <entry key="..\:/Express Delivery/Express_Delivery_Mobile/app/src/main/res/layout/activity_main.xml" value="0.3625" />
         <entry key="..\:/Express Delivery/Express_Delivery_Mobile/app/src/main/res/layout/login_tab_fragment.xml" value="0.3625" />
+        <entry key="..\:/Express Delivery/Express_Delivery_Mobile/app/src/main/res/layout/nav_header_layout.xml" value="0.3625" />
+        <entry key="..\:/Express Delivery/Express_Delivery_Mobile/app/src/main/res/layout/upcoming_mail_row.xml" value="0.3625" />
         <entry key="..\:/Express Delivery/Express_Delivery_Mobile/app/src/main/res/menu/nav_menu.xml" value="0.3625" />
+        <entry key="..\:/Express Delivery/Express_Delivery_Mobile/app/src/main/res/menu/nav_menu_customer.xml" value="0.3569230769230769" />
       </map>
     </option>
   </component>
