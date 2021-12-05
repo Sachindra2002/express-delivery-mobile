@@ -9,6 +9,9 @@
     <color name="white">#FFFFFFFF</color>
     <color name="yellow">#FEBC17</color>
 
+    <color name="Green">#00B832</color>
+    <color name="green1">#1BB820</color>
+
     <color name="colorPrimary">#15d2fe</color>
     <color name="colorPrimaryDark">#00a6f4</color>
     <color name="colorAccent">#00a6f4</color>

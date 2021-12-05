@@ -2,42 +2,40 @@ package com.example.express_delivery_mobile.Adapter;
 
 import android.app.ProgressDialog;
 import android.content.Context;
-import android.graphics.Color;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.Filter;
 import android.widget.Filterable;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
-import androidx.core.content.ContextCompat;
 import androidx.recyclerview.widget.DiffUtil;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.express_delivery_mobile.Model.Mail;
 import com.example.express_delivery_mobile.R;
-import com.example.express_delivery_mobile.Service.MailClient;
+import com.example.express_delivery_mobile.Service.DriverClient;
 import com.example.express_delivery_mobile.Service.RetrofitClientInstance;
 
 import java.util.ArrayList;
 import java.util.List;
 
-public class MailAdapter extends RecyclerView.Adapter<MailAdapter.ViewHolder> implements Filterable {
-
+public class DriverAcceptedMailAdapter extends RecyclerView.Adapter<DriverAcceptedMailAdapter.ViewHolder> implements Filterable {
     private Context context;
     private List<Mail> mails;
     private List<Mail> filteredMails;
+
     private String token;
     private String userRole;
-    private String username;
 
     private ProgressDialog mProgressDialog;
 
-    //Mail Retrofit client
-    MailClient mailClient = RetrofitClientInstance.getRetrofitInstance().create(MailClient.class);
+    //Driver Retrofit client
+    DriverClient driverClient = RetrofitClientInstance.getRetrofitInstance().create(DriverClient.class);
 
-    public MailAdapter(Context context, List<Mail> mails, String token, String userRole, ProgressDialog mProgressDialog) {
+    public DriverAcceptedMailAdapter(Context context, List<Mail> mails, String token, String userRole, ProgressDialog mProgressDialog) {
         this.context = context;
         this.mails = mails;
         this.token = token;
@@ -58,7 +56,7 @@ public class MailAdapter extends RecyclerView.Adapter<MailAdapter.ViewHolder> im
             final DiffUtil.DiffResult result = DiffUtil.calculateDiff(new DiffUtil.Callback() {
                 @Override
                 public int getOldListSize() {
-                    return MailAdapter.this.mails.size();
+                    return DriverAcceptedMailAdapter.this.mails.size();
                 }
 
                 @Override
@@ -68,13 +66,13 @@ public class MailAdapter extends RecyclerView.Adapter<MailAdapter.ViewHolder> im
 
                 @Override
                 public boolean areItemsTheSame(int oldItemPosition, int newItemPosition) {
-                    return MailAdapter.this.mails.get(oldItemPosition).getMailId() == mails.get(newItemPosition).getMailId();
+                    return DriverAcceptedMailAdapter.this.mails.get(oldItemPosition).getMailId() == mails.get(newItemPosition).getMailId();
                 }
 
                 @Override
                 public boolean areContentsTheSame(int oldItemPosition, int newItemPosition) {
 
-                    Mail newMail = MailAdapter.this.mails.get(oldItemPosition);
+                    Mail newMail = DriverAcceptedMailAdapter.this.mails.get(oldItemPosition);
 
                     Mail oldMail = mails.get(newItemPosition);
 
@@ -86,6 +84,39 @@ public class MailAdapter extends RecyclerView.Adapter<MailAdapter.ViewHolder> im
             this.filteredMails = mails;
             result.dispatchUpdatesTo(this);
         }
+    }
+
+    @NonNull
+    @Override
+    public DriverAcceptedMailAdapter.ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
+        View view = LayoutInflater.from(context).inflate(R.layout.driver_accepted_mails_row, parent, false);
+        return new ViewHolder(view);
+    }
+
+    @Override
+    public void onBindViewHolder(@NonNull DriverAcceptedMailAdapter.ViewHolder holder, final int position) {
+        if (filteredMails.get(position).getTransportationStatus().contains("Pick Up")) {
+            holder.name.setText(filteredMails.get(position).getUser().getFirstName() + " " + mails.get(position).getUser().getLastName());
+            holder.transportationStatus.setText(filteredMails.get(position).getTransportationStatus());
+            holder.address.setText(filteredMails.get(position).getPickupAddress());
+            holder.type.setText(filteredMails.get(position).getParcelType());
+            holder.weight.setText(filteredMails.get(position).getWeight() + "KG");
+
+        } else if (filteredMails.get(position).getTransportationStatus().contains("Drop Off")) {
+            holder.name.setText(filteredMails.get(position).getReceiverFirstName() + " " + mails.get(position).getReceiverLastName());
+            holder.transportationStatus.setText(filteredMails.get(position).getTransportationStatus());
+            holder.address.setText(filteredMails.get(position).getReceiverAddress());
+            holder.type.setText(filteredMails.get(position).getParcelType());
+            holder.weight.setText(filteredMails.get(position).getWeight() + "KG");
+
+        }
+
+    }
+
+    @Override
+    public int getItemCount() {
+        if (filteredMails != null) return filteredMails.size();
+        return 0;
     }
 
     @Override
@@ -102,7 +133,9 @@ public class MailAdapter extends RecyclerView.Adapter<MailAdapter.ViewHolder> im
                         String searchString = charString.toLowerCase();
 
                         //Filter through fields and add to filtered list
-                        if (mail.getDescription().contains(searchString) || String.valueOf(mail.getMailId()).contains(charString)) {
+                        if (mail.getDescription().contains(searchString) || String.valueOf(mail.getMailId()).contains(searchString) || mail.getReceiverFirstName().contains(searchString) || mail.getTransportationStatus().contains(searchString) ||
+                        mail.getUser().getFirstName().contains(searchString) || mail.getUser().getLastName().contains(searchString) ||
+                        mail.getParcelType().contains(searchString)) {
                             filteredList.add(mail);
                         }
                     }
@@ -121,55 +154,19 @@ public class MailAdapter extends RecyclerView.Adapter<MailAdapter.ViewHolder> im
         };
     }
 
-    @NonNull
-    @Override
-    public MailAdapter.ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        View view = LayoutInflater.from(context).inflate(R.layout.upcoming_mail_row, parent, false);
-        return new ViewHolder(view);
-    }
-
-    @Override
-    public void onBindViewHolder(@NonNull MailAdapter.ViewHolder holder, final int position) {
-        holder.senderName.setText(String.format(filteredMails.get(position).getUser().getFirstName() + " " + filteredMails.get(position).getUser().getLastName()));
-        holder.status.setText(filteredMails.get(position).getStatus());
-        holder.description.setText(filteredMails.get(position).getDescription());
-        holder.type.setText(filteredMails.get(position).getParcelType());
-        holder.weight.setText(filteredMails.get(position).getWeight() + "KG");
-        if (filteredMails.get(position).getStatus().contains("Processing")) {
-            holder.status.setTextColor(Color.parseColor("#00B832"));
-        } else if (filteredMails.get(position).getStatus().contains("Accepted")) {
-            holder.status.setTextColor(Color.parseColor("#00B832"));
-        } else if (filteredMails.get(position).getStatus().contains("Cancelled")) {
-            holder.status.setTextColor(Color.parseColor("#F41F1F"));
-        } else if (filteredMails.get(position).getStatus().contains("Assigned")) {
-            holder.status.setTextColor(Color.parseColor("#0C6E0F"));
-        } else if (filteredMails.get(position).getStatus().contains("Rejected")) {
-            holder.status.setTextColor(Color.parseColor("#F41F1F"));
-        }
-
-        holder.itemView.setOnClickListener(view -> {
-
-        });
-
-    }
-
-    @Override
-    public int getItemCount() {
-        if (filteredMails != null) return filteredMails.size();
-        return 0;
-    }
-
     public class ViewHolder extends RecyclerView.ViewHolder {
-        TextView senderName, status, description, type, weight;
+        TextView name, transportationStatus, address, type, weight;
+        Button button;
 
         public ViewHolder(@NonNull View itemView) {
             super(itemView);
 
-            senderName = itemView.findViewById(R.id.senderName);
-            status = itemView.findViewById(R.id.status);
-            description = itemView.findViewById(R.id.description);
+            name = itemView.findViewById(R.id.senderName);
+            transportationStatus = itemView.findViewById(R.id.transport_status);
+            address = itemView.findViewById(R.id.address);
             type = itemView.findViewById(R.id.type);
             weight = itemView.findViewById(R.id.weight);
+//            button = itemView.findViewById(R.id.start_button);
         }
     }
 }

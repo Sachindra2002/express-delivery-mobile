@@ -1,92 +1,101 @@
 package com.example.express_delivery_mobile;
 
-import android.app.ActionBar;
+import android.app.AlertDialog;
 import android.app.ProgressDialog;
 import android.content.Context;
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.view.MenuItem;
-import android.widget.LinearLayout;
+import android.view.View;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.appcompat.app.ActionBarDrawerToggle;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
+import androidx.cardview.widget.CardView;
 import androidx.core.view.GravityCompat;
 import androidx.drawerlayout.widget.DrawerLayout;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
+import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
+import com.example.express_delivery_mobile.Adapter.DriverAssignedMailAdapter;
 import com.example.express_delivery_mobile.Adapter.MailAdapter;
 import com.example.express_delivery_mobile.Model.Mail;
-import com.example.express_delivery_mobile.Service.MailClient;
+import com.example.express_delivery_mobile.Service.DriverClient;
 import com.example.express_delivery_mobile.Service.RetrofitClientInstance;
 import com.example.express_delivery_mobile.Util.AuthHandler;
 import com.example.express_delivery_mobile.Util.NavHandler;
 import com.google.android.material.navigation.NavigationView;
 
 import java.util.ArrayList;
-import java.util.Calendar;
 import java.util.List;
 
+import dmax.dialog.SpotsDialog;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
-public class MainActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener {
-    TextView mGreeting;
+public class DriverActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener{
+    TextView home_name;
     private Toolbar mToolbar;
     private DrawerLayout mDrawerLayout;
     private NavigationView mNavigationView;
-    private ProgressDialog mProgressDialog;
-
-    private RecyclerView recyclerView;
-    private MailAdapter mailAdapter;
+    private AlertDialog mProgressDialog;
+    private CardView acceptedMails;
 
     private List<Mail> mails;
-    private boolean resultsRetrieved;
+
+    private RecyclerView recyclerView;
+    private DriverAssignedMailAdapter driverAssignedMailAdapter;
+    SwipeRefreshLayout swipeRefreshLayout;
+
     private String token;
     private String email;
+    private String firstName;
+    private String lastName;
     private String username;
 
-    private MailClient mailClient = RetrofitClientInstance.getRetrofitInstance().create(MailClient.class);
+    //Driver Retrofit client
+    DriverClient driverClient = RetrofitClientInstance.getRetrofitInstance().create(DriverClient.class);
 
     @Override
-    protected void onCreate(Bundle savedInstance) {
-        super.onCreate(savedInstance);
-
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
         //Check if authorization token is valid
-        String result = AuthHandler.validate(MainActivity.this, "customer");
+        String result = AuthHandler.validate(DriverActivity.this, "driver");
 
         if (result != null) {
             if (result.equals("unauthorized") || result.equals("expired")) return;
         }
 
         //Load layout only after authorization
-        setContentView(R.layout.activity_main);
+        setContentView(R.layout.activity_driver);
 
-        //Greeting message
-        TextView mGreeting = (TextView) findViewById(R.id.greeting);
-        Calendar c = Calendar.getInstance();
-        int timeOfDay = c.get(Calendar.HOUR_OF_DAY);
-        if (timeOfDay >= 0 && timeOfDay < 12) {
-            mGreeting.setText(R.string.good_morning);
-        } else if (timeOfDay >= 12 && timeOfDay < 14) {
-            mGreeting.setText(R.string.good_afternoon);
-        } else if (timeOfDay >= 14 && timeOfDay < 21) {
-            mGreeting.setText(R.string.good_evening);
-        } else if (timeOfDay >= 21 && timeOfDay < 24) {
-            mGreeting.setText(R.string.good_evening);
-        } else {
-            mGreeting.setText(R.string.greetings);
-        }
+        acceptedMails = findViewById(R.id.accepted_mails);
+        acceptedMails.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent = new Intent(DriverActivity.this, DriverAcceptedMailsActivity.class);
+                intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                startActivity(intent);
+            }
+        });
 
         //Retrieve JWT Token
         SharedPreferences sharedPreferences = getSharedPreferences("auth_preferences", Context.MODE_PRIVATE);
         token = "Bearer " + sharedPreferences.getString("auth_token", null);
         email = sharedPreferences.getString("email", null);
+        firstName = sharedPreferences.getString("firstName", null);
+        lastName = sharedPreferences.getString("lastName", null);
+
+        //Set user name to home screen
+        home_name = findViewById(R.id.home_name);
+        home_name.setText(firstName + " " + lastName);
 
         //Setup toolbar
         mToolbar = findViewById(R.id.toolbar);
@@ -105,7 +114,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                 R.string.close_nav_drawer
         );
 
-        mProgressDialog = new ProgressDialog(this);
+        mProgressDialog = new SpotsDialog.Builder().setContext(this).setMessage("Loading Packages...").setTheme(R.style.Custom).build();
 
         mDrawerLayout.addDrawerListener(mActionBarDrawerToggle);
         mActionBarDrawerToggle.syncState();
@@ -114,17 +123,26 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         //Setup mail list
         mails = new ArrayList<>();
         recyclerView = findViewById(R.id.recycler_view);
+        swipeRefreshLayout = (SwipeRefreshLayout) findViewById(R.id.swipe);
         LinearLayoutManager layoutManager = new LinearLayoutManager(this);
         recyclerView.setLayoutManager(layoutManager);
-        mailAdapter = new MailAdapter(this, mails, token ,"customer", mProgressDialog);
-        recyclerView.setAdapter(mailAdapter);
+        driverAssignedMailAdapter = new DriverAssignedMailAdapter(this, mails, token ,"driver", mProgressDialog);
+        recyclerView.setAdapter(driverAssignedMailAdapter);
 
-        getAllUpcomingMails();
+        // SetOnRefreshListener on SwipeRefreshLayout
+        swipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
+            @Override
+            public void onRefresh() {
+                swipeRefreshLayout.setRefreshing(false);
+                getRecentAssignedMails();
+            }
+        });
 
+        getRecentAssignedMails();
     }
 
-    private void getAllUpcomingMails() {
-        Call<List<Mail>> call = mailClient.getAllUpcomingMails(token);
+    private void getRecentAssignedMails() {
+        Call<List<Mail>> call = driverClient.getAllAssignedMails(token);
 
         //Show Progress
         mProgressDialog.setMessage("Loading Packages..");
@@ -138,16 +156,16 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                 System.out.println(response.body());
                 //Handle null pointer errors
                 if(mails != null){
-                    mailAdapter.setMails(mails);
+                    driverAssignedMailAdapter.setMails(mails);
                 }else {
-                    Toast.makeText(MainActivity.this, "Something went wrong" + response.toString(), Toast.LENGTH_SHORT).show();
+                    Toast.makeText(DriverActivity.this, "Something went wrong" + response.toString(), Toast.LENGTH_SHORT).show();
                 }
                 mProgressDialog.dismiss();
             }
 
             @Override
             public void onFailure(Call<List<Mail>> call, Throwable t) {
-                Toast.makeText(MainActivity.this, "Something went Wrong!" + t.toString(), Toast.LENGTH_SHORT).show();
+                Toast.makeText(DriverActivity.this, "Something went Wrong!" + t.toString(), Toast.LENGTH_SHORT).show();
                 mProgressDialog.dismiss();
             }
         });
@@ -156,7 +174,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     @Override
     public boolean onNavigationItemSelected(@NonNull MenuItem item) {
         //Handle side drawer navigation
-        NavHandler.handleCustomerNav(item, MainActivity.this);
+        NavHandler.handleDriverNav(item, DriverActivity.this);
 
         //close navigation drawer
         mDrawerLayout.closeDrawer(GravityCompat.START);
@@ -164,15 +182,10 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     }
 
     @Override
-    public void onPointerCaptureChanged(boolean hasCapture) {
-
-    }
-
-    @Override
     protected void onResume() {
         super.onResume();
         //Check if authorization token is valid
-        AuthHandler.validate(MainActivity.this, "customer");
+        AuthHandler.validate(DriverActivity.this, "driver");
     }
 
     @Override
@@ -182,7 +195,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     }
 
     @Override
-    protected void onNightModeChanged(int mode) {
-        super.onNightModeChanged(mode);
+    public void onPointerCaptureChanged(boolean hasCapture) {
+
     }
 }

@@ -11,6 +11,8 @@
         android:theme="@style/Theme.Express_Delivery_Mobile"
         android:usesCleartextTraffic="${usesCleartextTraffic}">
         <activity android:name=".LoginActivity" />
+        <activity android:name=".DriverActivity" />
+        <activity android:name=".DriverAcceptedMailsActivity" />
         <activity android:name=".MainActivity"
             android:exported="true">
             <intent-filter>

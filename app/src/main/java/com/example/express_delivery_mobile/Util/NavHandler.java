@@ -16,4 +16,14 @@ public class NavHandler {
             }
         }
     }
+
+    public static void handleDriverNav(MenuItem item, Context context){
+        switch (item.getItemId()){
+            case R.id.nav_logout: {
+                //Logout Button
+                AuthHandler.logout(context);
+                break;
+            }
+        }
+    }
 }

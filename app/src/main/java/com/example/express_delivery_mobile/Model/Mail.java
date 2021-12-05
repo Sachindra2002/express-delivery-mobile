@@ -22,10 +22,15 @@ public class Mail implements Serializable {
             totalCost,
             status,
             description;
-    private LocalDate dropOffDate;
+    private User user;
+    private MailTracking mailTracking;
+    private DriverDetail driverDetail;
+    private String transportationStatus;
+    private ServiceCentre serviceCentre;
+    private String dropOffDate;
     private Date createdAt;
 
-    public Mail(int mailId, String pickupAddress, String receiverAddress, String receiverFirstName, String receiverLastName, String receiverPhoneNumber, String receiverEmail, String receiverCity, String parcelType, String weight, String pieces, String paymentMethod, String date, String time, String totalCost, String status, String description, LocalDate dropOffDate, Date createdAt) {
+    public Mail(int mailId, String pickupAddress, String receiverAddress, String receiverFirstName, String receiverLastName, String receiverPhoneNumber, String receiverEmail, String receiverCity, String parcelType, String weight, String pieces, String paymentMethod, String date, String time, String totalCost, String status, String description, User user, MailTracking mailTracking, DriverDetail driverDetail, String transportationStatus, ServiceCentre serviceCentre, String dropOffDate, Date createdAt) {
         this.mailId = mailId;
         this.pickupAddress = pickupAddress;
         this.receiverAddress = receiverAddress;
@@ -43,6 +48,11 @@ public class Mail implements Serializable {
         this.totalCost = totalCost;
         this.status = status;
         this.description = description;
+        this.user = user;
+        this.mailTracking = mailTracking;
+        this.driverDetail = driverDetail;
+        this.transportationStatus = transportationStatus;
+        this.serviceCentre = serviceCentre;
         this.dropOffDate = dropOffDate;
         this.createdAt = createdAt;
     }
@@ -183,11 +193,51 @@ public class Mail implements Serializable {
         this.description = description;
     }
 
-    public LocalDate getDropOffDate() {
+    public User getUser() {
+        return user;
+    }
+
+    public void setUser(User user) {
+        this.user = user;
+    }
+
+    public MailTracking getMailTracking() {
+        return mailTracking;
+    }
+
+    public void setMailTracking(MailTracking mailTracking) {
+        this.mailTracking = mailTracking;
+    }
+
+    public DriverDetail getDriverDetail() {
+        return driverDetail;
+    }
+
+    public void setDriverDetail(DriverDetail driverDetail) {
+        this.driverDetail = driverDetail;
+    }
+
+    public String getTransportationStatus() {
+        return transportationStatus;
+    }
+
+    public void setTransportationStatus(String transportationStatus) {
+        this.transportationStatus = transportationStatus;
+    }
+
+    public ServiceCentre getServiceCentre() {
+        return serviceCentre;
+    }
+
+    public void setServiceCentre(ServiceCentre serviceCentre) {
+        this.serviceCentre = serviceCentre;
+    }
+
+    public String getDropOffDate() {
         return dropOffDate;
     }
 
-    public void setDropOffDate(LocalDate dropOffDate) {
+    public void setDropOffDate(String dropOffDate) {
         this.dropOffDate = dropOffDate;
     }
 

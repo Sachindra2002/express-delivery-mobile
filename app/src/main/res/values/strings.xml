@@ -12,4 +12,8 @@
     <string name="close_nav_drawer">CLOSE_NAV_BAR</string>
     <string name="track_package">Track Package</string>
     <string name="send_package">Send Package</string>
+    <string name="good_morning">Good Morning</string>
+    <string name="good_afternoon">Good Afternoon</string>
+    <string name="good_evening">Good Evening</string>
+    <string name="greetings">Greeting</string>
 </resources>

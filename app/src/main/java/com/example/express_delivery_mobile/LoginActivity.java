@@ -88,6 +88,8 @@ public class LoginActivity extends AppCompatActivity {
                         editor.putString("auth_token", response.body().getToken());
                         editor.putString("role", response.body().getUserRole());
                         editor.putString("email", response.body().getEmail());
+                        editor.putString("firstName", response.body().getFirstName());
+                        editor.putString("lastName", response.body().getLastName());
                         editor.apply();
 
                         //Direct user to respective home page
@@ -98,8 +100,11 @@ public class LoginActivity extends AppCompatActivity {
                         if(role.equals("customer")){
                             homePageIntent = new Intent(LoginActivity.this, MainActivity.class);
                         }else if(role.equals("admin")) {
+
                         }else if(role.equals("agent")){
-                        }else{
+
+                        }else if(role.equals("driver")){
+                            homePageIntent = new Intent(LoginActivity.this, DriverActivity.class);
                         }
 
                         homePageIntent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
@@ -139,7 +144,9 @@ public class LoginActivity extends AppCompatActivity {
             }else if(role.equals("agent")){
 
             }else if(role.equals("driver")){
-
+                Intent intent = new Intent(LoginActivity.this, DriverActivity.class);
+                intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                startActivity(intent);
             }
         }
     }

@@ -21,42 +21,49 @@
         android:padding="10dp"
         android:weightSum="100">
 
+<!--                <ImageView-->
+<!--                    android:layout_width="50dp"-->
+<!--                    android:layout_height="match_parent"-->
+<!--                    android:layout_weight="2"-->
+<!--                    android:paddingLeft="15dp"-->
+<!--                    android:src="@drawable/box2"/>-->
+
         <RelativeLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_weight="85">
 
             <TextView
-                android:id="@+id/status"
-                android:gravity="center"
-                android:background="@drawable/buttons"
+                android:id="@+id/transport_status"
                 android:layout_width="180dp"
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="15dp"
+                android:background="@drawable/buttons"
+                android:gravity="center"
                 android:padding="5dp"
-                android:text="Status"
+                android:text="Pickup"
                 android:textColor="@android:color/holo_orange_dark"
                 android:textStyle="bold" />
 
             <TextView
-                android:id="@+id/_senderName"
+                android:id="@+id/_receiverName"
                 android:layout_width="180dp"
                 android:layout_height="wrap_content"
+                android:layout_below="@+id/transport_status"
                 android:layout_marginLeft="15dp"
                 android:padding="5dp"
-                android:layout_below="@+id/status"
-                android:text="From"
+                android:text="Customer"
                 android:textColor="@android:color/darker_gray" />
 
             <TextView
                 android:id="@+id/senderName"
                 android:layout_width="180dp"
                 android:layout_height="wrap_content"
+                android:layout_below="@+id/transport_status"
                 android:layout_alignParentRight="true"
                 android:layout_marginRight="30dp"
                 android:gravity="right"
                 android:padding="5dp"
-                android:layout_below="@+id/status"
                 android:text="Name Here"
                 android:textColor="@android:color/black" />
 
@@ -64,22 +71,22 @@
                 android:id="@+id/_description"
                 android:layout_width="180dp"
                 android:layout_height="wrap_content"
-                android:layout_below="@id/_senderName"
+                android:layout_below="@id/_receiverName"
                 android:layout_marginLeft="15dp"
                 android:padding="5dp"
-                android:text="Description"
+                android:text="Address"
                 android:textColor="@android:color/darker_gray" />
 
             <TextView
-                android:id="@+id/description"
+                android:id="@+id/address"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_below="@+id/_senderName"
+                android:layout_below="@+id/_receiverName"
                 android:layout_alignParentRight="true"
                 android:layout_marginRight="30dp"
                 android:gravity="right"
                 android:padding="5dp"
-                android:text="Box of Thermal Paste"
+                android:text="331/2A Welihena"
                 android:textColor="@android:color/black"
                 android:textStyle="bold" />
 
@@ -97,7 +104,7 @@
                 android:id="@+id/type"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_below="@+id/description"
+                android:layout_below="@+id/address"
                 android:layout_alignParentRight="true"
                 android:layout_marginRight="30dp"
                 android:gravity="right"
@@ -124,9 +131,20 @@
                 android:layout_alignParentRight="true"
                 android:layout_marginRight="30dp"
                 android:gravity="right"
-                android:textColor="@color/black"
                 android:padding="5dp"
-                android:text="4KG" />
+                android:text="4KG"
+                android:textColor="@color/black" />
+
+<!--            <Button-->
+<!--                android:id="@+id/start_button"-->
+<!--                android:layout_width="match_parent"-->
+<!--                android:layout_height="50dp"-->
+<!--                android:layout_below="@id/weight"-->
+<!--                android:layout_alignParentRight="true"-->
+<!--                android:layout_marginLeft="150dp"-->
+<!--                android:layout_marginRight="30dp"-->
+<!--                android:text="Start Now"-->
+<!--                android:textColor="@color/green1" />-->
 
         </RelativeLayout>
 

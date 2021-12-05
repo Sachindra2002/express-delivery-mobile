@@ -63,7 +63,9 @@
                 android:layout_gravity="center_horizontal"
                 android:layout_marginStart="35dp"
                 android:layout_marginTop="45dp"
+                android:textStyle="bold"
                 android:padding="10dp"
+                android:textColor="@color/black"
                 android:text="Send   Package"
                 android:textSize="15sp" />
 
@@ -76,6 +78,8 @@
                 android:layout_gravity="center_horizontal"
                 android:layout_marginTop="45dp"
                 android:layout_marginEnd="35dp"
+                android:textColor="@color/black"
+                android:textStyle="bold"
                 android:padding="10dp"
                 android:text="Track     Package"
                 android:textSize="15sp" />
@@ -104,7 +108,7 @@
                         android:layout_width="80dp"
                         android:layout_height="80dp"
                         android:layout_gravity="center"
-                        android:src="@drawable/ic_icons8_box" />
+                        android:src="@drawable/box6" />
 
                     <TextView
                         android:layout_width="wrap_content"
@@ -143,7 +147,7 @@
                         android:layout_width="80dp"
                         android:layout_height="80dp"
                         android:layout_gravity="center"
-                        android:src="@drawable/ic__451981_box_delivery_logistic_package_shipping_icon" />
+                        android:src="@drawable/box3" />
 
                     <TextView
                         android:layout_width="wrap_content"

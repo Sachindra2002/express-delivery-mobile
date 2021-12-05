@@ -1,16 +1,17 @@
 package com.example.express_delivery_mobile;
 
-import android.app.ActionBar;
 import android.app.ProgressDialog;
+import android.app.SearchManager;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.view.Menu;
 import android.view.MenuItem;
-import android.widget.LinearLayout;
-import android.widget.TextView;
+import android.widget.SearchView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.appcompat.app.ActionBarDrawerToggle;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
@@ -19,69 +20,51 @@ import androidx.drawerlayout.widget.DrawerLayout;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.example.express_delivery_mobile.Adapter.DriverAcceptedMailAdapter;
 import com.example.express_delivery_mobile.Adapter.MailAdapter;
 import com.example.express_delivery_mobile.Model.Mail;
-import com.example.express_delivery_mobile.Service.MailClient;
+import com.example.express_delivery_mobile.Service.DriverClient;
 import com.example.express_delivery_mobile.Service.RetrofitClientInstance;
 import com.example.express_delivery_mobile.Util.AuthHandler;
 import com.example.express_delivery_mobile.Util.NavHandler;
 import com.google.android.material.navigation.NavigationView;
 
 import java.util.ArrayList;
-import java.util.Calendar;
 import java.util.List;
 
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
-public class MainActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener {
-    TextView mGreeting;
+public class DriverAcceptedMailsActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener{
     private Toolbar mToolbar;
     private DrawerLayout mDrawerLayout;
     private NavigationView mNavigationView;
     private ProgressDialog mProgressDialog;
+    private SearchView searchView;
 
     private RecyclerView recyclerView;
-    private MailAdapter mailAdapter;
+    private DriverAcceptedMailAdapter driverAcceptedMailAdapter;
 
     private List<Mail> mails;
-    private boolean resultsRetrieved;
     private String token;
     private String email;
-    private String username;
 
-    private MailClient mailClient = RetrofitClientInstance.getRetrofitInstance().create(MailClient.class);
+    private DriverClient driverClient = RetrofitClientInstance.getRetrofitInstance().create(DriverClient.class);
 
     @Override
-    protected void onCreate(Bundle savedInstance) {
-        super.onCreate(savedInstance);
+    protected void onCreate(@Nullable Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
 
         //Check if authorization token is valid
-        String result = AuthHandler.validate(MainActivity.this, "customer");
+        String result = AuthHandler.validate(DriverAcceptedMailsActivity.this, "driver");
 
         if (result != null) {
             if (result.equals("unauthorized") || result.equals("expired")) return;
         }
 
-        //Load layout only after authorization
-        setContentView(R.layout.activity_main);
-
-        //Greeting message
-        TextView mGreeting = (TextView) findViewById(R.id.greeting);
-        Calendar c = Calendar.getInstance();
-        int timeOfDay = c.get(Calendar.HOUR_OF_DAY);
-        if (timeOfDay >= 0 && timeOfDay < 12) {
-            mGreeting.setText(R.string.good_morning);
-        } else if (timeOfDay >= 12 && timeOfDay < 14) {
-            mGreeting.setText(R.string.good_afternoon);
-        } else if (timeOfDay >= 14 && timeOfDay < 21) {
-            mGreeting.setText(R.string.good_evening);
-        } else if (timeOfDay >= 21 && timeOfDay < 24) {
-            mGreeting.setText(R.string.good_evening);
-        } else {
-            mGreeting.setText(R.string.greetings);
-        }
+        //Load layout
+        setContentView(R.layout.activity_accepted_mails_driver);
 
         //Retrieve JWT Token
         SharedPreferences sharedPreferences = getSharedPreferences("auth_preferences", Context.MODE_PRIVATE);
@@ -116,15 +99,14 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         recyclerView = findViewById(R.id.recycler_view);
         LinearLayoutManager layoutManager = new LinearLayoutManager(this);
         recyclerView.setLayoutManager(layoutManager);
-        mailAdapter = new MailAdapter(this, mails, token ,"customer", mProgressDialog);
-        recyclerView.setAdapter(mailAdapter);
+        driverAcceptedMailAdapter = new DriverAcceptedMailAdapter(this, mails, token ,"driver", mProgressDialog);
+        recyclerView.setAdapter(driverAcceptedMailAdapter);
 
-        getAllUpcomingMails();
-
+        getAllAcceptedMails();
     }
 
-    private void getAllUpcomingMails() {
-        Call<List<Mail>> call = mailClient.getAllUpcomingMails(token);
+    private void getAllAcceptedMails() {
+        Call<List<Mail>> call = driverClient.getAllAcceptedMails(token);
 
         //Show Progress
         mProgressDialog.setMessage("Loading Packages..");
@@ -138,16 +120,16 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                 System.out.println(response.body());
                 //Handle null pointer errors
                 if(mails != null){
-                    mailAdapter.setMails(mails);
+                    driverAcceptedMailAdapter.setMails(mails);
                 }else {
-                    Toast.makeText(MainActivity.this, "Something went wrong" + response.toString(), Toast.LENGTH_SHORT).show();
+                    Toast.makeText(DriverAcceptedMailsActivity.this, "Something went wrong" + response.toString(), Toast.LENGTH_SHORT).show();
                 }
                 mProgressDialog.dismiss();
             }
 
             @Override
             public void onFailure(Call<List<Mail>> call, Throwable t) {
-                Toast.makeText(MainActivity.this, "Something went Wrong!" + t.toString(), Toast.LENGTH_SHORT).show();
+                Toast.makeText(DriverAcceptedMailsActivity.this, "Something went Wrong!" + t.toString(), Toast.LENGTH_SHORT).show();
                 mProgressDialog.dismiss();
             }
         });
@@ -156,7 +138,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     @Override
     public boolean onNavigationItemSelected(@NonNull MenuItem item) {
         //Handle side drawer navigation
-        NavHandler.handleCustomerNav(item, MainActivity.this);
+        NavHandler.handleCustomerNav(item, DriverAcceptedMailsActivity.this);
 
         //close navigation drawer
         mDrawerLayout.closeDrawer(GravityCompat.START);
@@ -169,20 +151,33 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     }
 
     @Override
-    protected void onResume() {
-        super.onResume();
-        //Check if authorization token is valid
-        AuthHandler.validate(MainActivity.this, "customer");
+    public boolean onCreateOptionsMenu(Menu menu) {
+        getMenuInflater().inflate(R.menu.search_menu_options, menu);
+
+        SearchManager searchManager = (SearchManager) getSystemService(Context.SEARCH_SERVICE);
+        searchView = (SearchView) menu.findItem(R.id.action_search).getActionView();
+        searchView.setSearchableInfo(searchManager.getSearchableInfo(getComponentName()));
+        searchView.setMaxWidth(Integer.MAX_VALUE);
+
+        searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
+            @Override
+            public boolean onQueryTextSubmit(String query) {
+                driverAcceptedMailAdapter.getFilter().filter(query);
+                return false;
+            }
+
+            @Override
+            public boolean onQueryTextChange(String query) {
+                driverAcceptedMailAdapter.getFilter().filter(query);
+                return false;
+            }
+        });
+        return true;
     }
 
     @Override
     public void onBackPressed() {
-        // super.onBackPressed();
+         super.onBackPressed();
         // Not calling **super**, disables back button in current screen.
-    }
-
-    @Override
-    protected void onNightModeChanged(int mode) {
-        super.onNightModeChanged(mode);
     }
 }
