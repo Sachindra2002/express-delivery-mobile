@@ -13,6 +13,11 @@
         <activity android:name=".LoginActivity" />
         <activity android:name=".DriverActivity" />
         <activity android:name=".DriverAcceptedMailsActivity" />
+        <activity android:name=".DriverProfileActivity" />
+        <activity android:name=".SendPackageActivity" />
+        <activity android:name=".ForYouActivity" />
+        <activity android:name=".FromYouActivity" />
+        <activity android:name=".TrackPackageActivity" />
         <activity android:name=".MainActivity"
             android:exported="true">
             <intent-filter>

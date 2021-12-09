@@ -3,13 +3,13 @@ package com.example.express_delivery_mobile.Model;
 public class ServiceCentre {
     private int centreId;
     private String city;
-    private String center;
+    private String centre;
     private String address;
 
-    public ServiceCentre(int centreId, String city, String center, String address) {
+    public ServiceCentre(int centreId, String city, String centre, String address) {
         this.centreId = centreId;
         this.city = city;
-        this.center = center;
+        this.centre = centre;
         this.address = address;
     }
 
@@ -29,12 +29,12 @@ public class ServiceCentre {
         this.city = city;
     }
 
-    public String getCenter() {
-        return center;
+    public String getCentre() {
+        return centre;
     }
 
     public void setCenter(String center) {
-        this.center = center;
+        this.centre = centre;
     }
 
     public String getAddress() {

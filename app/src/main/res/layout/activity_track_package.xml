@@ -1,0 +1,420 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.drawerlayout.widget.DrawerLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/drawer_layout"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".TrackPackageActivity">
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <androidx.coordinatorlayout.widget.CoordinatorLayout
+            android:id="@+id/coordinator_layout"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <com.google.android.material.appbar.AppBarLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+
+                <com.google.android.material.appbar.MaterialToolbar
+                    android:id="@+id/toolbar"
+                    android:layout_width="match_parent"
+                    android:layout_height="?actionBarSize"
+                    android:background="@color/yellow"></com.google.android.material.appbar.MaterialToolbar>
+
+            </com.google.android.material.appbar.AppBarLayout>
+
+        </androidx.coordinatorlayout.widget.CoordinatorLayout>
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_below="@id/coordinator_layout">
+
+            <LinearLayout
+                android:id="@+id/ll1"
+                android:layout_width="match_parent"
+                android:layout_height="80dp"
+                android:layout_marginTop="20dp"
+                android:orientation="horizontal"
+                android:padding="10dp">
+
+                <RelativeLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent">
+
+                    <TextView
+                        android:id="@+id/created_at"
+                        android:layout_width="match_parent"
+                        android:layout_height="30dp"
+                        android:layout_marginLeft="10dp"
+                        android:text="Order Placed on 25 Nov 2021"
+                        android:textColor="@color/black"
+                        android:textSize="18sp"
+                        android:textStyle="bold" />
+
+                    <TextView
+                        android:id="@+id/tracking_id"
+                        android:layout_width="match_parent"
+                        android:layout_height="30dp"
+                        android:layout_below="@+id/created_at"
+                        android:layout_marginLeft="10dp"
+                        android:text="Tracking ID #118"
+                        android:textSize="18sp"
+                        android:textStyle="bold" />
+
+                </RelativeLayout>
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:id="@+id/ll2"
+                android:layout_width="match_parent"
+                android:layout_height="100dp"
+                android:layout_below="@+id/ll1"
+                android:layout_marginTop="20dp">
+
+                <com.kofigyan.stateprogressbar.StateProgressBar
+                    android:id="@+id/your_state_progress_bar_id"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    app:spb_animateToCurrentProgressState="true"
+                    app:spb_checkStateCompleted="true"
+                    app:spb_maxStateNumber="four"
+                    app:spb_stateBackgroundColor="#BDBDBD"
+                    app:spb_stateDescriptionColor="#808080"
+                    app:spb_stateForegroundColor="#009688"
+                    app:spb_stateNumberBackgroundColor="#808080"
+                    app:spb_stateNumberForegroundColor="#eeeeee" />
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:id="@+id/ll3"
+                android:layout_width="match_parent"
+                android:layout_height="150dp"
+                android:layout_below="@+id/ll2"
+                android:layout_margin="20dp">
+
+                <androidx.cardview.widget.CardView
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    app:cardBackgroundColor="#F5F5F5"
+                    app:cardCornerRadius="10dp">
+
+                    <RelativeLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:gravity="center">
+
+                        <EditText
+                            android:id="@+id/pick_up_address"
+                            android:layout_width="match_parent"
+                            android:layout_height="50dp"
+                            android:layout_marginStart="20dp"
+                            android:layout_marginTop="5dp"
+                            android:layout_marginEnd="20dp"
+                            android:layout_marginBottom="5dp"
+                            android:background="@drawable/input_field"
+                            android:clickable="false"
+                            android:cursorVisible="false"
+                            android:ems="10"
+                            android:focusable="false"
+                            android:focusableInTouchMode="false"
+                            android:gravity="left"
+                            android:hint="Pick up address"
+                            android:inputType="phone"
+                            android:padding="10sp"
+                            android:textColor="@color/black"
+                            android:textColorHint="@color/black" />
+
+                        <EditText
+                            android:id="@+id/drop_address"
+                            android:layout_width="match_parent"
+                            android:layout_height="50dp"
+                            android:layout_below="@id/pick_up_address"
+                            android:layout_marginStart="20dp"
+                            android:layout_marginTop="5dp"
+                            android:layout_marginEnd="20dp"
+                            android:layout_marginBottom="5dp"
+                            android:background="@drawable/input_field"
+                            android:clickable="false"
+                            android:cursorVisible="false"
+                            android:ems="10"
+                            android:focusable="false"
+                            android:focusableInTouchMode="false"
+                            android:gravity="left"
+                            android:hint="Pick up address"
+                            android:inputType="phone"
+                            android:padding="10sp"
+                            android:textColor="@color/black"
+                            android:textColorHint="@color/black" />
+                    </RelativeLayout>
+
+
+                </androidx.cardview.widget.CardView>
+
+
+            </LinearLayout>
+
+            <ScrollView
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_below="@id/ll3">
+
+                <RelativeLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent">
+
+
+                    <LinearLayout
+                        android:id="@+id/ll5"
+                        android:layout_width="match_parent"
+                        android:layout_height="180dp"
+                        android:padding="20dp">
+
+                        <androidx.cardview.widget.CardView
+                            android:id="@+id/package_info"
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent"
+                            app:cardBackgroundColor="#F5F5F5"
+                            app:cardCornerRadius="10dp">
+
+                            <LinearLayout
+                                android:layout_width="match_parent"
+                                android:layout_height="match_parent"
+                                android:orientation="horizontal"
+                                android:padding="10dp"
+                                android:weightSum="100">
+
+
+                                <RelativeLayout
+                                    android:layout_width="match_parent"
+                                    android:layout_height="wrap_content"
+                                    android:layout_weight="85">
+
+                                    <TextView
+                                        android:id="@+id/_parcel_description"
+                                        android:layout_width="180dp"
+                                        android:layout_height="wrap_content"
+                                        android:layout_marginLeft="15dp"
+                                        android:padding="5dp"
+                                        android:text="Parcel Description"
+                                        android:textColor="@android:color/darker_gray" />
+
+                                    <TextView
+                                        android:id="@+id/parcel_description"
+                                        android:layout_width="180dp"
+                                        android:layout_height="wrap_content"
+                                        android:layout_alignParentRight="true"
+                                        android:layout_marginRight="30dp"
+                                        android:gravity="right"
+                                        android:padding="5dp"
+                                        android:text="Description Here"
+                                        android:textColor="@android:color/black" />
+
+                                    <TextView
+                                        android:id="@+id/_parcel_weight"
+                                        android:layout_width="180dp"
+                                        android:layout_height="wrap_content"
+                                        android:layout_below="@+id/_parcel_description"
+                                        android:layout_marginLeft="15dp"
+                                        android:padding="5dp"
+                                        android:text="Parcel Weight"
+                                        android:textColor="@android:color/darker_gray" />
+
+                                    <TextView
+                                        android:id="@+id/parcel_weight"
+                                        android:layout_width="180dp"
+                                        android:layout_height="wrap_content"
+                                        android:layout_below="@+id/_parcel_description"
+                                        android:layout_alignParentRight="true"
+                                        android:layout_marginRight="30dp"
+                                        android:gravity="right"
+                                        android:padding="5dp"
+                                        android:text="10KG"
+                                        android:textColor="@android:color/black" />
+
+                                    <TextView
+                                        android:id="@+id/_parcel_type"
+                                        android:layout_width="180dp"
+                                        android:layout_height="wrap_content"
+                                        android:layout_below="@+id/_parcel_weight"
+                                        android:layout_marginLeft="15dp"
+                                        android:padding="5dp"
+                                        android:text="Parcel Type"
+                                        android:textColor="@android:color/darker_gray" />
+
+                                    <TextView
+                                        android:id="@+id/parcel_type"
+                                        android:layout_width="180dp"
+                                        android:layout_height="wrap_content"
+                                        android:layout_below="@+id/_parcel_weight"
+                                        android:layout_alignParentRight="true"
+                                        android:layout_marginRight="30dp"
+                                        android:gravity="right"
+                                        android:padding="5dp"
+                                        android:text="35CM X 35CM"
+                                        android:textColor="@android:color/black" />
+
+                                    <TextView
+                                        android:id="@+id/_pieces"
+                                        android:layout_width="180dp"
+                                        android:layout_height="wrap_content"
+                                        android:layout_below="@+id/_parcel_type"
+                                        android:layout_marginLeft="15dp"
+                                        android:padding="5dp"
+                                        android:text="Pieces"
+                                        android:textColor="@android:color/darker_gray" />
+
+                                    <TextView
+                                        android:id="@+id/pieces"
+                                        android:layout_width="180dp"
+                                        android:layout_height="wrap_content"
+                                        android:layout_below="@+id/_parcel_type"
+                                        android:layout_alignParentRight="true"
+                                        android:layout_marginRight="30dp"
+                                        android:gravity="right"
+                                        android:padding="5dp"
+                                        android:text="2"
+                                        android:textColor="@android:color/black" />
+                                </RelativeLayout>
+                            </LinearLayout>
+
+                        </androidx.cardview.widget.CardView>
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="200dp"
+                        android:layout_below="@+id/ll5"
+                        android:layout_margin="20dp">
+
+                        <androidx.cardview.widget.CardView
+                            android:id="@+id/driver_info"
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent"
+                            app:cardBackgroundColor="#F5F5F5"
+                            app:cardCornerRadius="10dp">
+
+                            <LinearLayout
+                                android:layout_width="match_parent"
+                                android:layout_height="match_parent"
+                                android:orientation="horizontal"
+                                android:padding="10dp"
+                                android:weightSum="100">
+
+
+                                <RelativeLayout
+                                    android:layout_width="match_parent"
+                                    android:layout_height="wrap_content"
+                                    android:layout_weight="85">
+
+                                    <TextView
+                                        android:id="@+id/_driver_name"
+                                        android:layout_width="180dp"
+                                        android:layout_height="wrap_content"
+                                        android:layout_marginLeft="15dp"
+                                        android:padding="5dp"
+                                        android:text="Driver"
+                                        android:textColor="@android:color/darker_gray" />
+
+                                    <TextView
+                                        android:id="@+id/driver_name"
+                                        android:layout_width="180dp"
+                                        android:layout_height="wrap_content"
+                                        android:layout_alignParentRight="true"
+                                        android:layout_marginRight="30dp"
+                                        android:gravity="right"
+                                        android:padding="5dp"
+                                        android:text="Name Here"
+                                        android:textColor="@android:color/black" />
+
+                                    <TextView
+                                        android:id="@+id/_driver_mobile"
+                                        android:layout_width="180dp"
+                                        android:layout_height="wrap_content"
+                                        android:layout_below="@+id/_driver_name"
+                                        android:layout_marginLeft="15dp"
+                                        android:padding="5dp"
+                                        android:text="Driver Mobile"
+                                        android:textColor="@android:color/darker_gray" />
+
+                                    <TextView
+                                        android:id="@+id/driver_mobile"
+                                        android:layout_width="180dp"
+                                        android:layout_height="wrap_content"
+                                        android:layout_below="@+id/_driver_name"
+                                        android:layout_alignParentRight="true"
+                                        android:layout_marginRight="30dp"
+                                        android:gravity="right"
+                                        android:padding="5dp"
+                                        android:text="0714460355"
+                                        android:textColor="@android:color/black" />
+
+                                    <TextView
+                                        android:id="@+id/_driver_vehicle"
+                                        android:layout_width="180dp"
+                                        android:layout_height="wrap_content"
+                                        android:layout_below="@+id/_driver_mobile"
+                                        android:layout_marginLeft="15dp"
+                                        android:padding="5dp"
+                                        android:text="Driver Vehicle"
+                                        android:textColor="@android:color/darker_gray" />
+
+                                    <TextView
+                                        android:id="@+id/driver_vehicle"
+                                        android:layout_width="180dp"
+                                        android:layout_height="wrap_content"
+                                        android:layout_below="@+id/_driver_mobile"
+                                        android:layout_alignParentRight="true"
+                                        android:layout_marginRight="30dp"
+                                        android:gravity="right"
+                                        android:padding="5dp"
+                                        android:text="CBC 1722"
+                                        android:textColor="@android:color/black" />
+
+                                    <Button
+                                        android:id="@+id/call_driver"
+                                        android:layout_width="match_parent"
+                                        android:layout_height="wrap_content"
+                                        android:layout_below="@id/driver_vehicle"
+                                        android:layout_margin="20dp"
+                                        android:layout_marginStart="20dp"
+                                        android:layout_marginTop="20dp"
+                                        android:layout_marginEnd="20dp"
+                                        android:layout_marginBottom="20dp"
+                                        android:background="@drawable/buttons"
+                                        android:text="Call Driver" />
+
+
+                                </RelativeLayout>
+                            </LinearLayout>
+
+                        </androidx.cardview.widget.CardView>
+
+                    </LinearLayout>
+                </RelativeLayout>
+
+            </ScrollView>
+
+        </RelativeLayout>
+
+    </RelativeLayout>
+
+    <com.google.android.material.navigation.NavigationView
+        android:id="@+id/nav_view"
+        android:layout_width="wrap_content"
+        android:layout_height="match_parent"
+        android:layout_gravity="start"
+        app:headerLayout="@layout/nav_header_layout"
+        app:menu="@menu/nav_menu_customer">
+
+    </com.google.android.material.navigation.NavigationView>
+
+</androidx.drawerlayout.widget.DrawerLayout>

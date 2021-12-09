@@ -7,6 +7,7 @@
     <string name="app_description">Hassle Free Courier Service</string>
     <string name="logo">Logo</string>
     <string name="settings">Settings</string>
+    <string name="home">Home</string>
     <string name="logout">Logout</string>
     <string name="open_nav_drawer">OPEN_NAV_BAR</string>
     <string name="close_nav_drawer">CLOSE_NAV_BAR</string>
@@ -16,4 +17,23 @@
     <string name="good_afternoon">Good Afternoon</string>
     <string name="good_evening">Good Evening</string>
     <string name="greetings">Greeting</string>
+
+    <string-array name="receiver_city">
+        <item>Colombo [Western Province]</item>
+        <item>Negombo [Western Province]</item>
+        <item>Galle [Southern Province]</item>
+    </string-array>
+    
+    <string-array name="type_of_parcel">
+        <item>Small 20CM X 20CM</item>
+        <item>Medium 45CM X 45CM</item>
+        <item>Large 80CM X 80CM</item>
+        <item>Card Envelop</item>
+        <item>Express Delivery Flyer</item>
+    </string-array>
+
+    <string-array name="payment_method">
+        <item>Card</item>
+        <item>Cash on Delivery</item>
+    </string-array>
 </resources>

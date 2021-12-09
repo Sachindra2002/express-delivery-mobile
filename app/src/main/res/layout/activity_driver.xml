@@ -159,6 +159,7 @@
                 android:gravity="center">
 
                 <androidx.cardview.widget.CardView
+                    android:id="@+id/view_profile"
                     android:layout_width="150dp"
                     android:layout_height="150dp"
                     android:layout_margin="10dp"
@@ -259,7 +260,7 @@
         android:layout_height="match_parent"
         android:layout_gravity="start"
         app:headerLayout="@layout/nav_header_layout"
-        app:menu="@menu/nav_menu_customer">
+        app:menu="@menu/nav_menu_driver">
 
     </com.google.android.material.navigation.NavigationView>
 

@@ -1,15 +1,11 @@
 package com.example.express_delivery_mobile;
 
-import android.app.AlertDialog;
 import android.app.ProgressDialog;
 import android.content.Context;
-import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.view.MenuItem;
-import android.view.View;
-import android.widget.ProgressBar;
-import android.widget.TextView;
+import android.widget.SearchView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
@@ -17,17 +13,17 @@ import androidx.annotation.Nullable;
 import androidx.appcompat.app.ActionBarDrawerToggle;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
-import androidx.cardview.widget.CardView;
 import androidx.core.view.GravityCompat;
 import androidx.drawerlayout.widget.DrawerLayout;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
-import com.example.express_delivery_mobile.Adapter.DriverAssignedMailAdapter;
+import com.example.express_delivery_mobile.Adapter.DriverAcceptedMailAdapter;
 import com.example.express_delivery_mobile.Adapter.MailAdapter;
 import com.example.express_delivery_mobile.Model.Mail;
 import com.example.express_delivery_mobile.Service.DriverClient;
+import com.example.express_delivery_mobile.Service.MailClient;
 import com.example.express_delivery_mobile.Service.RetrofitClientInstance;
 import com.example.express_delivery_mobile.Util.AuthHandler;
 import com.example.express_delivery_mobile.Util.NavHandler;
@@ -35,76 +31,45 @@ import com.google.android.material.navigation.NavigationView;
 
 import java.util.ArrayList;
 import java.util.List;
+
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
-public class DriverActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener{
-    TextView home_name;
+public class ForYouActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener {
     private Toolbar mToolbar;
     private DrawerLayout mDrawerLayout;
     private NavigationView mNavigationView;
     private ProgressDialog mProgressDialog;
-    private CardView acceptedMails;
-    private CardView viewProfile;
-
-    private List<Mail> mails;
+    private SearchView searchView;
 
     private RecyclerView recyclerView;
-    private DriverAssignedMailAdapter driverAssignedMailAdapter;
-    SwipeRefreshLayout swipeRefreshLayout;
+    private MailAdapter mailAdapter;
+    private SwipeRefreshLayout swipeRefreshLayout;
 
+    private List<Mail> mails;
     private String token;
     private String email;
-    private String firstName;
-    private String lastName;
 
-    //Driver Retrofit client
-    DriverClient driverClient = RetrofitClientInstance.getRetrofitInstance().create(DriverClient.class);
+    private MailClient mailClient = RetrofitClientInstance.getRetrofitInstance().create(MailClient.class);
 
     @Override
-    protected void onCreate(Bundle savedInstanceState) {
+    protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         //Check if authorization token is valid
-        String result = AuthHandler.validate(DriverActivity.this, "driver");
+        String result = AuthHandler.validate(ForYouActivity.this, "customer");
 
         if (result != null) {
             if (result.equals("unauthorized") || result.equals("expired")) return;
         }
 
-        //Load layout only after authorization
-        setContentView(R.layout.activity_driver);
-
-        acceptedMails = findViewById(R.id.accepted_mails);
-        acceptedMails.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Intent intent = new Intent(DriverActivity.this, DriverAcceptedMailsActivity.class);
-                intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-                startActivity(intent);
-            }
-        });
-
-        viewProfile = findViewById(R.id.view_profile);
-        viewProfile.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Intent intent = new Intent(DriverActivity.this, DriverProfileActivity.class);
-                intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-                startActivity(intent);
-            }
-        });
+        //Load layout
+        setContentView(R.layout.activity_for_you_mails);
 
         //Retrieve JWT Token
         SharedPreferences sharedPreferences = getSharedPreferences("auth_preferences", Context.MODE_PRIVATE);
         token = "Bearer " + sharedPreferences.getString("auth_token", null);
         email = sharedPreferences.getString("email", null);
-        firstName = sharedPreferences.getString("firstName", null);
-        lastName = sharedPreferences.getString("lastName", null);
-
-        //Set user name to home screen
-        home_name = findViewById(R.id.home_name);
-        home_name.setText(firstName + " " + lastName);
 
         //Setup toolbar
         mToolbar = findViewById(R.id.toolbar);
@@ -135,23 +100,23 @@ public class DriverActivity extends AppCompatActivity implements NavigationView.
         swipeRefreshLayout = (SwipeRefreshLayout) findViewById(R.id.swipe);
         LinearLayoutManager layoutManager = new LinearLayoutManager(this);
         recyclerView.setLayoutManager(layoutManager);
-        driverAssignedMailAdapter = new DriverAssignedMailAdapter(this, mails, token ,"driver", mProgressDialog);
-        recyclerView.setAdapter(driverAssignedMailAdapter);
+        mailAdapter = new MailAdapter(this, mails, token ,"customer", mProgressDialog, email);
+        recyclerView.setAdapter(mailAdapter);
 
         // SetOnRefreshListener on SwipeRefreshLayout
         swipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override
             public void onRefresh() {
                 swipeRefreshLayout.setRefreshing(false);
-                getRecentAssignedMails();
+                getAllUpcomingMails();
             }
         });
 
-        getRecentAssignedMails();
+        getAllUpcomingMails();
     }
 
-    private void getRecentAssignedMails() {
-        Call<List<Mail>> call = driverClient.getAllAssignedMails(token);
+    private void getAllUpcomingMails() {
+        Call<List<Mail>> call = mailClient.getAllUpcomingMails(token);
 
         //Show Progress
         mProgressDialog.setMessage("Loading Packages..");
@@ -165,16 +130,16 @@ public class DriverActivity extends AppCompatActivity implements NavigationView.
                 System.out.println(response.body());
                 //Handle null pointer errors
                 if(mails != null){
-                    driverAssignedMailAdapter.setMails(mails);
+                    mailAdapter.setMails(mails);
                 }else {
-                    Toast.makeText(DriverActivity.this, "Something went wrong" + response.toString(), Toast.LENGTH_SHORT).show();
+                    Toast.makeText(ForYouActivity.this, "Something went wrong" + response.toString(), Toast.LENGTH_SHORT).show();
                 }
                 mProgressDialog.dismiss();
             }
 
             @Override
             public void onFailure(Call<List<Mail>> call, Throwable t) {
-                Toast.makeText(DriverActivity.this, "Something went Wrong!" + t.toString(), Toast.LENGTH_SHORT).show();
+                Toast.makeText(ForYouActivity.this, "Something went Wrong!" + t.toString(), Toast.LENGTH_SHORT).show();
                 mProgressDialog.dismiss();
             }
         });
@@ -183,7 +148,7 @@ public class DriverActivity extends AppCompatActivity implements NavigationView.
     @Override
     public boolean onNavigationItemSelected(@NonNull MenuItem item) {
         //Handle side drawer navigation
-        NavHandler.handleDriverNav(item, DriverActivity.this);
+        NavHandler.handleCustomerNav(item, ForYouActivity.this);
 
         //close navigation drawer
         mDrawerLayout.closeDrawer(GravityCompat.START);
@@ -191,20 +156,12 @@ public class DriverActivity extends AppCompatActivity implements NavigationView.
     }
 
     @Override
-    protected void onResume() {
-        super.onResume();
-        //Check if authorization token is valid
-        AuthHandler.validate(DriverActivity.this, "driver");
+    public void onPointerCaptureChanged(boolean hasCapture) {
+
     }
 
     @Override
     public void onBackPressed() {
-        // super.onBackPressed();
-        // Not calling **super**, disables back button in current screen.
-    }
-
-    @Override
-    public void onPointerCaptureChanged(boolean hasCapture) {
-
+        super.onBackPressed();
     }
 }

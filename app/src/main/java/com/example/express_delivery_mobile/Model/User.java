@@ -10,8 +10,10 @@ public class User {
     private String userRole;
     private String token;
     private String confirmPassword;
+    private DriverDetail driverDetail;
+    private ServiceCentre serviceCentre;
 
-    public User(String email, String firstName, String lastName, String location, String phoneNumber, String password, String userRole, String token, String confirmPassword) {
+    public User(String email, String firstName, String lastName, String location, String phoneNumber, String password, String userRole, String token, String confirmPassword, DriverDetail driverDetail, ServiceCentre serviceCentre) {
         this.email = email;
         this.firstName = firstName;
         this.lastName = lastName;
@@ -21,6 +23,8 @@ public class User {
         this.userRole = userRole;
         this.token = token;
         this.confirmPassword = confirmPassword;
+        this.driverDetail = driverDetail;
+        this.serviceCentre = serviceCentre;
     }
 
     public String getEmail() {
@@ -93,5 +97,21 @@ public class User {
 
     public void setConfirmPassword(String confirmPassword) {
         this.confirmPassword = confirmPassword;
+    }
+
+    public DriverDetail getDriverDetail() {
+        return driverDetail;
+    }
+
+    public void setDriverDetail(DriverDetail driverDetail) {
+        this.driverDetail = driverDetail;
+    }
+
+    public ServiceCentre getServiceCentre() {
+        return serviceCentre;
+    }
+
+    public void setServiceCentre(ServiceCentre serviceCentre) {
+        this.serviceCentre = serviceCentre;
     }
 }

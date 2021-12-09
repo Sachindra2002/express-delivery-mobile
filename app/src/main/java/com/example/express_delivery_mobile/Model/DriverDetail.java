@@ -6,17 +6,17 @@ public class DriverDetail {
     private String status;
     private User user;
     private Vehicle vehicle;
-    private String NIC;
-    private String DOB;
+    private String nic;
+    private String dob;
     private String address;
 
-    public DriverDetail(int driverId, String status, User user, Vehicle vehicle, String NIC, String DOB, String address) {
+    public DriverDetail(int driverId, String status, User user, Vehicle vehicle, String nic, String dob, String address) {
         this.driverId = driverId;
         this.status = status;
         this.user = user;
         this.vehicle = vehicle;
-        this.NIC = NIC;
-        this.DOB = DOB;
+        this.nic = nic;
+        this.dob = dob;
         this.address = address;
     }
 
@@ -52,20 +52,20 @@ public class DriverDetail {
         this.vehicle = vehicle;
     }
 
-    public String getNIC() {
-        return NIC;
+    public String getNic() {
+        return nic;
     }
 
-    public void setNIC(String NIC) {
-        this.NIC = NIC;
+    public void setNic(String nic) {
+        this.nic = nic;
     }
 
-    public String getDOB() {
-        return DOB;
+    public String getDob() {
+        return dob;
     }
 
-    public void setDOB(String DOB) {
-        this.DOB = DOB;
+    public void setDob(String dob) {
+        this.dob = dob;
     }
 
     public String getAddress() {

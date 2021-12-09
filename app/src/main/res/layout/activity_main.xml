@@ -5,177 +5,251 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context=".MainActivity"
+    android:background="@drawable/ic_wave__3_"
     android:id="@+id/drawer_layout">
 
     <RelativeLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:background="@color/white">
+        android:layout_height="match_parent">
 
-        <androidx.coordinatorlayout.widget.CoordinatorLayout
+    <androidx.coordinatorlayout.widget.CoordinatorLayout
+        android:id="@+id/coordinator_layout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <com.google.android.material.appbar.AppBarLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <com.google.android.material.appbar.MaterialToolbar
+                android:id="@+id/toolbar"
+                android:layout_width="match_parent"
+                android:layout_height="?actionBarSize"
+                android:background="@color/yellow"></com.google.android.material.appbar.MaterialToolbar>
+
+        </com.google.android.material.appbar.AppBarLayout>
+
+    </androidx.coordinatorlayout.widget.CoordinatorLayout>
+
+        <LinearLayout
+            android:id="@+id/ll1"
+            android:layout_width="wrap_content"
+            android:layout_height="80dp"
+            android:layout_below="@+id/coordinator_layout"
+            android:layout_marginLeft="10dp"
+            android:layout_marginTop="20dp"
+            android:gravity="center_vertical">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="10dp"
+                android:layout_marginLeft="10dp"
+                android:orientation="vertical">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Welcome Back"
+                    android:textColor="@color/white"
+                    android:textSize="30sp"
+                    android:textStyle="bold" />
+
+                <TextView
+                    android:id="@+id/home_name"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Peter Parker"
+                    android:textColor="@color/white"
+                    android:textSize="30sp"
+                    android:textStyle="normal" />
+            </LinearLayout>
+        </LinearLayout>
+        <LinearLayout
+            android:id="@+id/ll3"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:id="@+id/coordinator_layout">
+            android:layout_below="@+id/ll1"
+            android:layout_marginTop="40dp"
+            android:orientation="vertical">
 
-            <com.google.android.material.appbar.AppBarLayout
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:gravity="center">
+
+                <androidx.cardview.widget.CardView
+                    android:id="@+id/send_package"
+                    android:layout_width="150dp"
+                    android:layout_height="150dp"
+                    android:layout_margin="10dp"
+                    android:background="@color/white"
+                    android:clickable="true"
+                    app:cardCornerRadius="15dp">
+
+                    <LinearLayout
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center"
+                        android:orientation="vertical">
+
+                        <ImageView
+                            android:layout_width="80dp"
+                            android:layout_height="80dp"
+                            android:layout_gravity="center"
+                            android:background="@drawable/box9" />
+
+                        <TextView
+                            android:layout_width="150dp"
+                            android:layout_height="wrap_content"
+                            android:layout_gravity="center"
+                            android:layout_marginTop="10dp"
+                            android:gravity="center"
+                            android:text="Send Package"
+                            android:textColor="@color/black"
+                            android:textSize="16sp"
+                            android:textStyle="bold" />
+                    </LinearLayout>
+
+                </androidx.cardview.widget.CardView>
+
+                <androidx.cardview.widget.CardView
+                    android:id="@+id/track_button"
+                    android:layout_width="150dp"
+                    android:layout_height="150dp"
+                    android:layout_margin="10dp"
+                    android:background="@color/white"
+                    android:clickable="true"
+                    app:cardCornerRadius="15dp">
+
+                    <LinearLayout
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center"
+                        android:orientation="vertical">
+
+                        <ImageView
+                            android:layout_width="80dp"
+                            android:layout_height="80dp"
+                            android:layout_gravity="center"
+                            android:background="@drawable/box10" />
+
+                        <TextView
+                            android:layout_width="150dp"
+                            android:layout_height="wrap_content"
+                            android:layout_gravity="center"
+                            android:layout_marginTop="10dp"
+                            android:gravity="center"
+                            android:text="Track Package"
+                            android:textColor="@color/black"
+                            android:textSize="16sp"
+                            android:textStyle="bold" />
+                    </LinearLayout>
+
+                </androidx.cardview.widget.CardView>
+
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:gravity="center">
+
+                <androidx.cardview.widget.CardView
+                    android:id="@+id/from_you"
+                    android:layout_width="150dp"
+                    android:layout_height="150dp"
+                    android:layout_margin="10dp"
+                    android:background="@color/white"
+                    app:cardCornerRadius="15dp">
+
+                    <LinearLayout
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center"
+                        android:orientation="vertical">
+
+                        <ImageView
+                            android:layout_width="80dp"
+                            android:layout_height="80dp"
+                            android:layout_gravity="center"
+                            android:background="@drawable/box7" />
+
+                        <TextView
+                            android:layout_width="150dp"
+                            android:layout_height="wrap_content"
+                            android:layout_gravity="center"
+                            android:layout_marginTop="10dp"
+                            android:gravity="center"
+                            android:text="From You"
+                            android:textColor="@color/black"
+                            android:textSize="16sp"
+                            android:textStyle="bold" />
+                    </LinearLayout>
+
+                </androidx.cardview.widget.CardView>
+
+                <androidx.cardview.widget.CardView
+                    android:id="@+id/for_you_card"
+                    android:layout_width="150dp"
+                    android:layout_height="150dp"
+                    android:layout_margin="10dp"
+                    android:background="@color/white"
+                    app:cardCornerRadius="15dp">
+
+                    <LinearLayout
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center"
+                        android:orientation="vertical">
+
+                        <ImageView
+                            android:layout_width="80dp"
+                            android:layout_height="80dp"
+                            android:layout_gravity="center"
+                            android:background="@drawable/box11" />
+
+                        <TextView
+                            android:layout_width="150dp"
+                            android:layout_height="wrap_content"
+                            android:layout_gravity="center"
+                            android:layout_marginTop="10dp"
+                            android:gravity="center"
+                            android:text="To You"
+                            android:textColor="@color/black"
+                            android:textSize="16sp"
+                            android:textStyle="bold" />
+                    </LinearLayout>
+
+                </androidx.cardview.widget.CardView>
+
+            </LinearLayout>
+
+        </LinearLayout>
+        <LinearLayout
+            android:id="@+id/rc1"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/ll3"
+            android:layout_weight="1"
+            android:gravity="center">
+
+            <androidx.swiperefreshlayout.widget.SwipeRefreshLayout
+                android:id="@+id/swipe"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content">
-                <com.google.android.material.appbar.MaterialToolbar
+
+                <androidx.recyclerview.widget.RecyclerView
+                    android:id="@+id/recycler_view"
                     android:layout_width="match_parent"
-                    android:layout_height="?actionBarSize"
-                    android:background="@color/yellow"
-                    android:id="@+id/toolbar">
-                </com.google.android.material.appbar.MaterialToolbar>
+                    android:layout_height="wrap_content" />
 
-            </com.google.android.material.appbar.AppBarLayout>
+            </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>
 
-        </androidx.coordinatorlayout.widget.CoordinatorLayout>
-
-        <RelativeLayout
-            android:id="@+id/yellow_top"
-            android:layout_width="match_parent"
-            android:layout_height="400sp"
-            android:layout_below="@id/coordinator_layout"
-            android:layout_marginTop="0dp"
-            android:background="@drawable/home_bg"
-            android:orientation="horizontal"
-            android:paddingLeft="10dp"
-            android:paddingTop="5sp"
-            android:paddingRight="10dp">
-
-            <TextView
-                android:id="@+id/greeting"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center_horizontal"
-                android:padding="10dp"
-                android:text="Good Evening"
-                android:textColor="@color/white"
-                android:textSize="30sp"
-                android:textStyle="bold" />
-
-            <Button
-                android:id="@+id/send_package"
-                android:layout_width="150dp"
-                android:layout_height="wrap_content"
-                android:layout_below="@+id/greeting"
-                android:layout_alignParentStart="true"
-                android:layout_gravity="center_horizontal"
-                android:layout_marginStart="35dp"
-                android:layout_marginTop="45dp"
-                android:textStyle="bold"
-                android:padding="10dp"
-                android:textColor="@color/black"
-                android:text="Send   Package"
-                android:textSize="15sp" />
-
-            <Button
-                android:id="@+id/button"
-                android:layout_width="150dp"
-                android:layout_height="wrap_content"
-                android:layout_below="@+id/greeting"
-                android:layout_alignParentEnd="true"
-                android:layout_gravity="center_horizontal"
-                android:layout_marginTop="45dp"
-                android:layout_marginEnd="35dp"
-                android:textColor="@color/black"
-                android:textStyle="bold"
-                android:padding="10dp"
-                android:text="Track     Package"
-                android:textSize="15sp" />
-
-            <androidx.cardview.widget.CardView
-                android:layout_width="130dp"
-                android:layout_height="130dp"
-                android:layout_below="@+id/send_package"
-                app:cardBackgroundColor="@color/white"
-                android:layout_alignParentStart="true"
-                android:layout_alignParentBottom="true"
-                android:layout_marginStart="45dp"
-                android:layout_marginTop="40dp"
-                android:layout_marginEnd="47dp"
-                android:layout_marginBottom="47dp"
-                app:cardCornerRadius="15dp">
-
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:layout_gravity="center"
-                    android:orientation="vertical"
-                    android:padding="16dp">
-
-                    <ImageView
-                        android:layout_width="80dp"
-                        android:layout_height="80dp"
-                        android:layout_gravity="center"
-                        android:src="@drawable/box6" />
-
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_gravity="center"
-                        android:text="For Me"
-                        android:textColor="@color/black"
-                        android:textStyle="bold"
-                        android:textSize="18sp" />
-                </LinearLayout>
-
-
-            </androidx.cardview.widget.CardView>
-
-            <androidx.cardview.widget.CardView
-                android:layout_width="134dp"
-                android:layout_height="132dp"
-                android:layout_below="@+id/button"
-                app:cardBackgroundColor="@color/white"
-                android:layout_alignParentEnd="true"
-                android:layout_alignParentBottom="true"
-                android:layout_marginStart="47dp"
-                android:layout_marginTop="40dp"
-                android:layout_marginEnd="45dp"
-                android:layout_marginBottom="47dp"
-                app:cardCornerRadius="15dp">
-
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:layout_gravity="center"
-                    android:orientation="vertical"
-                    android:padding="16dp">
-
-                    <ImageView
-                        android:layout_width="80dp"
-                        android:layout_height="80dp"
-                        android:layout_gravity="center"
-                        android:src="@drawable/box3" />
-
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_gravity="center"
-                        android:textStyle="bold"
-                        android:textColor="@color/black"
-                        android:text="From Me"
-                        android:textSize="18sp" />
-                </LinearLayout>
-            </androidx.cardview.widget.CardView>
-
-        </RelativeLayout>
-
-        <RelativeLayout
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:layout_below="@+id/yellow_top">
-
-            <androidx.recyclerview.widget.RecyclerView
-                android:id="@+id/recycler_view"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="20dp"
-
-                />
-
-        </RelativeLayout>
+        </LinearLayout>
 
     </RelativeLayout>
 

@@ -19,6 +19,7 @@ import androidx.core.view.GravityCompat;
 import androidx.drawerlayout.widget.DrawerLayout;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
+import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
 import com.example.express_delivery_mobile.Adapter.DriverAcceptedMailAdapter;
 import com.example.express_delivery_mobile.Adapter.MailAdapter;
@@ -45,6 +46,7 @@ public class DriverAcceptedMailsActivity extends AppCompatActivity implements Na
 
     private RecyclerView recyclerView;
     private DriverAcceptedMailAdapter driverAcceptedMailAdapter;
+    private SwipeRefreshLayout swipeRefreshLayout;
 
     private List<Mail> mails;
     private String token;
@@ -97,10 +99,20 @@ public class DriverAcceptedMailsActivity extends AppCompatActivity implements Na
         //Setup mail list
         mails = new ArrayList<>();
         recyclerView = findViewById(R.id.recycler_view);
+        swipeRefreshLayout = (SwipeRefreshLayout) findViewById(R.id.swipe);
         LinearLayoutManager layoutManager = new LinearLayoutManager(this);
         recyclerView.setLayoutManager(layoutManager);
         driverAcceptedMailAdapter = new DriverAcceptedMailAdapter(this, mails, token ,"driver", mProgressDialog);
         recyclerView.setAdapter(driverAcceptedMailAdapter);
+
+        // SetOnRefreshListener on SwipeRefreshLayout
+        swipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
+            @Override
+            public void onRefresh() {
+                swipeRefreshLayout.setRefreshing(false);
+                getAllAcceptedMails();
+            }
+        });
 
         getAllAcceptedMails();
     }
@@ -178,6 +190,5 @@ public class DriverAcceptedMailsActivity extends AppCompatActivity implements Na
     @Override
     public void onBackPressed() {
          super.onBackPressed();
-        // Not calling **super**, disables back button in current screen.
     }
 }

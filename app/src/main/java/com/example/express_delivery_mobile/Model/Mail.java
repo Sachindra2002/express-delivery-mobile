@@ -57,6 +57,24 @@ public class Mail implements Serializable {
         this.createdAt = createdAt;
     }
 
+    public Mail(String pickupAddress, String receiverAddress, String receiverFirstName, String receiverLastName, String receiverPhoneNumber, String receiverEmail, String receiverCity, String parcelType, String weight, String pieces, String paymentMethod, String date, String time, String totalCost, String description) {
+        this.pickupAddress = pickupAddress;
+        this.receiverAddress = receiverAddress;
+        this.receiverFirstName = receiverFirstName;
+        this.receiverLastName = receiverLastName;
+        this.receiverPhoneNumber = receiverPhoneNumber;
+        this.receiverEmail = receiverEmail;
+        this.receiverCity = receiverCity;
+        this.parcelType = parcelType;
+        this.weight = weight;
+        this.pieces = pieces;
+        this.paymentMethod = paymentMethod;
+        this.date = date;
+        this.time = time;
+        this.totalCost = totalCost;
+        this.description = description;
+    }
+
     public int getMailId() {
         return mailId;
     }

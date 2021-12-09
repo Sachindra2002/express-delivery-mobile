@@ -42,6 +42,7 @@ dependencies {
     implementation 'com.squareup.retrofit2:converter-gson:2.9.0'
     implementation 'com.auth0.android:jwtdecode:2.0.1'
     implementation 'androidx.swiperefreshlayout:swiperefreshlayout:1.1.0'
-    implementation 'com.github.d-max:spots-dialog:1.1@aar'
+    implementation 'com.kofigyan.stateprogressbar:stateprogressbar:1.0.0'
+    implementation 'com.ernestoyaquello.stepperform:vertical-stepper-form:2.5.0'
 
 }

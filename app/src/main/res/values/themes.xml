@@ -14,7 +14,8 @@
         <!-- Customize your theme here. -->
         <item name="windowActionBar">false</item>
         <item name="windowNoTitle">true</item>
-
+        <item name="android:datePickerDialogTheme">@style/DatePickerDialogTheme</item>
+        <item name="android:timePickerDialogTheme">@style/TimePickerDialog</item>
         <item name="materialAlertDialogTheme">@style/AlertDialogMaterialTheme</item>
     </style>
 
@@ -41,11 +42,10 @@
         <item name="rippleColor">@color/yellow</item>
     </style>
 
-    <style name="Custom" parent="android:Theme.DeviceDefault.Dialog">
-        <item name="android:windowBackground">@color/colorGray</item>
-        <item name="DialogTitleAppearance">@android:style/TextAppearance.Medium</item>
-        <item name="DialogTitleText">Please Wait</item>
-        <item name="DialogSpotColor">@color/yellow</item>
-        <item name="DialogSpotCount">5</item>
+    <style name="DatePickerDialogTheme" parent="Theme.AppCompat.Light.Dialog">
+        <item name="colorAccent">@android:color/holo_green_dark</item>
+    </style>
+    <style name="TimePickerDialog" parent="Theme.AppCompat.Light.Dialog">
+        <item name="colorAccent">@android:color/holo_green_dark</item>
     </style>
 </resources>
