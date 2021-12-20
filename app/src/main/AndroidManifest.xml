@@ -12,7 +12,9 @@
         android:usesCleartextTraffic="${usesCleartextTraffic}">
         <activity android:name=".LoginActivity" />
         <activity android:name=".DriverActivity" />
+        <activity android:name=".AgentActivity" />
         <activity android:name=".DriverAcceptedMailsActivity" />
+        <activity android:name=".AgentAcceptedMailsActivity" />
         <activity android:name=".DriverProfileActivity" />
         <activity android:name=".SendPackageActivity" />
         <activity android:name=".ForYouActivity" />

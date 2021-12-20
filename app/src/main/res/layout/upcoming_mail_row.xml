@@ -52,11 +52,11 @@
                 android:id="@+id/senderName"
                 android:layout_width="180dp"
                 android:layout_height="wrap_content"
+                android:layout_below="@+id/status"
                 android:layout_alignParentRight="true"
                 android:layout_marginRight="30dp"
                 android:gravity="right"
                 android:padding="5dp"
-                android:layout_below="@+id/status"
                 android:text="Name Here"
                 android:textColor="@android:color/black" />
 
@@ -124,9 +124,9 @@
                 android:layout_alignParentRight="true"
                 android:layout_marginRight="30dp"
                 android:gravity="right"
-                android:textColor="@color/black"
                 android:padding="5dp"
-                android:text="4KG" />
+                android:text="4KG"
+                android:textColor="@color/black" />
 
         </RelativeLayout>
 

@@ -23,7 +23,7 @@
         <item>Negombo [Western Province]</item>
         <item>Galle [Southern Province]</item>
     </string-array>
-    
+
     <string-array name="type_of_parcel">
         <item>Small 20CM X 20CM</item>
         <item>Medium 45CM X 45CM</item>
@@ -36,4 +36,13 @@
         <item>Card</item>
         <item>Cash on Delivery</item>
     </string-array>
+
+    <string-array name="driver_list">
+        <item>Trevor Kurera</item>
+        <item>Janith Fonseka</item>
+        <item>Kumara Pieris</item>
+        <item>Kevin Perera</item>
+    </string-array>
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
 </resources>

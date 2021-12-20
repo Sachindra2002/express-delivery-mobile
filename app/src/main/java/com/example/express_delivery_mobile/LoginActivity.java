@@ -102,7 +102,7 @@ public class LoginActivity extends AppCompatActivity {
                         }else if(role.equals("admin")) {
 
                         }else if(role.equals("agent")){
-
+                            homePageIntent = new Intent(LoginActivity.this, AgentActivity.class);
                         }else if(role.equals("driver")){
                             homePageIntent = new Intent(LoginActivity.this, DriverActivity.class);
                         }
@@ -142,7 +142,9 @@ public class LoginActivity extends AppCompatActivity {
             }else if(role.equals("admin")){
 
             }else if(role.equals("agent")){
-
+                Intent intent = new Intent(LoginActivity.this, AgentActivity.class);
+                intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                startActivity(intent);
             }else if(role.equals("driver")){
                 Intent intent = new Intent(LoginActivity.this, DriverActivity.class);
                 intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);

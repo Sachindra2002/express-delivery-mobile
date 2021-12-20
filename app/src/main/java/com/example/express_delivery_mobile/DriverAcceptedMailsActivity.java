@@ -1,14 +1,11 @@
 package com.example.express_delivery_mobile;
 
 import android.app.ProgressDialog;
-import android.app.SearchManager;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.os.Bundle;
-import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.SearchView;
-import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -17,42 +14,37 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 import androidx.core.view.GravityCompat;
 import androidx.drawerlayout.widget.DrawerLayout;
-import androidx.recyclerview.widget.LinearLayoutManager;
-import androidx.recyclerview.widget.RecyclerView;
-import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
+import androidx.fragment.app.FragmentManager;
+import androidx.viewpager2.widget.ViewPager2;
 
-import com.example.express_delivery_mobile.Adapter.DriverAcceptedMailAdapter;
-import com.example.express_delivery_mobile.Adapter.MailAdapter;
+
+import com.example.express_delivery_mobile.Fragment.FragmentAdapter;
 import com.example.express_delivery_mobile.Model.Mail;
 import com.example.express_delivery_mobile.Service.DriverClient;
 import com.example.express_delivery_mobile.Service.RetrofitClientInstance;
 import com.example.express_delivery_mobile.Util.AuthHandler;
 import com.example.express_delivery_mobile.Util.NavHandler;
 import com.google.android.material.navigation.NavigationView;
+import com.google.android.material.tabs.TabLayout;
 
-import java.util.ArrayList;
 import java.util.List;
 
-import retrofit2.Call;
-import retrofit2.Callback;
-import retrofit2.Response;
 
-public class DriverAcceptedMailsActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener{
+public class DriverAcceptedMailsActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener {
     private Toolbar mToolbar;
     private DrawerLayout mDrawerLayout;
     private NavigationView mNavigationView;
-    private ProgressDialog mProgressDialog;
-    private SearchView searchView;
 
-    private RecyclerView recyclerView;
-    private DriverAcceptedMailAdapter driverAcceptedMailAdapter;
-    private SwipeRefreshLayout swipeRefreshLayout;
+    private SearchView searchView;
+    private TabLayout tabLayout;
+    private ViewPager2 viewPager2;
+    private FragmentAdapter fragmentAdapter;
 
     private List<Mail> mails;
     private String token;
     private String email;
 
-    private DriverClient driverClient = RetrofitClientInstance.getRetrofitInstance().create(DriverClient.class);
+
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -90,62 +82,47 @@ public class DriverAcceptedMailsActivity extends AppCompatActivity implements Na
                 R.string.close_nav_drawer
         );
 
-        mProgressDialog = new ProgressDialog(this);
-
         mDrawerLayout.addDrawerListener(mActionBarDrawerToggle);
         mActionBarDrawerToggle.syncState();
         mNavigationView.setNavigationItemSelectedListener(this);
 
-        //Setup mail list
-        mails = new ArrayList<>();
-        recyclerView = findViewById(R.id.recycler_view);
-        swipeRefreshLayout = (SwipeRefreshLayout) findViewById(R.id.swipe);
-        LinearLayoutManager layoutManager = new LinearLayoutManager(this);
-        recyclerView.setLayoutManager(layoutManager);
-        driverAcceptedMailAdapter = new DriverAcceptedMailAdapter(this, mails, token ,"driver", mProgressDialog);
-        recyclerView.setAdapter(driverAcceptedMailAdapter);
+        tabLayout = findViewById(R.id.tab_layout);
+        viewPager2 = findViewById(R.id.view_pager_2);
+        FragmentManager fragmentManager = getSupportFragmentManager();
+        fragmentAdapter = new FragmentAdapter(fragmentManager, getLifecycle());
+        viewPager2.setAdapter(fragmentAdapter);
 
-        // SetOnRefreshListener on SwipeRefreshLayout
-        swipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
+        tabLayout.addTab(tabLayout.newTab().setText("Accepted"));
+        tabLayout.addTab(tabLayout.newTab().setText("Started"));
+        tabLayout.addTab(tabLayout.newTab().setText("Picked up"));
+        tabLayout.addTab(tabLayout.newTab().setText("In Transit"));
+        tabLayout.addTab(tabLayout.newTab().setText("Delivered"));
+
+        tabLayout.addOnTabSelectedListener(new TabLayout.OnTabSelectedListener() {
             @Override
-            public void onRefresh() {
-                swipeRefreshLayout.setRefreshing(false);
-                getAllAcceptedMails();
+            public void onTabSelected(TabLayout.Tab tab) {
+                viewPager2.setCurrentItem(tab.getPosition());
+            }
+
+            @Override
+            public void onTabUnselected(TabLayout.Tab tab) {
+
+            }
+
+            @Override
+            public void onTabReselected(TabLayout.Tab tab) {
+
             }
         });
 
-        getAllAcceptedMails();
-    }
-
-    private void getAllAcceptedMails() {
-        Call<List<Mail>> call = driverClient.getAllAcceptedMails(token);
-
-        //Show Progress
-        mProgressDialog.setMessage("Loading Packages..");
-        mProgressDialog.show();
-
-        call.enqueue(new Callback<List<Mail>>() {
+        viewPager2.registerOnPageChangeCallback(new ViewPager2.OnPageChangeCallback() {
             @Override
-            public void onResponse(Call<List<Mail>> call, Response<List<Mail>> response) {
-                mails = response.body();
-                System.out.println(response);
-                System.out.println(response.body());
-                //Handle null pointer errors
-                if(mails != null){
-                    driverAcceptedMailAdapter.setMails(mails);
-                }else {
-                    Toast.makeText(DriverAcceptedMailsActivity.this, "Something went wrong" + response.toString(), Toast.LENGTH_SHORT).show();
-                }
-                mProgressDialog.dismiss();
-            }
-
-            @Override
-            public void onFailure(Call<List<Mail>> call, Throwable t) {
-                Toast.makeText(DriverAcceptedMailsActivity.this, "Something went Wrong!" + t.toString(), Toast.LENGTH_SHORT).show();
-                mProgressDialog.dismiss();
+            public void onPageSelected(int position) {
+                tabLayout.selectTab(tabLayout.getTabAt(position));
             }
         });
     }
+
 
     @Override
     public boolean onNavigationItemSelected(@NonNull MenuItem item) {
@@ -162,33 +139,9 @@ public class DriverAcceptedMailsActivity extends AppCompatActivity implements Na
 
     }
 
-    @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        getMenuInflater().inflate(R.menu.search_menu_options, menu);
-
-        SearchManager searchManager = (SearchManager) getSystemService(Context.SEARCH_SERVICE);
-        searchView = (SearchView) menu.findItem(R.id.action_search).getActionView();
-        searchView.setSearchableInfo(searchManager.getSearchableInfo(getComponentName()));
-        searchView.setMaxWidth(Integer.MAX_VALUE);
-
-        searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
-            @Override
-            public boolean onQueryTextSubmit(String query) {
-                driverAcceptedMailAdapter.getFilter().filter(query);
-                return false;
-            }
-
-            @Override
-            public boolean onQueryTextChange(String query) {
-                driverAcceptedMailAdapter.getFilter().filter(query);
-                return false;
-            }
-        });
-        return true;
-    }
 
     @Override
     public void onBackPressed() {
-         super.onBackPressed();
+        super.onBackPressed();
     }
 }

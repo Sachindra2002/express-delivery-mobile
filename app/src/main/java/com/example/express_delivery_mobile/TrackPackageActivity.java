@@ -7,6 +7,7 @@ import android.os.Bundle;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
@@ -35,10 +36,13 @@ public class TrackPackageActivity extends AppCompatActivity implements Navigatio
     private NavigationView mNavigationView;
 
     String[] descriptionData = {"Order\nAccepted", "In\nTransit", "Out for\nDelivery", "Parcel\nDelivered"};
+    String[] descriptionData1 = {"Order\nPlaced", "Order\nCancelled"};
+    String[] descriptionData2 = {"Order\nPlaced", "Order\nRejected"};
 
     TextView created_at, tracking_id, pick_up_address, drop_address, status_11, status_10, parcel_description, parcel_weight, parcel_type, _pieces,
             driver_name, driver_mobile, driver_vehicle;
     CardView driver_info;
+    LinearLayout ll6;
     Button call_driver;
 
     private String token;
@@ -76,6 +80,7 @@ public class TrackPackageActivity extends AppCompatActivity implements Navigatio
         driver_mobile = findViewById(R.id.driver_mobile);
         driver_vehicle = findViewById(R.id.driver_vehicle);
         driver_info = findViewById(R.id.driver_info);
+        ll6 = findViewById(R.id.ll6);
         call_driver = findViewById(R.id.call_driver);
 
         Date d = new Date();
@@ -96,12 +101,13 @@ public class TrackPackageActivity extends AppCompatActivity implements Navigatio
             driver_mobile.setText(getIntent().getStringExtra("driverMobile"));
             driver_vehicle.setText(getIntent().getStringExtra("driverVehicleNumber"));
         }else{
-            driver_info.setVisibility(View.INVISIBLE);
+            ll6.setVisibility(View.INVISIBLE);
         }
         StateProgressBar stateProgressBar = (StateProgressBar) findViewById(R.id.your_state_progress_bar_id);
-        stateProgressBar.setStateDescriptionData(descriptionData);
+
 
         if(getIntent().getStringExtra("status") != null && getIntent().getStringExtra("status").equalsIgnoreCase("Driver Accepted")){
+            stateProgressBar.setStateDescriptionData(descriptionData);
             stateProgressBar.setForegroundColor(ContextCompat.getColor(this, R.color.yellow));
             stateProgressBar.setStateDescriptionColor(ContextCompat.getColor(this, R.color.black));
             stateProgressBar.setCurrentStateDescriptionColor(ContextCompat.getColor(this, R.color.yellow));
@@ -109,6 +115,33 @@ public class TrackPackageActivity extends AppCompatActivity implements Navigatio
             stateProgressBar.enableAnimationToCurrentState(true);
 
             stateProgressBar.setCurrentStateNumber(StateProgressBar.StateNumber.ONE);
+        } else if (getIntent().getStringExtra("status").equalsIgnoreCase("Processing")){
+            stateProgressBar.setStateDescriptionData(descriptionData);
+            stateProgressBar.setForegroundColor(ContextCompat.getColor(this, R.color.yellow));
+            stateProgressBar.setStateDescriptionColor(ContextCompat.getColor(this, R.color.black));
+            stateProgressBar.setCurrentStateDescriptionColor(ContextCompat.getColor(this, R.color.yellow));
+
+            stateProgressBar.enableAnimationToCurrentState(true);
+
+            stateProgressBar.setCurrentStateNumber(StateProgressBar.StateNumber.ONE);
+        } else if(getIntent().getStringExtra("status").equalsIgnoreCase("Cancelled")){
+            stateProgressBar.setStateDescriptionData(descriptionData1);
+            stateProgressBar.setForegroundColor(ContextCompat.getColor(this, R.color.yellow));
+            stateProgressBar.setStateDescriptionColor(ContextCompat.getColor(this, R.color.black));
+            stateProgressBar.setCurrentStateDescriptionColor(ContextCompat.getColor(this, R.color.buttonRed));
+            stateProgressBar.setMaxStateNumber(StateProgressBar.StateNumber.TWO);
+            stateProgressBar.enableAnimationToCurrentState(true);
+
+            stateProgressBar.setCurrentStateNumber(StateProgressBar.StateNumber.TWO);
+        } else if(getIntent().getStringExtra("status").equalsIgnoreCase("Rejected")) {
+            stateProgressBar.setStateDescriptionData(descriptionData2);
+            stateProgressBar.setForegroundColor(ContextCompat.getColor(this, R.color.yellow));
+            stateProgressBar.setStateDescriptionColor(ContextCompat.getColor(this, R.color.black));
+            stateProgressBar.setCurrentStateDescriptionColor(ContextCompat.getColor(this, R.color.buttonRed));
+            stateProgressBar.setMaxStateNumber(StateProgressBar.StateNumber.TWO);
+            stateProgressBar.enableAnimationToCurrentState(true);
+
+            stateProgressBar.setCurrentStateNumber(StateProgressBar.StateNumber.TWO);
         }
 
         //Retrieve JWT Token
