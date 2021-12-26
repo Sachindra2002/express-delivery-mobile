@@ -25,6 +25,10 @@ public interface DriverClient {
     @GET("get-started-packages")
     Call<List<Mail>> getAllStartedMails(@Header("Authorization") String token);
 
+    //Get list of picked up mails for driver
+    @GET("get-picked-up-packages")
+    Call<List<Mail>> getAllPickedUpMails(@Header("Authorization") String token);
+
     //Accepted packages
     @POST("accept-package/{mailId}")
     Call<ResponseBody> acceptPackage(@Header("Authorization") String token, @Path("mailId") int mailId);

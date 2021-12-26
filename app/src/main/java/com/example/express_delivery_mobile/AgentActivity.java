@@ -87,6 +87,16 @@ public class AgentActivity extends AppCompatActivity implements NavigationView.O
             }
         });
 
+        drivers = findViewById(R.id.view_drivers);
+        drivers.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent = new Intent(AgentActivity.this, AgentDriverListActivity.class);
+                intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                startActivity(intent);
+            }
+        });
+
         //Retrieve JWT Token
         SharedPreferences sharedPreferences = getSharedPreferences("auth_preferences", Context.MODE_PRIVATE);
         token = "Bearer " + sharedPreferences.getString("auth_token", null);

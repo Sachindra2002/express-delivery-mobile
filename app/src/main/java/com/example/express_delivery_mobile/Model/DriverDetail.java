@@ -20,6 +20,10 @@ public class DriverDetail {
         this.address = address;
     }
 
+    public DriverDetail() {
+
+    }
+
     public int getDriverId() {
         return driverId;
     }

@@ -1,0 +1,158 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.cardview.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_marginLeft="15dp"
+    android:layout_marginTop="5dp"
+    android:layout_marginRight="15dp"
+    android:layout_marginBottom="10dp"
+    android:clickable="true"
+    android:elevation="10dp"
+    android:foreground="?android:attr/selectableItemBackground"
+    app:cardBackgroundColor="#F5F5F5"
+    app:cardCornerRadius="10dp"
+    app:cardMaxElevation="10dp">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="horizontal"
+        android:padding="10dp"
+        android:weightSum="100">
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_weight="85">
+
+            <TextView
+                android:id="@+id/driver_status"
+                android:layout_width="180dp"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="15dp"
+                android:background="@drawable/buttons"
+                android:gravity="center"
+                android:padding="5dp"
+                android:text="Status"
+                android:textColor="@android:color/holo_orange_dark"
+                android:textStyle="bold" />
+
+            <TextView
+                android:id="@+id/_driverName"
+                android:layout_width="180dp"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/driver_status"
+                android:layout_marginLeft="15dp"
+                android:padding="5dp"
+                android:text="Name"
+                android:textColor="@android:color/darker_gray" />
+
+            <TextView
+                android:id="@+id/driverName"
+                android:layout_width="180dp"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/driver_status"
+                android:layout_alignParentRight="true"
+                android:layout_marginRight="30dp"
+                android:gravity="right"
+                android:padding="5dp"
+                android:text="Name Here"
+                android:textColor="@android:color/black" />
+
+            <TextView
+                android:id="@+id/_driverTelephone"
+                android:layout_width="180dp"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/_driverName"
+                android:layout_marginLeft="15dp"
+                android:padding="5dp"
+                android:text="Telephone"
+                android:textColor="@android:color/darker_gray" />
+
+            <TextView
+                android:id="@+id/driverTelephone"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/_driverName"
+                android:layout_alignParentRight="true"
+                android:layout_marginTop="0dp"
+                android:layout_marginRight="29dp"
+                android:gravity="right"
+                android:padding="5dp"
+                android:text="076 4374758"
+                android:textColor="@android:color/black"
+                android:textStyle="bold" />
+
+            <TextView
+                android:id="@+id/_driverAddress"
+                android:layout_width="180dp"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/_driverTelephone"
+                android:layout_marginLeft="15dp"
+                android:padding="5dp"
+                android:text="Address"
+                android:textColor="@android:color/darker_gray" />
+
+            <TextView
+                android:id="@+id/driverAddress"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/driverTelephone"
+                android:layout_alignParentRight="true"
+                android:layout_marginRight="30dp"
+                android:gravity="right"
+                android:padding="5dp"
+                android:text="331/2A Welihena"
+                android:textColor="@android:color/black"
+                android:textStyle="bold" />
+
+            <TextView
+                android:id="@+id/_driverNic"
+                android:layout_width="180dp"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/_driverAddress"
+                android:layout_marginLeft="15dp"
+                android:padding="5dp"
+                android:text="NIC"
+                android:textColor="@android:color/darker_gray" />
+
+            <TextView
+                android:id="@+id/driverNic"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/_driverAddress"
+                android:layout_alignParentRight="true"
+                android:layout_marginRight="30dp"
+                android:gravity="right"
+                android:padding="5dp"
+                android:text="19911822837V"
+                android:textColor="@color/black" />
+
+            <TextView
+                android:id="@+id/_driverEmail"
+                android:layout_width="180dp"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/_driverNic"
+                android:layout_marginLeft="15dp"
+                android:padding="5dp"
+                android:text="Email"
+                android:textColor="@android:color/darker_gray" />
+
+            <TextView
+                android:id="@+id/driverEmail"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/_driverNic"
+                android:layout_alignParentRight="true"
+                android:layout_marginRight="30dp"
+                android:gravity="right"
+                android:padding="5dp"
+                android:text="trevor@gmail.com"
+                android:textColor="@color/black" />
+
+        </RelativeLayout>
+
+    </LinearLayout>
+
+</androidx.cardview.widget.CardView>

@@ -1,5 +1,6 @@
 package com.example.express_delivery_mobile.Adapter;
 
+import android.annotation.SuppressLint;
 import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.DialogInterface;
@@ -106,9 +107,10 @@ public class DriverAcceptedMailAdapter extends RecyclerView.Adapter<DriverAccept
         return new ViewHolder(view);
     }
 
+    @SuppressLint("SetTextI18n")
     @Override
     public void onBindViewHolder(@NonNull DriverAcceptedMailAdapter.ViewHolder holder, final int position) {
-        if(filteredMails.get(position).getStatus().equalsIgnoreCase("Driver Accepted")){
+        if (filteredMails.get(position).getStatus().equalsIgnoreCase("Driver Accepted")) {
             if (filteredMails.get(position).getTransportationStatus().contains("Pick Up")) {
                 holder.name.setText(filteredMails.get(position).getUser().getFirstName() + " " + mails.get(position).getUser().getLastName());
                 holder.transportationStatus.setText(filteredMails.get(position).getTransportationStatus());
@@ -130,7 +132,29 @@ public class DriverAcceptedMailAdapter extends RecyclerView.Adapter<DriverAccept
                 holder.weight.setText(filteredMails.get(position).getWeight() + "KG");
 
             }
-        }else if(filteredMails.get(position).getStatus().equalsIgnoreCase("Delivery Started")){
+        } else if (filteredMails.get(position).getStatus().equalsIgnoreCase("Delivery Started")) {
+            if (filteredMails.get(position).getTransportationStatus().contains("Pick Up")) {
+                holder.name.setText(filteredMails.get(position).getUser().getFirstName() + " " + mails.get(position).getUser().getLastName());
+                holder.transportationStatus.setText(filteredMails.get(position).getTransportationStatus());
+                holder.address.setText(filteredMails.get(position).getPickupAddress());
+                holder.type.setText(filteredMails.get(position).getParcelType());
+                holder.weight.setText(filteredMails.get(position).getWeight() + "KG");
+                holder.itemView.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+                        pickupDelivery(filteredMails.get(position).getMailId());
+                    }
+                });
+
+            } else if (filteredMails.get(position).getTransportationStatus().contains("Drop Off")) {
+                holder.name.setText(filteredMails.get(position).getReceiverFirstName() + " " + mails.get(position).getReceiverLastName());
+                holder.transportationStatus.setText(filteredMails.get(position).getTransportationStatus());
+                holder.address.setText(filteredMails.get(position).getReceiverAddress());
+                holder.type.setText(filteredMails.get(position).getParcelType());
+                holder.weight.setText(filteredMails.get(position).getWeight() + "KG");
+
+            }
+        } else if (filteredMails.get(position).getStatus().equalsIgnoreCase("Package picked up")) {
             if (filteredMails.get(position).getTransportationStatus().contains("Pick Up")) {
                 holder.name.setText(filteredMails.get(position).getUser().getFirstName() + " " + mails.get(position).getUser().getLastName());
                 holder.transportationStatus.setText(filteredMails.get(position).getTransportationStatus());
@@ -215,12 +239,7 @@ public class DriverAcceptedMailAdapter extends RecyclerView.Adapter<DriverAccept
             public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
                 //Successfully accepted
                 if (response.code() == 200) {
-                    Toast.makeText(context, "successfully started", Toast.LENGTH_SHORT).show();
-
-                    //Direct to homepage
-                    Intent intent = new Intent(context, DriverAcceptedMailsActivity.class);
-                    intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-                    context.startActivity(intent);
+                    Toast.makeText(context, "successfully picked up", Toast.LENGTH_SHORT).show();
                 } else {
                     try {
                         //Capture and display specific messages
@@ -300,8 +319,8 @@ public class DriverAcceptedMailAdapter extends RecyclerView.Adapter<DriverAccept
 
                         //Filter through fields and add to filtered list
                         if (mail.getDescription().contains(searchString) || String.valueOf(mail.getMailId()).contains(searchString) || mail.getReceiverFirstName().contains(searchString) || mail.getTransportationStatus().contains(searchString) ||
-                        mail.getUser().getFirstName().contains(searchString) || mail.getUser().getLastName().contains(searchString) ||
-                        mail.getParcelType().contains(searchString)) {
+                                mail.getUser().getFirstName().contains(searchString) || mail.getUser().getLastName().contains(searchString) ||
+                                mail.getParcelType().contains(searchString)) {
                             filteredList.add(mail);
                         }
                     }
@@ -322,7 +341,6 @@ public class DriverAcceptedMailAdapter extends RecyclerView.Adapter<DriverAccept
 
     public class ViewHolder extends RecyclerView.ViewHolder {
         TextView name, transportationStatus, address, type, weight;
-        Button button;
 
         public ViewHolder(@NonNull View itemView) {
             super(itemView);
@@ -332,7 +350,6 @@ public class DriverAcceptedMailAdapter extends RecyclerView.Adapter<DriverAccept
             address = itemView.findViewById(R.id.address);
             type = itemView.findViewById(R.id.type);
             weight = itemView.findViewById(R.id.weight);
-//            button = itemView.findViewById(R.id.start_button);
         }
     }
 }

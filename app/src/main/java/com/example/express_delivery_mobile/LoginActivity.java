@@ -54,14 +54,14 @@ public class LoginActivity extends AppCompatActivity {
         });
     }
 
-    private void loginUser(){
+    private void loginUser() {
         String email = mEmailEditText.getText().toString();
         String password = mPasswordEditText.getText().toString();
 
         //If there are empty fields
-        if(TextUtils.isEmpty(email) || TextUtils.isEmpty(password)) {
+        if (TextUtils.isEmpty(email) || TextUtils.isEmpty(password)) {
             Toast.makeText(this, "Please enter valid data!", Toast.LENGTH_SHORT).show();
-        }else{
+        } else {
 
             //Create login credentials
             LoginCredentials loginCredentials = new LoginCredentials(email, password);
@@ -79,7 +79,7 @@ public class LoginActivity extends AppCompatActivity {
                     mProgressDialog.dismiss();
 
                     //200 status code
-                    if(response.isSuccessful()){
+                    if (response.isSuccessful()) {
 
                         Toast.makeText(LoginActivity.this, "Logged in successfully!", Toast.LENGTH_SHORT).show();
 
@@ -97,13 +97,13 @@ public class LoginActivity extends AppCompatActivity {
 
                         Intent homePageIntent = null;
 
-                        if(role.equals("customer")){
+                        if (role.equals("customer")) {
                             homePageIntent = new Intent(LoginActivity.this, MainActivity.class);
-                        }else if(role.equals("admin")) {
-
-                        }else if(role.equals("agent")){
+                        } else if (role.equals("admin")) {
+                            homePageIntent = new Intent(LoginActivity.this, AdminActivity.class);
+                        } else if (role.equals("agent")) {
                             homePageIntent = new Intent(LoginActivity.this, AgentActivity.class);
-                        }else if(role.equals("driver")){
+                        } else if (role.equals("driver")) {
                             homePageIntent = new Intent(LoginActivity.this, DriverActivity.class);
                         }
 
@@ -112,10 +112,9 @@ public class LoginActivity extends AppCompatActivity {
                         finish();
                     }
                     // Invalid password
-                    else if(response.code() == 403){
+                    else if (response.code() == 403) {
                         Toast.makeText(LoginActivity.this, "Invalid username or password!", Toast.LENGTH_SHORT).show();
-                    }
-                    else {
+                    } else {
                         Toast.makeText(LoginActivity.this, "Something went wrong!", Toast.LENGTH_SHORT).show();
                     }
                 }
@@ -134,18 +133,21 @@ public class LoginActivity extends AppCompatActivity {
         sharedPreferences = LoginActivity.this.getSharedPreferences("auth_preferences", Context.MODE_PRIVATE);
         String role = sharedPreferences.getString("role", null);
 
-        if(role!=null){
-            if(role.equals("customer")){
+        if (role != null) {
+            if (role.equals("customer")) {
                 Intent intent = new Intent(LoginActivity.this, MainActivity.class);
                 intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
                 startActivity(intent);
-            }else if(role.equals("admin")){
+            } else if (role.equals("admin")) {
+                Intent intent = new Intent(LoginActivity.this, AdminActivity.class);
+                intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                startActivity(intent);
 
-            }else if(role.equals("agent")){
+            } else if (role.equals("agent")) {
                 Intent intent = new Intent(LoginActivity.this, AgentActivity.class);
                 intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
                 startActivity(intent);
-            }else if(role.equals("driver")){
+            } else if (role.equals("driver")) {
                 Intent intent = new Intent(LoginActivity.this, DriverActivity.class);
                 intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
                 startActivity(intent);

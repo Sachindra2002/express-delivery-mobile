@@ -50,7 +50,8 @@ public class TrackPackageActivity extends AppCompatActivity implements Navigatio
     private String username;
     private String firstName;
     private String lastName;
-    public TrackPackageActivity(){
+
+    public TrackPackageActivity() {
 
     }
 
@@ -87,26 +88,26 @@ public class TrackPackageActivity extends AppCompatActivity implements Navigatio
         d.setTime(getIntent().getLongExtra("date", -1));
 
         created_at.setText("Order placed on " + d);
-        tracking_id.setText("Tracking ID #"+getIntent().getIntExtra("trackId", 0));
-        pick_up_address.setText("From : " +getIntent().getStringExtra("pickUpAddress"));
-        drop_address.setText("To : " +getIntent().getStringExtra("dropOffAddress"));
+        tracking_id.setText("Tracking ID #" + getIntent().getIntExtra("trackId", 0));
+        pick_up_address.setText("From : " + getIntent().getStringExtra("pickUpAddress"));
+        drop_address.setText("To : " + getIntent().getStringExtra("dropOffAddress"));
         parcel_description.setText(getIntent().getStringExtra("description"));
-        parcel_weight.setText(getIntent().getStringExtra("weight")+"KG");
+        parcel_weight.setText(getIntent().getStringExtra("weight") + "KG");
         parcel_type.setText(getIntent().getStringExtra("parcelType"));
         _pieces.setText(getIntent().getStringExtra("pieces"));
 
-        if(getIntent().getStringExtra("driverFirstName") != null){
+        if (getIntent().getStringExtra("driverFirstName") != null) {
 
             driver_name.setText(getIntent().getStringExtra("driverFirstName") + " " + getIntent().getStringExtra("driverLastName"));
             driver_mobile.setText(getIntent().getStringExtra("driverMobile"));
             driver_vehicle.setText(getIntent().getStringExtra("driverVehicleNumber"));
-        }else{
+        } else {
             ll6.setVisibility(View.INVISIBLE);
         }
         StateProgressBar stateProgressBar = (StateProgressBar) findViewById(R.id.your_state_progress_bar_id);
 
 
-        if(getIntent().getStringExtra("status") != null && getIntent().getStringExtra("status").equalsIgnoreCase("Driver Accepted")){
+        if (getIntent().getStringExtra("status") != null && getIntent().getStringExtra("status").equalsIgnoreCase("Driver Accepted")) {
             stateProgressBar.setStateDescriptionData(descriptionData);
             stateProgressBar.setForegroundColor(ContextCompat.getColor(this, R.color.yellow));
             stateProgressBar.setStateDescriptionColor(ContextCompat.getColor(this, R.color.black));
@@ -115,7 +116,7 @@ public class TrackPackageActivity extends AppCompatActivity implements Navigatio
             stateProgressBar.enableAnimationToCurrentState(true);
 
             stateProgressBar.setCurrentStateNumber(StateProgressBar.StateNumber.ONE);
-        } else if (getIntent().getStringExtra("status").equalsIgnoreCase("Processing")){
+        } else if (getIntent().getStringExtra("status") != null && getIntent().getStringExtra("status").equalsIgnoreCase("Processing")) {
             stateProgressBar.setStateDescriptionData(descriptionData);
             stateProgressBar.setForegroundColor(ContextCompat.getColor(this, R.color.yellow));
             stateProgressBar.setStateDescriptionColor(ContextCompat.getColor(this, R.color.black));
@@ -124,7 +125,16 @@ public class TrackPackageActivity extends AppCompatActivity implements Navigatio
             stateProgressBar.enableAnimationToCurrentState(true);
 
             stateProgressBar.setCurrentStateNumber(StateProgressBar.StateNumber.ONE);
-        } else if(getIntent().getStringExtra("status").equalsIgnoreCase("Cancelled")){
+        } else if (getIntent().getStringExtra("status") != null && getIntent().getStringExtra("status").equalsIgnoreCase("Assigned")) {
+            stateProgressBar.setStateDescriptionData(descriptionData);
+            stateProgressBar.setForegroundColor(ContextCompat.getColor(this, R.color.yellow));
+            stateProgressBar.setStateDescriptionColor(ContextCompat.getColor(this, R.color.black));
+            stateProgressBar.setCurrentStateDescriptionColor(ContextCompat.getColor(this, R.color.yellow));
+
+            stateProgressBar.enableAnimationToCurrentState(true);
+
+            stateProgressBar.setCurrentStateNumber(StateProgressBar.StateNumber.ONE);
+        } else if (getIntent().getStringExtra("status") != null && getIntent().getStringExtra("status").equalsIgnoreCase("Cancelled")) {
             stateProgressBar.setStateDescriptionData(descriptionData1);
             stateProgressBar.setForegroundColor(ContextCompat.getColor(this, R.color.yellow));
             stateProgressBar.setStateDescriptionColor(ContextCompat.getColor(this, R.color.black));
@@ -133,7 +143,7 @@ public class TrackPackageActivity extends AppCompatActivity implements Navigatio
             stateProgressBar.enableAnimationToCurrentState(true);
 
             stateProgressBar.setCurrentStateNumber(StateProgressBar.StateNumber.TWO);
-        } else if(getIntent().getStringExtra("status").equalsIgnoreCase("Rejected")) {
+        } else if (getIntent().getStringExtra("status") != null && getIntent().getStringExtra("status").equalsIgnoreCase("Rejected")) {
             stateProgressBar.setStateDescriptionData(descriptionData2);
             stateProgressBar.setForegroundColor(ContextCompat.getColor(this, R.color.yellow));
             stateProgressBar.setStateDescriptionColor(ContextCompat.getColor(this, R.color.black));

@@ -74,6 +74,9 @@ public class Mail implements Serializable {
         this.totalCost = totalCost;
         this.description = description;
     }
+    public Mail() {
+
+    }
 
     public int getMailId() {
         return mailId;

@@ -17,10 +17,12 @@
         <entry key="..\:/Express Delivery/Express_Delivery_Mobile/app/src/main/res/drawable/view_bg.xml" value="0.37864583333333335" />
         <entry key="..\:/Express Delivery/Express_Delivery_Mobile/app/src/main/res/layout/activity_accepted_mails_agent.xml" value="0.3625" />
         <entry key="..\:/Express Delivery/Express_Delivery_Mobile/app/src/main/res/layout/activity_accepted_mails_driver.xml" value="0.3625" />
+        <entry key="..\:/Express Delivery/Express_Delivery_Mobile/app/src/main/res/layout/activity_admin.xml" value="0.3625" />
         <entry key="..\:/Express Delivery/Express_Delivery_Mobile/app/src/main/res/layout/activity_agent.xml" value="0.3625" />
         <entry key="..\:/Express Delivery/Express_Delivery_Mobile/app/src/main/res/layout/activity_driver.xml" value="0.3625" />
+        <entry key="..\:/Express Delivery/Express_Delivery_Mobile/app/src/main/res/layout/activity_driver_list.xml" value="0.12129629629629629" />
         <entry key="..\:/Express Delivery/Express_Delivery_Mobile/app/src/main/res/layout/activity_driver_profile.xml" value="0.3625" />
-        <entry key="..\:/Express Delivery/Express_Delivery_Mobile/app/src/main/res/layout/activity_for_you_mails.xml" value="0.3625" />
+        <entry key="..\:/Express Delivery/Express_Delivery_Mobile/app/src/main/res/layout/activity_for_you_mails.xml" value="0.1" />
         <entry key="..\:/Express Delivery/Express_Delivery_Mobile/app/src/main/res/layout/activity_from_you_mails.xml" value="0.3625" />
         <entry key="..\:/Express Delivery/Express_Delivery_Mobile/app/src/main/res/layout/activity_login.xml" value="0.3625" />
         <entry key="..\:/Express Delivery/Express_Delivery_Mobile/app/src/main/res/layout/activity_main.xml" value="0.3625" />
@@ -28,7 +30,9 @@
         <entry key="..\:/Express Delivery/Express_Delivery_Mobile/app/src/main/res/layout/activity_track_package.xml" value="0.3625" />
         <entry key="..\:/Express Delivery/Express_Delivery_Mobile/app/src/main/res/layout/assign_driver_dialog.xml" value="0.3625" />
         <entry key="..\:/Express Delivery/Express_Delivery_Mobile/app/src/main/res/layout/driver_accepted_mails_row.xml" value="0.3625" />
+        <entry key="..\:/Express Delivery/Express_Delivery_Mobile/app/src/main/res/layout/driver_row.xml" value="0.3625" />
         <entry key="..\:/Express Delivery/Express_Delivery_Mobile/app/src/main/res/layout/fragment_driver_accepted_mails.xml" value="0.3625" />
+        <entry key="..\:/Express Delivery/Express_Delivery_Mobile/app/src/main/res/layout/fragment_driver_pickedup_mails.xml" value="0.3625" />
         <entry key="..\:/Express Delivery/Express_Delivery_Mobile/app/src/main/res/layout/fragment_driver_started_mails.xml" value="0.3625" />
         <entry key="..\:/Express Delivery/Express_Delivery_Mobile/app/src/main/res/layout/login_tab_fragment.xml" value="0.3625" />
         <entry key="..\:/Express Delivery/Express_Delivery_Mobile/app/src/main/res/layout/nav_header_layout.xml" value="0.3625" />

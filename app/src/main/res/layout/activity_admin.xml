@@ -6,7 +6,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@drawable/ic_wave__3_"
-    tools:context=".AgentActivity">
+    tools:context=".AdminActivity">
 
     <RelativeLayout
         android:layout_width="match_parent"
@@ -34,7 +34,7 @@
         <LinearLayout
             android:id="@+id/ll1"
             android:layout_width="wrap_content"
-            android:layout_height="80dp"
+            android:layout_height="90dp"
             android:layout_below="@+id/coordinator_layout"
             android:layout_marginLeft="10dp"
             android:layout_marginTop="20dp"
@@ -109,7 +109,7 @@
                             android:gravity="center"
                             android:text="Shipments"
                             android:textColor="@color/black"
-                            android:textSize="16sp"
+                            android:textSize="15sp"
                             android:textStyle="bold" />
                     </LinearLayout>
 
@@ -134,7 +134,7 @@
                             android:layout_width="80dp"
                             android:layout_height="80dp"
                             android:layout_gravity="center"
-                            android:background="@drawable/box6" />
+                            android:background="@drawable/warehouse2" />
 
                         <TextView
                             android:layout_width="150dp"
@@ -142,9 +142,9 @@
                             android:layout_gravity="center"
                             android:layout_marginTop="10dp"
                             android:gravity="center"
-                            android:text="Packages"
+                            android:text="Centers"
                             android:textColor="@color/black"
-                            android:textSize="16sp"
+                            android:textSize="15sp"
                             android:textStyle="bold" />
                     </LinearLayout>
 
@@ -194,7 +194,7 @@
                 </androidx.cardview.widget.CardView>
 
                 <androidx.cardview.widget.CardView
-                    android:id="@+id/in_trasit"
+                    android:id="@+id/agents"
                     android:layout_width="150dp"
                     android:layout_height="150dp"
                     android:layout_margin="10dp"
@@ -211,7 +211,7 @@
                             android:layout_width="80dp"
                             android:layout_height="80dp"
                             android:layout_gravity="center"
-                            android:background="@drawable/warehouse1" />
+                            android:background="@drawable/agent1" />
 
                         <TextView
                             android:layout_width="150dp"
@@ -219,7 +219,81 @@
                             android:layout_gravity="center"
                             android:layout_marginTop="10dp"
                             android:gravity="center"
-                            android:text="In Transit"
+                            android:text="Agents"
+                            android:textColor="@color/black"
+                            android:textSize="16sp"
+                            android:textStyle="bold" />
+                    </LinearLayout>
+
+                </androidx.cardview.widget.CardView>
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:gravity="center">
+
+                <androidx.cardview.widget.CardView
+                    android:layout_width="150dp"
+                    android:layout_height="150dp"
+                    android:layout_margin="10dp"
+                    android:background="@color/white"
+                    app:cardCornerRadius="15dp">
+
+                    <LinearLayout
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center"
+                        android:orientation="vertical">
+
+                        <ImageView
+                            android:layout_width="80dp"
+                            android:layout_height="80dp"
+                            android:layout_gravity="center"
+                            android:background="@drawable/addagent" />
+
+                        <TextView
+                            android:layout_width="150dp"
+                            android:layout_height="wrap_content"
+                            android:layout_gravity="center"
+                            android:layout_marginTop="10dp"
+                            android:gravity="center"
+                            android:text="Add Driver"
+                            android:textColor="@color/black"
+                            android:textSize="16sp"
+                            android:textStyle="bold" />
+                    </LinearLayout>
+
+                </androidx.cardview.widget.CardView>
+
+                <androidx.cardview.widget.CardView
+                    android:layout_width="150dp"
+                    android:layout_height="150dp"
+                    android:layout_margin="10dp"
+                    android:background="@color/white"
+                    app:cardCornerRadius="15dp">
+
+                    <LinearLayout
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center"
+                        android:orientation="vertical">
+
+                        <ImageView
+                            android:layout_width="80dp"
+                            android:layout_height="80dp"
+                            android:layout_gravity="center"
+                            android:background="@drawable/inquiry" />
+
+                        <TextView
+                            android:layout_width="150dp"
+                            android:layout_height="wrap_content"
+                            android:layout_gravity="center"
+                            android:layout_marginTop="10dp"
+                            android:gravity="center"
+                            android:text="Disputes"
                             android:textColor="@color/black"
                             android:textSize="16sp"
                             android:textStyle="bold" />
@@ -231,27 +305,6 @@
 
         </LinearLayout>
 
-        <LinearLayout
-            android:id="@+id/rc1"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_below="@+id/ll3"
-            android:layout_weight="1"
-            android:gravity="center">
-
-            <androidx.swiperefreshlayout.widget.SwipeRefreshLayout
-                android:id="@+id/swipe"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content">
-
-                <androidx.recyclerview.widget.RecyclerView
-                    android:id="@+id/recycler_view"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content" />
-
-            </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>
-
-        </LinearLayout>
 
     </RelativeLayout>
 

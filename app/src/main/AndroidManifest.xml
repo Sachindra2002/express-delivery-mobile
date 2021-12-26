@@ -12,6 +12,7 @@
         android:usesCleartextTraffic="${usesCleartextTraffic}">
         <activity android:name=".LoginActivity" />
         <activity android:name=".DriverActivity" />
+        <activity android:name=".AdminActivity" />
         <activity android:name=".AgentActivity" />
         <activity android:name=".DriverAcceptedMailsActivity" />
         <activity android:name=".AgentAcceptedMailsActivity" />
@@ -20,6 +21,7 @@
         <activity android:name=".ForYouActivity" />
         <activity android:name=".FromYouActivity" />
         <activity android:name=".TrackPackageActivity" />
+        <activity android:name=".AgentDriverListActivity" />
         <activity android:name=".MainActivity"
             android:exported="true">
             <intent-filter>
