@@ -27,6 +27,9 @@ public class User {
         this.serviceCentre = serviceCentre;
     }
 
+    public User() {
+    }
+
     public String getEmail() {
         return email;
     }

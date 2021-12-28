@@ -2,6 +2,9 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="com.example.express_delivery_mobile">
     <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE"/>
+    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE"/>
+    <uses-permission android:name="android.permission.CALL_PHONE"/>
     <application
         android:allowBackup="true"
         android:icon="@mipmap/ic_launcher"
@@ -11,6 +14,8 @@
         android:theme="@style/Theme.Express_Delivery_Mobile"
         android:usesCleartextTraffic="${usesCleartextTraffic}">
         <activity android:name=".LoginActivity" />
+        <activity android:name=".RegistrationActivity" />
+        <activity android:name=".AddDriverActivity" />
         <activity android:name=".DriverActivity" />
         <activity android:name=".AdminActivity" />
         <activity android:name=".AgentActivity" />
@@ -22,6 +27,7 @@
         <activity android:name=".FromYouActivity" />
         <activity android:name=".TrackPackageActivity" />
         <activity android:name=".AgentDriverListActivity" />
+        <activity android:name=".AgentDriverProfileActivity" />
         <activity android:name=".MainActivity"
             android:exported="true">
             <intent-filter>

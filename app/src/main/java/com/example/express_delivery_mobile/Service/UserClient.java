@@ -3,6 +3,7 @@ package com.example.express_delivery_mobile.Service;
 import com.example.express_delivery_mobile.Model.LoginCredentials;
 import com.example.express_delivery_mobile.Model.User;
 
+import okhttp3.ResponseBody;
 import retrofit2.Call;
 import retrofit2.http.Body;
 import retrofit2.http.GET;
@@ -18,4 +19,8 @@ public interface UserClient {
     //Get user details of logged in user
     @GET("user")
     Call<User> getUser(@Header("Authorization") String token);
+
+    //Register
+    @POST("register")
+    Call<ResponseBody> register(@Body User user);
 }

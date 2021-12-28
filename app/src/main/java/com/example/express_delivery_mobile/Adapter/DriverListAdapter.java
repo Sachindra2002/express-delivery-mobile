@@ -1,7 +1,9 @@
 package com.example.express_delivery_mobile.Adapter;
 
+import android.annotation.SuppressLint;
 import android.app.ProgressDialog;
 import android.content.Context;
+import android.content.Intent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -13,8 +15,10 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.DiffUtil;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.example.express_delivery_mobile.AgentDriverProfileActivity;
 import com.example.express_delivery_mobile.Model.User;
 import com.example.express_delivery_mobile.R;
+import com.example.express_delivery_mobile.TrackPackageActivity;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -38,14 +42,14 @@ public class DriverListAdapter extends RecyclerView.Adapter<DriverListAdapter.Vi
         this.mProgressDialog = mProgressDialog;
     }
 
-    public void setDrivers(final List<User> drivers){
-        if(this.drivers == null){
+    public void setDrivers(final List<User> drivers) {
+        if (this.drivers == null) {
             this.drivers = drivers;
             this.filteredDrivers = drivers;
 
             //Alert a change in items
             notifyItemChanged(0, filteredDrivers.size());
-        }else{
+        } else {
             final DiffUtil.DiffResult result = DiffUtil.calculateDiff(new DiffUtil.Callback() {
                 @Override
                 public int getOldListSize() {
@@ -120,7 +124,7 @@ public class DriverListAdapter extends RecyclerView.Adapter<DriverListAdapter.Vi
     }
 
     @Override
-    public void onBindViewHolder(@NonNull DriverListAdapter.ViewHolder holder, int position) {
+    public void onBindViewHolder(@NonNull DriverListAdapter.ViewHolder holder, @SuppressLint("RecyclerView") final int position) {
         if (userRole.equalsIgnoreCase("agent")) {
             holder.driverStatus.setText(filteredDrivers.get(position).getDriverDetail().getStatus());
             holder.driverName.setText(filteredDrivers.get(position).getFirstName() + " " + filteredDrivers.get(position).getLastName());
@@ -131,7 +135,21 @@ public class DriverListAdapter extends RecyclerView.Adapter<DriverListAdapter.Vi
             holder.itemView.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
-                    
+                    Intent intent = new Intent(context, AgentDriverProfileActivity.class);
+                    intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                    intent.putExtra("driver_name", filteredDrivers.get(position).getFirstName() + " " + filteredDrivers.get(position).getLastName());
+                    intent.putExtra("driver_telephone", filteredDrivers.get(position).getPhoneNumber());
+                    intent.putExtra("driver_dob", filteredDrivers.get(position).getDriverDetail().getDob());
+                    intent.putExtra("driver_address", filteredDrivers.get(position).getDriverDetail().getAddress());
+                    intent.putExtra("driver_email", filteredDrivers.get(position).getEmail());
+                    intent.putExtra("driver_city", filteredDrivers.get(position).getLocation());
+                    intent.putExtra("driver_nic", filteredDrivers.get(position).getDriverDetail().getNic());
+                    intent.putExtra("vehicle_number", filteredDrivers.get(position).getDriverDetail().getVehicle().getVehicleNumber());
+                    intent.putExtra("vehicle_type", filteredDrivers.get(position).getDriverDetail().getVehicle().getVehicleType());
+                    intent.putExtra("center", filteredDrivers.get(position).getServiceCentre().getCentre());
+                    intent.putExtra("center_address", filteredDrivers.get(position).getServiceCentre().getAddress());
+                    intent.putExtra("driver_id", filteredDrivers.get(position).getDriverDetail().getDriverId());
+                    context.startActivity(intent);
                 }
             });
         } else if (userRole.equalsIgnoreCase("admin")) {

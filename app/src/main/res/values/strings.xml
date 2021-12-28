@@ -24,6 +24,12 @@
         <item>Galle [Southern Province]</item>
     </string-array>
 
+    <string-array name="locations">
+        <item>Colombo</item>
+        <item>Negombo</item>
+        <item>Galle</item>
+    </string-array>
+
     <string-array name="type_of_parcel">
         <item>Small 20CM X 20CM</item>
         <item>Medium 45CM X 45CM</item>

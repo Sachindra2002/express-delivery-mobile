@@ -1,8 +1,11 @@
 package com.example.express_delivery_mobile.Service;
 
+import com.example.express_delivery_mobile.Model.Documents;
 import com.example.express_delivery_mobile.Model.Mail;
 import com.example.express_delivery_mobile.Model.User;
 
+import java.io.ByteArrayInputStream;
+import java.io.ByteArrayOutputStream;
 import java.util.List;
 
 import okhttp3.ResponseBody;
@@ -12,6 +15,7 @@ import retrofit2.http.GET;
 import retrofit2.http.Header;
 import retrofit2.http.POST;
 import retrofit2.http.Path;
+import retrofit2.http.Streaming;
 
 public interface AgentClient {
 
@@ -38,4 +42,12 @@ public interface AgentClient {
     //Assign driver to package
     @POST("assign-driver")
     Call<ResponseBody> assignDriver(@Header("Authorization") String token, @Body Mail mail);
+
+    //Get driver documents
+    @GET("get-driver-documents/{email}")
+    Call<List<Documents>> getDriverDocuments(@Header("Authorization") String token,@Path("email") String email);
+
+    //Download driver document
+    @GET("download/{fileName}")
+    Call<ResponseBody> downloadDriverDocument(@Header("Authorization") String token, @Path("fileName") String fileName);
 }
