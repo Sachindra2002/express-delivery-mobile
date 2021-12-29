@@ -27,7 +27,10 @@
         <activity android:name=".FromYouActivity" />
         <activity android:name=".TrackPackageActivity" />
         <activity android:name=".AgentDriverListActivity" />
+        <activity android:name=".AdminDriverListActivity" />
         <activity android:name=".AgentDriverProfileActivity" />
+        <activity android:name=".AdminDriverProfileActivity" />
+        <activity android:name=".AgentListActivity" />
         <activity android:name=".MainActivity"
             android:exported="true">
             <intent-filter>

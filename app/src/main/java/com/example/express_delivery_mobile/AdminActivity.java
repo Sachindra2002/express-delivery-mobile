@@ -35,6 +35,8 @@ public class AdminActivity extends AppCompatActivity implements NavigationView.O
     private String lastName;
 
     private CardView addDriver;
+    private CardView viewDrivers;
+    private CardView viewAgents;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -66,6 +68,26 @@ public class AdminActivity extends AppCompatActivity implements NavigationView.O
             @Override
             public void onClick(View view) {
                 Intent intent = new Intent(AdminActivity.this, AddDriverActivity.class);
+                intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                startActivity(intent);
+            }
+        });
+
+        viewDrivers = findViewById(R.id.view_drivers);
+        viewDrivers.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent = new Intent(AdminActivity.this, AdminDriverListActivity.class);
+                intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                startActivity(intent);
+            }
+        });
+
+        viewAgents = findViewById(R.id.agents);
+        viewAgents.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent = new Intent(AdminActivity.this, AgentListActivity.class);
                 intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
                 startActivity(intent);
             }

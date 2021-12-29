@@ -246,7 +246,7 @@ public class SendPackageActivity extends AppCompatActivity implements Navigation
         _description = description.getText().toString();
         _receiverAddress = receiverAddress.getText().toString();
         _pickupAddress = pickupAddress.getText().toString();
-        _totalCost = "1000";
+        _totalCost = "1000 LKR";
         _receiverCity = receiverCity.getSelectedItem().toString();
         _typeOfParcel = typeOfParcel.getSelectedItem().toString();
         _paymentMethod = paymentMethod.getSelectedItem().toString();

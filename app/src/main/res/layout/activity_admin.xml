@@ -165,6 +165,7 @@
                     android:layout_height="150dp"
                     android:layout_margin="10dp"
                     android:background="@color/white"
+                    android:clickable="true"
                     app:cardCornerRadius="15dp">
 
                     <LinearLayout
@@ -241,6 +242,7 @@
                     android:layout_height="150dp"
                     android:layout_margin="10dp"
                     android:background="@color/white"
+                    android:clickable="true"
                     app:cardCornerRadius="15dp">
 
                     <LinearLayout

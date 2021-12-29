@@ -13,6 +13,9 @@ public class Vehicle {
         this.driverDetail = driverDetail;
     }
 
+    public Vehicle() {
+    }
+
     public int getVehicleId() {
         return vehicleId;
     }

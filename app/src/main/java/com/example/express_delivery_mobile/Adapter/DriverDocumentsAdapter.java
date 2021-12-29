@@ -73,7 +73,7 @@ public class DriverDocumentsAdapter extends RecyclerView.Adapter<DriverDocuments
     @Override
     public DriverDocumentsAdapter.ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         View view = LayoutInflater.from(context).inflate(R.layout.driver_documents_row, parent, false);
-        if(ContextCompat.checkSelfPermission(context, Manifest.permission.WRITE_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED){
+        if (ContextCompat.checkSelfPermission(context, Manifest.permission.WRITE_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED) {
             ActivityCompat.requestPermissions((Activity) context, new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE}, MY_PERMISSION_REQUEST);
         }
         return new ViewHolder(view);
@@ -196,9 +196,9 @@ public class DriverDocumentsAdapter extends RecyclerView.Adapter<DriverDocuments
 
     @Override
     public int getItemCount() {
-        if (documents != null) {
+        if (documents != null)
             return documents.size();
-        }
+
         return 0;
     }
 

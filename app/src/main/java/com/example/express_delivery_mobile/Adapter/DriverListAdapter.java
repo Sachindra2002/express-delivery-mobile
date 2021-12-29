@@ -15,6 +15,7 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.DiffUtil;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.example.express_delivery_mobile.AdminDriverProfileActivity;
 import com.example.express_delivery_mobile.AgentDriverProfileActivity;
 import com.example.express_delivery_mobile.Model.User;
 import com.example.express_delivery_mobile.R;
@@ -153,7 +154,38 @@ public class DriverListAdapter extends RecyclerView.Adapter<DriverListAdapter.Vi
                 }
             });
         } else if (userRole.equalsIgnoreCase("admin")) {
-
+            holder.driverStatus.setText(filteredDrivers.get(position).getDriverDetail().getStatus());
+            holder.driverName.setText(filteredDrivers.get(position).getFirstName() + " " + filteredDrivers.get(position).getLastName());
+            holder.driverTelephone.setText(filteredDrivers.get(position).getPhoneNumber());
+            holder.driverAddress.setText(filteredDrivers.get(position).getDriverDetail().getAddress());
+            holder.driverNic.setText(filteredDrivers.get(position).getDriverDetail().getNic());
+            holder.driverEmail.setText(filteredDrivers.get(position).getEmail());
+            holder.itemView.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    Intent intent = new Intent(context, AdminDriverProfileActivity.class);
+                    intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                    intent.putExtra("driver_name", filteredDrivers.get(position).getFirstName() + " " + filteredDrivers.get(position).getLastName());
+                    intent.putExtra("driver_telephone", filteredDrivers.get(position).getPhoneNumber());
+                    intent.putExtra("driver_dob", filteredDrivers.get(position).getDriverDetail().getDob());
+                    intent.putExtra("driver_address", filteredDrivers.get(position).getDriverDetail().getAddress());
+                    intent.putExtra("driver_email", filteredDrivers.get(position).getEmail());
+                    intent.putExtra("driver_city", filteredDrivers.get(position).getLocation());
+                    intent.putExtra("driver_nic", filteredDrivers.get(position).getDriverDetail().getNic());
+                    intent.putExtra("vehicle_number", filteredDrivers.get(position).getDriverDetail().getVehicle().getVehicleNumber());
+                    intent.putExtra("vehicle_type", filteredDrivers.get(position).getDriverDetail().getVehicle().getVehicleType());
+                    intent.putExtra("center", filteredDrivers.get(position).getServiceCentre().getCentre());
+                    intent.putExtra("center_address", filteredDrivers.get(position).getServiceCentre().getAddress());
+                    intent.putExtra("driver_id", filteredDrivers.get(position).getDriverDetail().getDriverId());
+                    context.startActivity(intent);
+                }
+            });
+            holder.itemView.setOnLongClickListener(new View.OnLongClickListener() {
+                @Override
+                public boolean onLongClick(View view) {
+                    return false;
+                }
+            });
         }
     }
 
