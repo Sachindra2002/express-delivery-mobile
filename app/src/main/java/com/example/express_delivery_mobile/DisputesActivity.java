@@ -6,6 +6,7 @@ import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.view.MenuItem;
 import android.widget.SearchView;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -15,58 +16,76 @@ import androidx.appcompat.widget.Toolbar;
 import androidx.core.view.GravityCompat;
 import androidx.drawerlayout.widget.DrawerLayout;
 import androidx.fragment.app.FragmentManager;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
+import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 import androidx.viewpager2.widget.ViewPager2;
 
-
+import com.example.express_delivery_mobile.Adapter.InquiryAdapter;
+import com.example.express_delivery_mobile.Fragment.DisputeFragmentAdapter;
 import com.example.express_delivery_mobile.Fragment.FragmentAdapter;
+import com.example.express_delivery_mobile.Model.Inquiry;
 import com.example.express_delivery_mobile.Model.Mail;
-import com.example.express_delivery_mobile.Service.DriverClient;
+import com.example.express_delivery_mobile.Service.AdminClient;
 import com.example.express_delivery_mobile.Service.RetrofitClientInstance;
 import com.example.express_delivery_mobile.Util.AuthHandler;
 import com.example.express_delivery_mobile.Util.NavHandler;
 import com.google.android.material.navigation.NavigationView;
 import com.google.android.material.tabs.TabLayout;
 
+import java.util.ArrayList;
 import java.util.List;
 
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
 
-public class DriverAcceptedMailsActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener {
+public class DisputesActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener {
     private Toolbar mToolbar;
     private DrawerLayout mDrawerLayout;
     private NavigationView mNavigationView;
 
-    private SearchView searchView;
     private TabLayout tabLayout;
     private ViewPager2 viewPager2;
-    private FragmentAdapter fragmentAdapter;
+    private DisputeFragmentAdapter fragmentAdapter;
 
-    private List<Mail> mails;
     private String token;
     private String email;
+
+    private ProgressDialog mProgressDialog;
+    private RecyclerView recyclerView;
+    private SwipeRefreshLayout swipeRefreshLayout;
+
+    private List<Inquiry> inquiries;
+    private InquiryAdapter inquiryAdapter;
+
+    private AdminClient adminClient = RetrofitClientInstance.getRetrofitInstance().create(AdminClient.class);
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
         //Check if authorization token is valid
-        String result = AuthHandler.validate(DriverAcceptedMailsActivity.this, "driver");
+        String result = AuthHandler.validate(DisputesActivity.this, "admin");
 
         if (result != null) {
             if (result.equals("unauthorized") || result.equals("expired")) return;
         }
 
         //Load layout
-        setContentView(R.layout.activity_accepted_mails_driver);
+        setContentView(R.layout.activity_admin_disputes);
 
         //Retrieve JWT Token
         SharedPreferences sharedPreferences = getSharedPreferences("auth_preferences", Context.MODE_PRIVATE);
         token = "Bearer " + sharedPreferences.getString("auth_token", null);
         email = sharedPreferences.getString("email", null);
 
+        mProgressDialog = new ProgressDialog(this);
+
         //Setup toolbar
         mToolbar = findViewById(R.id.toolbar);
         setSupportActionBar(mToolbar);
-        getSupportActionBar().setTitle(null);
+        getSupportActionBar().setTitle("Disputes");
 
         //Setup navigation drawer
         mDrawerLayout = findViewById(R.id.drawer_layout);
@@ -87,14 +106,11 @@ public class DriverAcceptedMailsActivity extends AppCompatActivity implements Na
         tabLayout = findViewById(R.id.tab_layout);
         viewPager2 = findViewById(R.id.view_pager_2);
         FragmentManager fragmentManager = getSupportFragmentManager();
-        fragmentAdapter = new FragmentAdapter(fragmentManager, getLifecycle());
+        fragmentAdapter = new DisputeFragmentAdapter(fragmentManager, getLifecycle());
         viewPager2.setAdapter(fragmentAdapter);
 
-        tabLayout.addTab(tabLayout.newTab().setText("Accepted"));
-        tabLayout.addTab(tabLayout.newTab().setText("Started"));
-        tabLayout.addTab(tabLayout.newTab().setText("Picked up"));
-        tabLayout.addTab(tabLayout.newTab().setText("In Transit"));
-        tabLayout.addTab(tabLayout.newTab().setText("Delivered"));
+        tabLayout.addTab(tabLayout.newTab().setText("General"));
+        tabLayout.addTab(tabLayout.newTab().setText("Packages"));
 
         tabLayout.addOnTabSelectedListener(new TabLayout.OnTabSelectedListener() {
             @Override
@@ -119,13 +135,62 @@ public class DriverAcceptedMailsActivity extends AppCompatActivity implements Na
                 tabLayout.selectTab(tabLayout.getTabAt(position));
             }
         });
+
+        //Setup inquiry list
+//        inquiries = new ArrayList<>();
+//        recyclerView = findViewById(R.id.recycler_view);
+//        swipeRefreshLayout = (SwipeRefreshLayout) findViewById(R.id.swipe);
+//        LinearLayoutManager layoutManager = new LinearLayoutManager(this);
+//        recyclerView.setLayoutManager(layoutManager);
+//        inquiryAdapter = new InquiryAdapter(this, inquiries, token, "admin", mProgressDialog);
+//        recyclerView.setAdapter(inquiryAdapter);
+//
+//        // SetOnRefreshListener on SwipeRefreshLayout
+//        swipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
+//            @Override
+//            public void onRefresh() {
+//                swipeRefreshLayout.setRefreshing(false);
+//                getAllInquiries();
+//            }
+//        });
+//
+//        getAllInquiries();
     }
 
+    private void getAllInquiries() {
+        Call<List<Inquiry>> call = adminClient.getInquiries(token);
+
+        //Show Progress
+        mProgressDialog.setMessage("Loading Inquiries..");
+        mProgressDialog.show();
+
+        call.enqueue(new Callback<List<Inquiry>>() {
+            @Override
+            public void onResponse(@NonNull Call<List<Inquiry>> call, @NonNull Response<List<Inquiry>> response) {
+                inquiries = response.body();
+                System.out.println(response);
+                System.out.println(response.body());
+                //Handle null pointer errors
+                if (inquiries != null) {
+                    inquiryAdapter.setInquiries(inquiries);
+                } else {
+                    Toast.makeText(DisputesActivity.this, "Something went wrong" + response.toString(), Toast.LENGTH_SHORT).show();
+                }
+                mProgressDialog.dismiss();
+            }
+
+            @Override
+            public void onFailure(Call<List<Inquiry>> call, Throwable t) {
+                Toast.makeText(DisputesActivity.this, "Something went Wrong!" + t.toString(), Toast.LENGTH_SHORT).show();
+                mProgressDialog.dismiss();
+            }
+        });
+    }
 
     @Override
     public boolean onNavigationItemSelected(@NonNull MenuItem item) {
         //Handle side drawer navigation
-        NavHandler.handleCustomerNav(item, DriverAcceptedMailsActivity.this);
+        NavHandler.handleCustomerNav(item, DisputesActivity.this);
 
         //close navigation drawer
         mDrawerLayout.closeDrawer(GravityCompat.START);

@@ -31,6 +31,8 @@
         <activity android:name=".AgentDriverProfileActivity" />
         <activity android:name=".AdminDriverProfileActivity" />
         <activity android:name=".AgentListActivity" />
+        <activity android:name=".ServiceCenterListActivity" />
+        <activity android:name=".DisputesActivity" />
         <activity android:name=".MainActivity"
             android:exported="true">
             <intent-filter>

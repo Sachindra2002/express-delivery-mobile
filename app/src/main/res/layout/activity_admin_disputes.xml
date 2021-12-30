@@ -1,10 +1,10 @@
 <androidx.drawerlayout.widget.DrawerLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/drawer_layout"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".ServiceCenterListActivity"
-    android:id="@+id/drawer_layout">
+    tools:context=".DisputesActivity">
 
     <RelativeLayout
         android:layout_width="match_parent"
@@ -26,33 +26,45 @@
                     android:background="@color/yellow"></com.google.android.material.appbar.MaterialToolbar>
 
             </com.google.android.material.appbar.AppBarLayout>
-
         </androidx.coordinatorlayout.widget.CoordinatorLayout>
 
-        <androidx.swiperefreshlayout.widget.SwipeRefreshLayout
-            android:id="@+id/swipe"
-            android:layout_width="wrap_content"
+        <com.google.android.material.tabs.TabLayout
+            android:id="@+id/tab_layout"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            app:tabTextColor="@color/black"
+            app:tabSelectedTextColor="@color/yellow"
+            app:tabIndicatorColor="@color/yellow"
+            android:layout_below="@+id/coordinator_layout" />
+
+        <androidx.viewpager2.widget.ViewPager2
+            android:id="@+id/view_pager_2"
+            android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:layout_below="@+id/coordinator_layout">
+            android:layout_below="@id/tab_layout" />
 
-            <androidx.recyclerview.widget.RecyclerView
-                android:id="@+id/recycler_view"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_below="@id/coordinator_layout" />
+<!--        <androidx.swiperefreshlayout.widget.SwipeRefreshLayout-->
+<!--            android:id="@+id/swipe"-->
+<!--            android:layout_width="wrap_content"-->
+<!--            android:layout_height="match_parent"-->
+<!--            android:layout_below="@+id/coordinator_layout">-->
 
-        </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>
+<!--            <androidx.recyclerview.widget.RecyclerView-->
+<!--                android:id="@+id/recycler_view"-->
+<!--                android:layout_width="match_parent"-->
+<!--                android:layout_height="wrap_content"-->
+<!--                android:layout_below="@id/coordinator_layout" />-->
 
+<!--        </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>-->
     </RelativeLayout>
 
     <com.google.android.material.navigation.NavigationView
+        android:id="@+id/nav_view"
         android:layout_width="wrap_content"
         android:layout_height="match_parent"
-        android:id="@+id/nav_view"
         android:layout_gravity="start"
-        app:menu="@menu/nav_menu_customer"
-        app:headerLayout="@layout/nav_header_layout">
-    </com.google.android.material.navigation.NavigationView>
+        app:headerLayout="@layout/nav_header_layout"
+        app:menu="@menu/nav_menu_driver"></com.google.android.material.navigation.NavigationView>
 
 
 </androidx.drawerlayout.widget.DrawerLayout>

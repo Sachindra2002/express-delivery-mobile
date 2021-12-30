@@ -6,8 +6,8 @@ import androidx.fragment.app.FragmentManager;
 import androidx.lifecycle.Lifecycle;
 import androidx.viewpager2.adapter.FragmentStateAdapter;
 
-public class FragmentAdapter extends FragmentStateAdapter {
-    public FragmentAdapter(@NonNull FragmentManager fragmentManager, @NonNull Lifecycle lifecycle) {
+public class DisputeFragmentAdapter extends FragmentStateAdapter {
+    public DisputeFragmentAdapter(@NonNull FragmentManager fragmentManager, @NonNull Lifecycle lifecycle) {
         super(fragmentManager, lifecycle);
     }
 
@@ -17,15 +17,14 @@ public class FragmentAdapter extends FragmentStateAdapter {
 
         switch (position) {
             case 1:
-                return new DriverStartedMailsFragment();
-            case 2:
-                return new DriverPickedupMailsFragment();
+                return new PackageDisputesFragment();
         }
-        return new DriverAcceptedMailsFragment();
+
+        return new GeneralDisputesFragment();
     }
 
     @Override
     public int getItemCount() {
-        return 3;
+        return 2;
     }
 }

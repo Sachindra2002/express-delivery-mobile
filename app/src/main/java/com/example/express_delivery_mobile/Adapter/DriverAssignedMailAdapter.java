@@ -10,6 +10,7 @@ import android.os.Build;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -41,12 +42,12 @@ public class DriverAssignedMailAdapter extends RecyclerView.Adapter<DriverAssign
     private String token;
     private String userRole;
 
-    private AlertDialog mProgressDialog;
+    private ProgressDialog mProgressDialog;
 
     //Driver Retrofit client
     DriverClient driverClient = RetrofitClientInstance.getRetrofitInstance().create(DriverClient.class);
 
-    public DriverAssignedMailAdapter(Context context, List<Mail> mails, String token, String userRole, AlertDialog mProgressDialog) {
+    public DriverAssignedMailAdapter(Context context, List<Mail> mails, String token, String userRole, ProgressDialog mProgressDialog) {
         this.context = context;
         this.mails = mails;
         this.token = token;

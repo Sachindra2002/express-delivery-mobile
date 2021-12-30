@@ -2,6 +2,7 @@ package com.example.express_delivery_mobile.Service;
 
 import com.example.express_delivery_mobile.Model.Documents;
 import com.example.express_delivery_mobile.Model.DriverDetail;
+import com.example.express_delivery_mobile.Model.Inquiry;
 import com.example.express_delivery_mobile.Model.ServiceCentre;
 import com.example.express_delivery_mobile.Model.User;
 import com.example.express_delivery_mobile.Model.Vehicle;
@@ -45,4 +46,8 @@ public interface AdminClient {
     //Download driver document
     @GET("download-admin/{fileName}")
     Call<ResponseBody> downloadDriverDocument(@Header("Authorization") String token, @Path("fileName") String fileName);
+
+    //Get general inquiries
+    @GET("get-inquiries")
+    Call<List<Inquiry>> getInquiries(@Header("Authorization") String token);
 }

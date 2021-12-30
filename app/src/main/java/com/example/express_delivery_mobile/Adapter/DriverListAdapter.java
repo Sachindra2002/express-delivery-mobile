@@ -165,18 +165,33 @@ public class DriverListAdapter extends RecyclerView.Adapter<DriverListAdapter.Vi
                 public void onClick(View view) {
                     Intent intent = new Intent(context, AdminDriverProfileActivity.class);
                     intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-                    intent.putExtra("driver_name", filteredDrivers.get(position).getFirstName() + " " + filteredDrivers.get(position).getLastName());
-                    intent.putExtra("driver_telephone", filteredDrivers.get(position).getPhoneNumber());
-                    intent.putExtra("driver_dob", filteredDrivers.get(position).getDriverDetail().getDob());
-                    intent.putExtra("driver_address", filteredDrivers.get(position).getDriverDetail().getAddress());
-                    intent.putExtra("driver_email", filteredDrivers.get(position).getEmail());
-                    intent.putExtra("driver_city", filteredDrivers.get(position).getLocation());
-                    intent.putExtra("driver_nic", filteredDrivers.get(position).getDriverDetail().getNic());
-                    intent.putExtra("vehicle_number", filteredDrivers.get(position).getDriverDetail().getVehicle().getVehicleNumber());
-                    intent.putExtra("vehicle_type", filteredDrivers.get(position).getDriverDetail().getVehicle().getVehicleType());
-                    intent.putExtra("center", filteredDrivers.get(position).getServiceCentre().getCentre());
-                    intent.putExtra("center_address", filteredDrivers.get(position).getServiceCentre().getAddress());
-                    intent.putExtra("driver_id", filteredDrivers.get(position).getDriverDetail().getDriverId());
+
+                    if(filteredDrivers.get(position).getDriverDetail().getVehicle() != null){
+                        intent.putExtra("driver_name", filteredDrivers.get(position).getFirstName() + " " + filteredDrivers.get(position).getLastName());
+                        intent.putExtra("driver_telephone", filteredDrivers.get(position).getPhoneNumber());
+                        intent.putExtra("driver_dob", filteredDrivers.get(position).getDriverDetail().getDob());
+                        intent.putExtra("driver_address", filteredDrivers.get(position).getDriverDetail().getAddress());
+                        intent.putExtra("driver_email", filteredDrivers.get(position).getEmail());
+                        intent.putExtra("driver_city", filteredDrivers.get(position).getLocation());
+                        intent.putExtra("driver_nic", filteredDrivers.get(position).getDriverDetail().getNic());
+                        intent.putExtra("vehicle_number", filteredDrivers.get(position).getDriverDetail().getVehicle().getVehicleNumber());
+                        intent.putExtra("vehicle_type", filteredDrivers.get(position).getDriverDetail().getVehicle().getVehicleType());
+                        intent.putExtra("center", filteredDrivers.get(position).getServiceCentre().getCentre());
+                        intent.putExtra("center_address", filteredDrivers.get(position).getServiceCentre().getAddress());
+                        intent.putExtra("driver_id", filteredDrivers.get(position).getDriverDetail().getDriverId());
+                    }else{
+                        intent.putExtra("driver_name", filteredDrivers.get(position).getFirstName() + " " + filteredDrivers.get(position).getLastName());
+                        intent.putExtra("driver_telephone", filteredDrivers.get(position).getPhoneNumber());
+                        intent.putExtra("driver_dob", filteredDrivers.get(position).getDriverDetail().getDob());
+                        intent.putExtra("driver_address", filteredDrivers.get(position).getDriverDetail().getAddress());
+                        intent.putExtra("driver_email", filteredDrivers.get(position).getEmail());
+                        intent.putExtra("driver_city", filteredDrivers.get(position).getLocation());
+                        intent.putExtra("driver_nic", filteredDrivers.get(position).getDriverDetail().getNic());
+                        intent.putExtra("center", filteredDrivers.get(position).getServiceCentre().getCentre());
+                        intent.putExtra("center_address", filteredDrivers.get(position).getServiceCentre().getAddress());
+                        intent.putExtra("driver_id", filteredDrivers.get(position).getDriverDetail().getDriverId());
+                    }
+
                     context.startActivity(intent);
                 }
             });

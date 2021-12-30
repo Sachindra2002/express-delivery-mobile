@@ -271,6 +271,7 @@ public class SendPackageActivity extends AppCompatActivity implements Navigation
 
                     //200 status code
                     if (response.code() == 201) {
+                        Toast.makeText(SendPackageActivity.this, "Package request sent successfully!", Toast.LENGTH_SHORT).show();
                         Intent intent = new Intent(SendPackageActivity.this, MainActivity.class);
                         intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
                         startActivity(intent);
