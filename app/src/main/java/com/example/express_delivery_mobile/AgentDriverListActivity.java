@@ -147,7 +147,7 @@ public class AgentDriverListActivity extends AppCompatActivity implements Naviga
     @Override
     public boolean onNavigationItemSelected(@NonNull MenuItem item) {
         //Handle side drawer navigation
-        NavHandler.handleCustomerNav(item, AgentDriverListActivity.this);
+        NavHandler.handleAgentNav(item, AgentDriverListActivity.this);
 
         //close navigation drawer
         mDrawerLayout.closeDrawer(GravityCompat.START);

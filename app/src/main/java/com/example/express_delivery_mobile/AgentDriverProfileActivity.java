@@ -180,7 +180,7 @@ public class AgentDriverProfileActivity extends AppCompatActivity implements Nav
     @Override
     public boolean onNavigationItemSelected(@NonNull MenuItem item) {
         //Handle side drawer navigation
-        NavHandler.handleDriverNav(item, AgentDriverProfileActivity.this);
+        NavHandler.handleAgentNav(item, AgentDriverProfileActivity.this);
 
         //close navigation drawer
         mDrawerLayout.closeDrawer(GravityCompat.START);

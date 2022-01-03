@@ -23,6 +23,7 @@ import com.example.express_delivery_mobile.Service.AdminClient;
 import com.example.express_delivery_mobile.Service.RetrofitClientInstance;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 import retrofit2.Call;
@@ -139,6 +140,7 @@ public class GeneralDisputesFragment extends Fragment {
                     recyclerView.setLayoutManager(layoutManager);
                     inquiryAdapter = new InquiryAdapter(getContext(), inquiries, token, "admin", mProgressDialog);
                     recyclerView.setAdapter(inquiryAdapter);
+                    Collections.reverse(inquiries);
                     inquiryAdapter.setInquiries(inquiries);
                 } else {
                     Toast.makeText(getContext(), "Something went wrong" + response.toString(), Toast.LENGTH_SHORT).show();

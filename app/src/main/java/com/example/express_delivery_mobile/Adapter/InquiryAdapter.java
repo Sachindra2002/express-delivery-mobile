@@ -2,6 +2,7 @@ package com.example.express_delivery_mobile.Adapter;
 
 import android.app.ProgressDialog;
 import android.content.Context;
+import android.content.Intent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -13,8 +14,10 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.DiffUtil;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.example.express_delivery_mobile.AgentDriverProfileActivity;
 import com.example.express_delivery_mobile.Model.Inquiry;
 import com.example.express_delivery_mobile.R;
+import com.example.express_delivery_mobile.ViewInquiryActivity;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -41,8 +44,8 @@ public class InquiryAdapter extends RecyclerView.Adapter<InquiryAdapter.ViewHold
         this.mProgressDialog = mProgressDialog;
     }
 
-    public void setInquiries(final List<Inquiry> inquiries){
-        if(this.inquiries  == null){
+    public void setInquiries(final List<Inquiry> inquiries) {
+        if (this.inquiries == null) {
             this.inquiries = inquiries;
             this.filteredInquiry = inquiries;
 
@@ -88,15 +91,15 @@ public class InquiryAdapter extends RecyclerView.Adapter<InquiryAdapter.ViewHold
             @Override
             protected FilterResults performFiltering(CharSequence charSequence) {
                 String charString = charSequence.toString();
-                if(charString.isEmpty()){
+                if (charString.isEmpty()) {
                     filteredInquiry = inquiries;
-                }else{
+                } else {
                     List<Inquiry> filteredList = new ArrayList<>();
-                    for(Inquiry inquiry : inquiries){
+                    for (Inquiry inquiry : inquiries) {
                         String searchString = charString.toLowerCase();
 
                         //Filter through fields and add to filtered list
-                        if(String.valueOf(inquiry.getInquiryId()).contains(searchString)){
+                        if (String.valueOf(inquiry.getInquiryId()).contains(searchString)) {
                             filteredList.add(inquiry);
                         }
                     }
@@ -124,17 +127,28 @@ public class InquiryAdapter extends RecyclerView.Adapter<InquiryAdapter.ViewHold
 
     @Override
     public void onBindViewHolder(@NonNull InquiryAdapter.ViewHolder holder, int position) {
-        SimpleDateFormat df= new SimpleDateFormat("yyyy-MM-dd");
-        try {
-            Date date = df.parse(String.valueOf(filteredInquiry.get(position).getCreatedAt()));
-            df.applyPattern("dd/MM/yyyy");
-            holder.date.setText(df.format(date));
-        } catch (ParseException e) {
-            e.printStackTrace();
-        }
+        String pattern = "MM-dd-yyyy";
+        SimpleDateFormat simpleDateFormat = new SimpleDateFormat(pattern);
+        String date = simpleDateFormat.format(filteredInquiry.get(position).getCreatedAt());
+        holder.date.setText(date);
         holder.inquiryId.setText(String.valueOf(filteredInquiry.get(position).getInquiryId()));
         holder.status.setText(filteredInquiry.get(position).getStatus());
         holder.customerName.setText(filteredInquiry.get(position).getUser().getFirstName() + " " + filteredInquiry.get(position).getUser().getLastName());
+        holder.itemView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent = new Intent(context, ViewInquiryActivity.class);
+                intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                intent.putExtra("inquiry_id", String.valueOf(filteredInquiry.get(position).getInquiryId()));
+                intent.putExtra("customer_name", filteredInquiry.get(position).getUser().getFirstName() + " " + filteredInquiry.get(position).getUser().getLastName());
+                intent.putExtra("customer_email", filteredInquiry.get(position).getUser().getEmail());
+                intent.putExtra("customer_contact", filteredInquiry.get(position).getUser().getPhoneNumber());
+                intent.putExtra("inquiry_type", filteredInquiry.get(position).getInquiryType());
+                intent.putExtra("date", date);
+                intent.putExtra("inquiry", filteredInquiry.get(position).getDescription());
+                context.startActivity(intent);
+            }
+        });
     }
 
     @Override

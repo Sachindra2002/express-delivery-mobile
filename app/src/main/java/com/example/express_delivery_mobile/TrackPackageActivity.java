@@ -17,6 +17,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 import androidx.cardview.widget.CardView;
 import androidx.core.content.ContextCompat;
+import androidx.core.view.GravityCompat;
 import androidx.drawerlayout.widget.DrawerLayout;
 
 import com.example.express_delivery_mobile.Model.DriverDetail;
@@ -24,6 +25,7 @@ import com.example.express_delivery_mobile.Model.MailTracking;
 import com.example.express_delivery_mobile.Model.ServiceCentre;
 import com.example.express_delivery_mobile.Model.User;
 import com.example.express_delivery_mobile.Util.AuthHandler;
+import com.example.express_delivery_mobile.Util.NavHandler;
 import com.google.android.material.navigation.NavigationView;
 import com.kofigyan.stateprogressbar.StateProgressBar;
 
@@ -186,7 +188,12 @@ public class TrackPackageActivity extends AppCompatActivity implements Navigatio
 
     @Override
     public boolean onNavigationItemSelected(@NonNull MenuItem item) {
-        return false;
+        //Handle side drawer navigation
+        NavHandler.handleCustomerNav(item, TrackPackageActivity.this);
+
+        //close navigation drawer
+        mDrawerLayout.closeDrawer(GravityCompat.START);
+        return true;
     }
 
     @Override

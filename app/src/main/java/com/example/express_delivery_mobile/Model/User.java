@@ -12,6 +12,7 @@ public class User {
     private String confirmPassword;
     private DriverDetail driverDetail;
     private ServiceCentre serviceCentre;
+    private boolean isBanned;
 
     public User(String email, String firstName, String lastName, String location, String phoneNumber, String password, String userRole, String token, String confirmPassword, DriverDetail driverDetail, ServiceCentre serviceCentre) {
         this.email = email;
@@ -28,6 +29,14 @@ public class User {
     }
 
     public User() {
+    }
+
+    public boolean isBanned() {
+        return isBanned;
+    }
+
+    public void setBanned(boolean banned) {
+        isBanned = banned;
     }
 
     public String getEmail() {

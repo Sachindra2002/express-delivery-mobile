@@ -98,10 +98,7 @@ public class AgentListActivity extends AppCompatActivity implements NavigationVi
         agents = new ArrayList<>();
         recyclerView = findViewById(R.id.recycler_view);
         swipeRefreshLayout = (SwipeRefreshLayout) findViewById(R.id.swipe);
-        LinearLayoutManager layoutManager = new LinearLayoutManager(this);
-        recyclerView.setLayoutManager(layoutManager);
-        agentListAdapter = new AgentListAdapter(this, agents, token, "admin", mProgressDialog);
-        recyclerView.setAdapter(agentListAdapter);
+
 
         // SetOnRefreshListener on SwipeRefreshLayout
         swipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
@@ -131,6 +128,10 @@ public class AgentListActivity extends AppCompatActivity implements NavigationVi
                 System.out.println(response.body());
                 //Handle null pointer errors
                 if (agents != null) {
+                    LinearLayoutManager layoutManager = new LinearLayoutManager(AgentListActivity.this);
+                    recyclerView.setLayoutManager(layoutManager);
+                    agentListAdapter = new AgentListAdapter(AgentListActivity.this, agents, token, "admin", mProgressDialog);
+                    recyclerView.setAdapter(agentListAdapter);
                     agentListAdapter.setAgents(agents);
                 } else {
                     Toast.makeText(AgentListActivity.this, "Something went wrong" + response.toString(), Toast.LENGTH_SHORT).show();
@@ -149,7 +150,7 @@ public class AgentListActivity extends AppCompatActivity implements NavigationVi
     @Override
     public boolean onNavigationItemSelected(@NonNull MenuItem item) {
         //Handle side drawer navigation
-        NavHandler.handleCustomerNav(item, AgentListActivity.this);
+        NavHandler.handleAdminNav(item, AgentListActivity.this);
 
         //close navigation drawer
         mDrawerLayout.closeDrawer(GravityCompat.START);

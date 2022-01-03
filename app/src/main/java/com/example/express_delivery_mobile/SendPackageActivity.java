@@ -294,7 +294,7 @@ public class SendPackageActivity extends AppCompatActivity implements Navigation
     @Override
     public boolean onNavigationItemSelected(@NonNull MenuItem item) {
         //Handle side drawer navigation
-        NavHandler.handleDriverNav(item, SendPackageActivity.this);
+        NavHandler.handleCustomerNav(item, SendPackageActivity.this);
 
         //close navigation drawer
         mDrawerLayout.closeDrawer(GravityCompat.START);

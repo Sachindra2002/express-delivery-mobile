@@ -186,7 +186,7 @@ public class AgentActivity extends AppCompatActivity implements NavigationView.O
     @Override
     public boolean onNavigationItemSelected(@NonNull MenuItem item) {
         //Handle side drawer navigation
-        NavHandler.handleDriverNav(item, AgentActivity.this);
+        NavHandler.handleAgentNav(item, AgentActivity.this);
 
         //close navigation drawer
         mDrawerLayout.closeDrawer(GravityCompat.START);

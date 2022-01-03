@@ -1,5 +1,6 @@
 package com.example.express_delivery_mobile.Service;
 
+import com.example.express_delivery_mobile.Model.Disputes;
 import com.example.express_delivery_mobile.Model.Documents;
 import com.example.express_delivery_mobile.Model.DriverDetail;
 import com.example.express_delivery_mobile.Model.Inquiry;
@@ -50,4 +51,8 @@ public interface AdminClient {
     //Get general inquiries
     @GET("get-inquiries")
     Call<List<Inquiry>> getInquiries(@Header("Authorization") String token);
+
+    //Get package inquiries
+    @GET("get-disputes")
+    Call<List<Disputes>> getDisputes(@Header("Authorization") String token);
 }

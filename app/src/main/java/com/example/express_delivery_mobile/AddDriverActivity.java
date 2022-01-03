@@ -331,7 +331,7 @@ public class AddDriverActivity extends AppCompatActivity implements NavigationVi
     @Override
     public boolean onNavigationItemSelected(@NonNull MenuItem item) {
         //Handle side drawer navigation
-        NavHandler.handleDriverNav(item, AddDriverActivity.this);
+        NavHandler.handleAdminNav(item, AddDriverActivity.this);
 
         //close navigation drawer
         mDrawerLayout.closeDrawer(GravityCompat.START);

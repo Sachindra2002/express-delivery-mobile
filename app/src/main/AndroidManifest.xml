@@ -33,6 +33,7 @@
         <activity android:name=".AgentListActivity" />
         <activity android:name=".ServiceCenterListActivity" />
         <activity android:name=".DisputesActivity" />
+        <activity android:name=".ViewInquiryActivity" />
         <activity android:name=".MainActivity"
             android:exported="true">
             <intent-filter>

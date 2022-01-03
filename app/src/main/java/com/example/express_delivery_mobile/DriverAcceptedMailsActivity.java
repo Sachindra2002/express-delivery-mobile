@@ -125,7 +125,7 @@ public class DriverAcceptedMailsActivity extends AppCompatActivity implements Na
     @Override
     public boolean onNavigationItemSelected(@NonNull MenuItem item) {
         //Handle side drawer navigation
-        NavHandler.handleCustomerNav(item, DriverAcceptedMailsActivity.this);
+        NavHandler.handleDriverNav(item, DriverAcceptedMailsActivity.this);
 
         //close navigation drawer
         mDrawerLayout.closeDrawer(GravityCompat.START);

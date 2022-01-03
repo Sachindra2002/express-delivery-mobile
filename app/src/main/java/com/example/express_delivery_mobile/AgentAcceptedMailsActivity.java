@@ -147,7 +147,7 @@ public class AgentAcceptedMailsActivity extends AppCompatActivity implements Nav
     @Override
     public boolean onNavigationItemSelected(@NonNull MenuItem item) {
         //Handle side drawer navigation
-        NavHandler.handleCustomerNav(item, AgentAcceptedMailsActivity.this);
+        NavHandler.handleAgentNav(item, AgentAcceptedMailsActivity.this);
 
         //close navigation drawer
         mDrawerLayout.closeDrawer(GravityCompat.START);

@@ -129,10 +129,7 @@ public class AdminDriverProfileActivity extends AppCompatActivity implements Nav
         documents = new ArrayList<>();
         recyclerView = findViewById(R.id.recycler_view);
         swipeRefreshLayout = (SwipeRefreshLayout) findViewById(R.id.swipe);
-        LinearLayoutManager layoutManager = new LinearLayoutManager(this);
-        recyclerView.setLayoutManager(layoutManager);
-        driverDocumentsAdapter = new DriverDocumentsAdapter(this, documents, token, "admin", email, mProgressDialog);
-        recyclerView.setAdapter(driverDocumentsAdapter);
+
 
         // SetOnRefreshListener on SwipeRefreshLayout
         swipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
@@ -162,6 +159,10 @@ public class AdminDriverProfileActivity extends AppCompatActivity implements Nav
                 System.out.println(response.body());
                 //Handle null pointer errors
                 if (documents != null) {
+                    LinearLayoutManager layoutManager = new LinearLayoutManager(AdminDriverProfileActivity.this);
+                    recyclerView.setLayoutManager(layoutManager);
+                    driverDocumentsAdapter = new DriverDocumentsAdapter(AdminDriverProfileActivity.this, documents, token, "admin", email, mProgressDialog);
+                    recyclerView.setAdapter(driverDocumentsAdapter);
                     driverDocumentsAdapter.setDocuments(documents);
                 } else {
                     Toast.makeText(AdminDriverProfileActivity.this, "Something went wrong" + response.toString(), Toast.LENGTH_SHORT).show();
@@ -180,7 +181,7 @@ public class AdminDriverProfileActivity extends AppCompatActivity implements Nav
     @Override
     public boolean onNavigationItemSelected(@NonNull MenuItem item) {
         //Handle side drawer navigation
-        NavHandler.handleDriverNav(item, AdminDriverProfileActivity.this);
+        NavHandler.handleAdminNav(item, AdminDriverProfileActivity.this);
 
         //close navigation drawer
         mDrawerLayout.closeDrawer(GravityCompat.START);

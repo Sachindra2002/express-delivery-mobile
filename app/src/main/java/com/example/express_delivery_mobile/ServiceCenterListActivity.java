@@ -97,10 +97,7 @@ public class ServiceCenterListActivity extends AppCompatActivity implements Navi
         centers = new ArrayList<>();
         recyclerView = findViewById(R.id.recycler_view);
         swipeRefreshLayout = (SwipeRefreshLayout) findViewById(R.id.swipe);
-        LinearLayoutManager layoutManager = new LinearLayoutManager(this);
-        recyclerView.setLayoutManager(layoutManager);
-        serviceCenterListAdapter = new ServiceCenterListAdapter(this, centers, token, "admin", mProgressDialog);
-        recyclerView.setAdapter(serviceCenterListAdapter);
+
 
         // SetOnRefreshListener on SwipeRefreshLayout
         swipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
@@ -129,6 +126,10 @@ public class ServiceCenterListActivity extends AppCompatActivity implements Navi
                 System.out.println(response.body());
                 //Handle null pointer errors
                 if (centers != null) {
+                    LinearLayoutManager layoutManager = new LinearLayoutManager(ServiceCenterListActivity.this);
+                    recyclerView.setLayoutManager(layoutManager);
+                    serviceCenterListAdapter = new ServiceCenterListAdapter(ServiceCenterListActivity.this, centers, token, "admin", mProgressDialog);
+                    recyclerView.setAdapter(serviceCenterListAdapter);
                     serviceCenterListAdapter.setCenters(centers);
                 } else {
                     Toast.makeText(ServiceCenterListActivity.this, "Something went wrong" + response.toString(), Toast.LENGTH_SHORT).show();
@@ -147,7 +148,7 @@ public class ServiceCenterListActivity extends AppCompatActivity implements Navi
     @Override
     public boolean onNavigationItemSelected(@NonNull MenuItem item) {
         //Handle side drawer navigation
-        NavHandler.handleCustomerNav(item, ServiceCenterListActivity.this);
+        NavHandler.handleAdminNav(item, ServiceCenterListActivity.this);
 
         //close navigation drawer
         mDrawerLayout.closeDrawer(GravityCompat.START);

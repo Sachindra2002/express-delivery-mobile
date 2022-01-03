@@ -26,4 +26,24 @@ public class NavHandler {
             }
         }
     }
+
+    public static void handleAgentNav(MenuItem item, Context context){
+        switch (item.getItemId()){
+            case R.id.nav_logout: {
+                //Logout Button
+                AuthHandler.logout(context);
+                break;
+            }
+        }
+    }
+
+    public static void handleAdminNav(MenuItem item, Context context){
+        switch (item.getItemId()){
+            case R.id.nav_logout: {
+                //Logout Button
+                AuthHandler.logout(context);
+                break;
+            }
+        }
+    }
 }

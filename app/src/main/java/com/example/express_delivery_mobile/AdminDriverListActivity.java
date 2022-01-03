@@ -97,10 +97,7 @@ public class AdminDriverListActivity extends AppCompatActivity implements Naviga
         drivers = new ArrayList<>();
         recyclerView = findViewById(R.id.recycler_view);
         swipeRefreshLayout = (SwipeRefreshLayout) findViewById(R.id.swipe);
-        LinearLayoutManager layoutManager = new LinearLayoutManager(this);
-        recyclerView.setLayoutManager(layoutManager);
-        driverListAdapter = new DriverListAdapter(this, drivers, token ,"admin", mProgressDialog);
-        recyclerView.setAdapter(driverListAdapter);
+
 
         // SetOnRefreshListener on SwipeRefreshLayout
         swipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
@@ -129,6 +126,10 @@ public class AdminDriverListActivity extends AppCompatActivity implements Naviga
                 System.out.println(response.body());
                 //Handle null pointer errors
                 if(drivers != null){
+                    LinearLayoutManager layoutManager = new LinearLayoutManager(AdminDriverListActivity.this);
+                    recyclerView.setLayoutManager(layoutManager);
+                    driverListAdapter = new DriverListAdapter(AdminDriverListActivity.this, drivers, token ,"admin", mProgressDialog);
+                    recyclerView.setAdapter(driverListAdapter);
                     driverListAdapter.setDrivers(drivers);
                 }else {
                     Toast.makeText(AdminDriverListActivity.this, "Something went wrong" + response.toString(), Toast.LENGTH_SHORT).show();
@@ -147,7 +148,7 @@ public class AdminDriverListActivity extends AppCompatActivity implements Naviga
     @Override
     public boolean onNavigationItemSelected(@NonNull MenuItem item) {
         //Handle side drawer navigation
-        NavHandler.handleCustomerNav(item, AdminDriverListActivity.this);
+        NavHandler.handleAdminNav(item, AdminDriverListActivity.this);
 
         //close navigation drawer
         mDrawerLayout.closeDrawer(GravityCompat.START);

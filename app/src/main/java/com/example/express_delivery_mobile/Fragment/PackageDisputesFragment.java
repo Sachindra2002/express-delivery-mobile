@@ -16,13 +16,16 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Toast;
 
+import com.example.express_delivery_mobile.Adapter.DisputesAdapter;
 import com.example.express_delivery_mobile.Adapter.InquiryAdapter;
+import com.example.express_delivery_mobile.Model.Disputes;
 import com.example.express_delivery_mobile.Model.Inquiry;
 import com.example.express_delivery_mobile.R;
 import com.example.express_delivery_mobile.Service.AdminClient;
 import com.example.express_delivery_mobile.Service.RetrofitClientInstance;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 import retrofit2.Call;
@@ -40,8 +43,8 @@ public class PackageDisputesFragment extends Fragment {
     private RecyclerView recyclerView;
     private SwipeRefreshLayout swipeRefreshLayout;
 
-    private List<Inquiry> inquiries;
-    private InquiryAdapter inquiryAdapter;
+    private List<Disputes> disputes;
+    private DisputesAdapter disputesAdapter;
     private String token;
 
     private AdminClient adminClient = RetrofitClientInstance.getRetrofitInstance().create(AdminClient.class);
@@ -97,13 +100,9 @@ public class PackageDisputesFragment extends Fragment {
         token = "Bearer " + sharedPreferences.getString("auth_token", null);
 
         //Setup inquiry list
-        inquiries = new ArrayList<>();
+        disputes = new ArrayList<>();
         recyclerView = view.findViewById(R.id.recycler_view);
         swipeRefreshLayout = (SwipeRefreshLayout) view.findViewById(R.id.swipe);
-        LinearLayoutManager layoutManager = new LinearLayoutManager(getContext());
-        recyclerView.setLayoutManager(layoutManager);
-        inquiryAdapter = new InquiryAdapter(getContext(), inquiries, token, "admin", mProgressDialog);
-        recyclerView.setAdapter(inquiryAdapter);
 
         // SetOnRefreshListener on SwipeRefreshLayout
         swipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
@@ -118,21 +117,26 @@ public class PackageDisputesFragment extends Fragment {
         return view;
     }
     private void getAllInquiries() {
-        Call<List<Inquiry>> call = adminClient.getInquiries(token);
+        Call<List<Disputes>> call = adminClient.getDisputes(token);
 
         //Show Progress
-        mProgressDialog.setMessage("Loading Inquiries..");
+        mProgressDialog.setMessage("Loading Disputes..");
         mProgressDialog.show();
 
-        call.enqueue(new Callback<List<Inquiry>>() {
+        call.enqueue(new Callback<List<Disputes>>() {
             @Override
-            public void onResponse(@NonNull Call<List<Inquiry>> call, @NonNull Response<List<Inquiry>> response) {
-                inquiries = response.body();
+            public void onResponse(@NonNull Call<List<Disputes>> call, @NonNull Response<List<Disputes>> response) {
+                disputes = response.body();
                 System.out.println(response);
                 System.out.println(response.body());
                 //Handle null pointer errors
-                if (inquiries != null) {
-                    inquiryAdapter.setInquiries(inquiries);
+                if (disputes != null) {
+                    LinearLayoutManager layoutManager = new LinearLayoutManager(getContext());
+                    recyclerView.setLayoutManager(layoutManager);
+                    disputesAdapter = new DisputesAdapter(getContext(), disputes, token, "admin", mProgressDialog);
+                    recyclerView.setAdapter(disputesAdapter);
+                    Collections.reverse(disputes);
+                    disputesAdapter.setDisputes(disputes);
                 } else {
                     Toast.makeText(getContext(), "Something went wrong" + response.toString(), Toast.LENGTH_SHORT).show();
                 }
@@ -140,7 +144,7 @@ public class PackageDisputesFragment extends Fragment {
             }
 
             @Override
-            public void onFailure(Call<List<Inquiry>> call, Throwable t) {
+            public void onFailure(Call<List<Disputes>> call, Throwable t) {
                 Toast.makeText(getContext(), "Something went Wrong!" + t.toString(), Toast.LENGTH_SHORT).show();
                 mProgressDialog.dismiss();
             }
