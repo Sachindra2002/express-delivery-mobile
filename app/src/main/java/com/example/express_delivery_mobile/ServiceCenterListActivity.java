@@ -73,7 +73,7 @@ public class ServiceCenterListActivity extends AppCompatActivity implements Navi
         //Setup toolbar
         mToolbar = findViewById(R.id.toolbar);
         setSupportActionBar(mToolbar);
-        getSupportActionBar().setTitle(null);
+        getSupportActionBar().setTitle("Service Centers");
 
         //Setup navigation drawer
         mDrawerLayout = findViewById(R.id.drawer_layout);

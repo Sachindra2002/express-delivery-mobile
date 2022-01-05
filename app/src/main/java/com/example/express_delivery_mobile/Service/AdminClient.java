@@ -4,6 +4,7 @@ import com.example.express_delivery_mobile.Model.Disputes;
 import com.example.express_delivery_mobile.Model.Documents;
 import com.example.express_delivery_mobile.Model.DriverDetail;
 import com.example.express_delivery_mobile.Model.Inquiry;
+import com.example.express_delivery_mobile.Model.Mail;
 import com.example.express_delivery_mobile.Model.ServiceCentre;
 import com.example.express_delivery_mobile.Model.User;
 import com.example.express_delivery_mobile.Model.Vehicle;
@@ -14,6 +15,7 @@ import okhttp3.ResponseBody;
 import retrofit2.Call;
 import retrofit2.http.Body;
 import retrofit2.http.GET;
+import retrofit2.http.HTTP;
 import retrofit2.http.Header;
 import retrofit2.http.POST;
 import retrofit2.http.Path;
@@ -55,4 +57,32 @@ public interface AdminClient {
     //Get package inquiries
     @GET("get-disputes")
     Call<List<Disputes>> getDisputes(@Header("Authorization") String token);
+
+    //Respond to inquiry
+    @POST("send-response-inquiry")
+    Call<ResponseBody> respondInquiry(@Header("Authorization") String token, @Body Inquiry inquiry);
+
+    //Respond to disputes
+    @POST("send-response-dispute")
+    Call<ResponseBody> respondDispute(@Header("Authorization") String token, @Body Disputes disputes);
+
+    //Change Service Center
+    @POST("change-driver-center")
+    Call<ResponseBody> changeDriverServiceCenter(@Header("Authorization") String token, @Body User user);
+
+    //Change driver vehicle
+    @POST("change-driver-vehicle")
+    Call<ResponseBody> changeDriverVehicle(@Header("Authorization") String token, @Body User user);
+
+    //Get drivers for a service center
+    @POST("get-center-drivers")
+    Call<List<User>> getServiceCenterDrivers(@Header("Authorization") String token, @Body ServiceCentre serviceCentre);
+
+    //Get packages for a service center
+    @POST("get-center-packages")
+    Call<List<Mail>> getServiceCenterPackages(@Header("Authorization") String token, @Body ServiceCentre serviceCentre);
+
+    //Get all packages
+    @GET("get-all-packages")
+    Call<List<Mail>> getAllPackages(@Header("Authorization") String token);
 }

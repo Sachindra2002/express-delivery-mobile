@@ -45,5 +45,6 @@ dependencies {
     implementation 'androidx.swiperefreshlayout:swiperefreshlayout:1.1.0'
     implementation 'com.kofigyan.stateprogressbar:stateprogressbar:1.0.0'
     implementation 'com.ernestoyaquello.stepperform:vertical-stepper-form:2.5.0'
+    implementation "androidx.sqlite:sqlite:2.2.0"
 
 }

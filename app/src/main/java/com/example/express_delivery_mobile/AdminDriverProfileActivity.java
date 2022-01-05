@@ -1,10 +1,18 @@
 package com.example.express_delivery_mobile;
 
+import android.app.AlertDialog;
 import android.app.ProgressDialog;
 import android.content.Context;
+import android.content.DialogInterface;
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.view.LayoutInflater;
 import android.view.MenuItem;
+import android.view.View;
+import android.widget.ArrayAdapter;
+import android.widget.Button;
+import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -21,16 +29,21 @@ import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
 import com.example.express_delivery_mobile.Adapter.DriverDocumentsAdapter;
 import com.example.express_delivery_mobile.Model.Documents;
+import com.example.express_delivery_mobile.Model.DriverDetail;
+import com.example.express_delivery_mobile.Model.ServiceCentre;
 import com.example.express_delivery_mobile.Model.User;
+import com.example.express_delivery_mobile.Model.Vehicle;
 import com.example.express_delivery_mobile.Service.AdminClient;
 import com.example.express_delivery_mobile.Service.RetrofitClientInstance;
 import com.example.express_delivery_mobile.Util.AuthHandler;
 import com.example.express_delivery_mobile.Util.NavHandler;
+import com.google.android.material.dialog.MaterialAlertDialogBuilder;
 import com.google.android.material.navigation.NavigationView;
 
 import java.util.ArrayList;
 import java.util.List;
 
+import okhttp3.ResponseBody;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
@@ -41,6 +54,20 @@ public class AdminDriverProfileActivity extends AppCompatActivity implements Nav
     private DrawerLayout mDrawerLayout;
     private NavigationView mNavigationView;
     private ProgressDialog mProgressDialog;
+    Button editDriverDetails;
+    Spinner center;
+    Spinner vehicle;
+
+    //Dropdown attributes
+    private List<String> centers = new ArrayList<>();
+    private List<Integer> center_ids = new ArrayList<>();
+
+    //Dropdown attributes
+    private List<String> vehicles = new ArrayList<>();
+    private List<Integer> vehicle_ids = new ArrayList<>();
+
+    private boolean centersLoaded;
+    private boolean vehiclesLoaded;
 
     private String token;
     private String email;
@@ -82,6 +109,33 @@ public class AdminDriverProfileActivity extends AppCompatActivity implements Nav
         vehicleType = findViewById(R.id.vehicleType);
         serviceCenter = findViewById(R.id.center);
         centerAddress = findViewById(R.id.centerAddress);
+        editDriverDetails = findViewById(R.id.edit_driver_details);
+
+        editDriverDetails.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                MaterialAlertDialogBuilder builder = new MaterialAlertDialogBuilder(AdminDriverProfileActivity.this);
+                builder.setTitle("Edit Driver Details");
+
+                //When "Accept" button is clicked
+                builder.setPositiveButton("Vehicle", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialogInterface, int i) {
+                        changeVehicle();
+                    }
+                });
+
+                //When cancel button is clicked
+                builder.setNeutralButton("Service Center", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        changeServiceCenter();
+                    }
+                });
+
+                builder.show();
+            }
+        });
 
         fullName.setText(getIntent().getStringExtra("driver_name"));
         _email.setText(getIntent().getStringExtra("driver_email"));
@@ -144,6 +198,120 @@ public class AdminDriverProfileActivity extends AppCompatActivity implements Nav
 
     }
 
+    private void changeVehicle() {
+        AlertDialog.Builder mBuilder = new AlertDialog.Builder(AdminDriverProfileActivity.this, R.style.MyAlertDialogTheme);
+        LayoutInflater inflater = (LayoutInflater) AdminDriverProfileActivity.this.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+        View v = inflater.inflate(R.layout.update_vehicle_dialog, null);
+        mBuilder.setTitle("Change Vehicle");
+        vehicle = (Spinner) v.findViewById(R.id.vehicle_spinner);
+        //Show progress
+        mProgressDialog.setMessage("Setting up form...");
+        mProgressDialog.show();
+
+        setupVehicleDropdown();
+
+        mBuilder.setPositiveButton("Change", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialogInterface, int i) {
+                String _vehicle = vehicle.getSelectedItem().toString();
+                Vehicle vehicle = new Vehicle();
+                vehicle.setVehicleId(vehicle_ids.get(vehicles.indexOf(_vehicle)));
+                DriverDetail driverDetail = new DriverDetail();
+                driverDetail.setDriverId(getIntent().getIntExtra("driver_id", 0));
+                driverDetail.setVehicle(vehicle);
+                User user = new User();
+                user.setDriverDetail(driverDetail);
+
+                Call<ResponseBody> call = adminClient.changeDriverVehicle(token, user);
+                //Show progress
+                mProgressDialog.setMessage("Updating vehicle...");
+                mProgressDialog.show();
+
+                call.enqueue(new Callback<ResponseBody>() {
+                    @Override
+                    public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
+                        mProgressDialog.dismiss();
+                        //200 status code
+                        if (response.code() == 200) {
+                            Toast.makeText(AdminDriverProfileActivity.this, "Vehicle updated successfully", Toast.LENGTH_SHORT).show();
+                            Intent intent = new Intent(AdminDriverProfileActivity.this, AdminDriverListActivity.class);
+                            intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                            startActivity(intent);
+                        } else {
+                            Toast.makeText(AdminDriverProfileActivity.this, "Something went wrong!", Toast.LENGTH_SHORT).show();
+                        }
+                    }
+
+                    @Override
+                    public void onFailure(Call<ResponseBody> call, Throwable t) {
+                        mProgressDialog.dismiss();
+                        Toast.makeText(AdminDriverProfileActivity.this, "Something! went wrong" + t.toString(), Toast.LENGTH_SHORT).show();
+                    }
+                });
+            }
+        });
+
+        mBuilder.setView(v);
+        AlertDialog dialog = mBuilder.create();
+        dialog.show();
+    }
+
+    private void changeServiceCenter() {
+        AlertDialog.Builder mBuilder = new AlertDialog.Builder(AdminDriverProfileActivity.this, R.style.MyAlertDialogTheme);
+        LayoutInflater inflater = (LayoutInflater) AdminDriverProfileActivity.this.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+        View v = inflater.inflate(R.layout.update_center_dialog, null);
+        mBuilder.setTitle("Change Service Center");
+        center = (Spinner) v.findViewById(R.id.center_spinner);
+        //Show progress
+        mProgressDialog.setMessage("Setting up form...");
+        mProgressDialog.show();
+
+        setupCenterDropdown();
+
+        mBuilder.setPositiveButton("Change", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialogInterface, int i) {
+                String _center = center.getSelectedItem().toString();
+                ServiceCentre serviceCentre = new ServiceCentre();
+                serviceCentre.setCentreId(center_ids.get(centers.indexOf(_center)));
+                User user = new User();
+                user.setEmail(getIntent().getStringExtra("driver_email"));
+                user.setServiceCentre(serviceCentre);
+
+                Call<ResponseBody> call = adminClient.changeDriverServiceCenter(token, user);
+                //Show progress
+                mProgressDialog.setMessage("Updating service center...");
+                mProgressDialog.show();
+
+                call.enqueue(new Callback<ResponseBody>() {
+                    @Override
+                    public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
+                        mProgressDialog.dismiss();
+                        //200 status code
+                        if (response.code() == 200) {
+                            Toast.makeText(AdminDriverProfileActivity.this, "Service center updated successfully", Toast.LENGTH_SHORT).show();
+                            Intent intent = new Intent(AdminDriverProfileActivity.this, AdminDriverListActivity.class);
+                            intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                            startActivity(intent);
+                        } else {
+                            Toast.makeText(AdminDriverProfileActivity.this, "Something went wrong!", Toast.LENGTH_SHORT).show();
+                        }
+                    }
+
+                    @Override
+                    public void onFailure(Call<ResponseBody> call, Throwable t) {
+                        mProgressDialog.dismiss();
+                        Toast.makeText(AdminDriverProfileActivity.this, "Something! went wrong" + t.toString(), Toast.LENGTH_SHORT).show();
+                    }
+                });
+            }
+        });
+
+        mBuilder.setView(v);
+        AlertDialog dialog = mBuilder.create();
+        dialog.show();
+    }
+
     private void getDriverDocuments() {
         Call<List<Documents>> call = adminClient.getDriverDocuments(token, getIntent().getStringExtra("driver_email"));
 
@@ -173,6 +341,80 @@ public class AdminDriverProfileActivity extends AppCompatActivity implements Nav
             @Override
             public void onFailure(Call<List<Documents>> call, Throwable t) {
                 Toast.makeText(AdminDriverProfileActivity.this, "Something went Wrong!" + t.toString(), Toast.LENGTH_SHORT).show();
+                mProgressDialog.dismiss();
+            }
+        });
+    }
+
+    private void setupCenterDropdown() {
+        Call<List<ServiceCentre>> call = adminClient.getServiceCenters(token);
+
+        call.enqueue(new Callback<List<ServiceCentre>>() {
+            @Override
+            public void onResponse(Call<List<ServiceCentre>> call, Response<List<ServiceCentre>> response) {
+                List<ServiceCentre> centerList = response.body();
+                if (centerList != null) {
+
+                    //Configure drop down
+                    for (ServiceCentre center : centerList) {
+                        centers.add(center.getCentre());
+                        center_ids.add(center.getCentreId());
+                    }
+
+                    //Set Adapter for dropdown
+                    ArrayAdapter<String> adapter = new ArrayAdapter<>(AdminDriverProfileActivity.this, android.R.layout.simple_spinner_item, centers);
+                    adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+                    center.setAdapter(adapter);
+                    centersLoaded = true;
+
+                    if (centersLoaded) mProgressDialog.dismiss();
+
+                } else {
+                    Toast.makeText(AdminDriverProfileActivity.this, "Something went wrong!", Toast.LENGTH_SHORT).show();
+                    mProgressDialog.dismiss();
+                }
+            }
+
+            @Override
+            public void onFailure(Call<List<ServiceCentre>> call, Throwable t) {
+                Toast.makeText(AdminDriverProfileActivity.this, "Something went wrong!", Toast.LENGTH_SHORT).show();
+                mProgressDialog.dismiss();
+            }
+        });
+    }
+
+    private void setupVehicleDropdown() {
+        Call<List<Vehicle>> call = adminClient.getAvailableVehicles(token);
+
+        call.enqueue(new Callback<List<Vehicle>>() {
+            @Override
+            public void onResponse(Call<List<Vehicle>> call, Response<List<Vehicle>> response) {
+                List<Vehicle> vehicleList = response.body();
+                if (vehicleList != null) {
+
+                    //Configure drop down
+                    for (Vehicle vehicle : vehicleList) {
+                        vehicles.add(vehicle.getVehicleType() + " " + vehicle.getVehicleNumber());
+                        vehicle_ids.add(vehicle.getVehicleId());
+                    }
+
+                    //Set Adapter for dropdown
+                    ArrayAdapter<String> adapter = new ArrayAdapter<>(AdminDriverProfileActivity.this, android.R.layout.simple_spinner_item, vehicles);
+                    adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+                    vehicle.setAdapter(adapter);
+                    vehiclesLoaded = true;
+
+                    if (vehiclesLoaded) mProgressDialog.dismiss();
+
+                } else {
+                    Toast.makeText(AdminDriverProfileActivity.this, "Something went wrong!", Toast.LENGTH_SHORT).show();
+                    mProgressDialog.dismiss();
+                }
+            }
+
+            @Override
+            public void onFailure(Call<List<Vehicle>> call, Throwable t) {
+                Toast.makeText(AdminDriverProfileActivity.this, "Something went wrong!", Toast.LENGTH_SHORT).show();
                 mProgressDialog.dismiss();
             }
         });

@@ -2,6 +2,7 @@ package com.example.express_delivery_mobile.Adapter;
 
 import android.app.ProgressDialog;
 import android.content.Context;
+import android.content.Intent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -15,6 +16,8 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.express_delivery_mobile.Model.Disputes;
 import com.example.express_delivery_mobile.R;
+import com.example.express_delivery_mobile.ViewDisputeActivity;
+import com.example.express_delivery_mobile.ViewInquiryActivity;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -132,7 +135,22 @@ public class DisputesAdapter extends RecyclerView.Adapter<DisputesAdapter.ViewHo
         holder.mailId.setText(String.valueOf(filteredDisputes.get(position).getMail().getMailId()));
         holder.status.setText(filteredDisputes.get(position).getStatus());
         holder.customerName.setText(filteredDisputes.get(position).getMail().getUser().getFirstName() + " " + filteredDisputes.get(position).getMail().getUser().getLastName());
-
+        holder.itemView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent = new Intent(context, ViewDisputeActivity.class);
+                intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                intent.putExtra("dispute", filteredDisputes.get(position).getDescription());
+                intent.putExtra("dispute_id", String.valueOf(filteredDisputes.get(position).getDisputeId()));
+                intent.putExtra("mail_id", String.valueOf(filteredDisputes.get(position).getMail().getMailId()));
+                intent.putExtra("customer_name", filteredDisputes.get(position).getMail().getUser().getFirstName() + " " + filteredDisputes.get(position).getMail().getUser().getFirstName());
+                intent.putExtra("customer_email", filteredDisputes.get(position).getMail().getUser().getEmail());
+                intent.putExtra("customer_contact", filteredDisputes.get(position).getMail().getUser().getPhoneNumber());
+                intent.putExtra("dispute_type", filteredDisputes.get(position).getDisputeType());
+                intent.putExtra("date", date);
+                context.startActivity(intent);
+            }
+        });
     }
 
     @Override

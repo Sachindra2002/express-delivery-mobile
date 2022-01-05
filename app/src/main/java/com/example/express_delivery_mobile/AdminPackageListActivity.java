@@ -19,8 +19,8 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
-import com.example.express_delivery_mobile.Adapter.DriverListAdapter;
-import com.example.express_delivery_mobile.Model.User;
+import com.example.express_delivery_mobile.Adapter.MailAdapter;
+import com.example.express_delivery_mobile.Model.Mail;
 import com.example.express_delivery_mobile.Service.AdminClient;
 import com.example.express_delivery_mobile.Service.RetrofitClientInstance;
 import com.example.express_delivery_mobile.Util.AuthHandler;
@@ -34,7 +34,7 @@ import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
-public class AdminDriverListActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener {
+public class AdminPackageListActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener {
     private Toolbar mToolbar;
     private DrawerLayout mDrawerLayout;
     private NavigationView mNavigationView;
@@ -42,28 +42,28 @@ public class AdminDriverListActivity extends AppCompatActivity implements Naviga
     private SearchView searchView;
 
     private RecyclerView recyclerView;
-    private DriverListAdapter driverListAdapter;
+    private MailAdapter mailAdapter;
     private SwipeRefreshLayout swipeRefreshLayout;
 
-    private List<User> drivers;
+    private List<Mail> mails;
     private String token;
     private String email;
 
-    private AdminClient adminClient = RetrofitClientInstance.getRetrofitInstance().create(AdminClient.class);
+    AdminClient adminClient = RetrofitClientInstance.getRetrofitInstance().create(AdminClient.class);
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
         //Check if authorization token is valid
-        String result = AuthHandler.validate(AdminDriverListActivity.this, "admin");
+        String result = AuthHandler.validate(AdminPackageListActivity.this, "admin");
 
         if (result != null) {
             if (result.equals("unauthorized") || result.equals("expired")) return;
         }
 
         //Load layout
-        setContentView(R.layout.activity_admin_driver_list);
+        setContentView(R.layout.activity_for_you_mails);
 
         //Retrieve JWT Token
         SharedPreferences sharedPreferences = getSharedPreferences("auth_preferences", Context.MODE_PRIVATE);
@@ -73,7 +73,7 @@ public class AdminDriverListActivity extends AppCompatActivity implements Naviga
         //Setup toolbar
         mToolbar = findViewById(R.id.toolbar);
         setSupportActionBar(mToolbar);
-        getSupportActionBar().setTitle("Drivers");
+        getSupportActionBar().setTitle(null);
 
         //Setup navigation drawer
         mDrawerLayout = findViewById(R.id.drawer_layout);
@@ -93,53 +93,52 @@ public class AdminDriverListActivity extends AppCompatActivity implements Naviga
         mActionBarDrawerToggle.syncState();
         mNavigationView.setNavigationItemSelectedListener(this);
 
-        //Setup driver list
-        drivers = new ArrayList<>();
+        //Setup mail list
+        mails = new ArrayList<>();
         recyclerView = findViewById(R.id.recycler_view);
         swipeRefreshLayout = (SwipeRefreshLayout) findViewById(R.id.swipe);
-
+        LinearLayoutManager layoutManager = new LinearLayoutManager(this);
+        recyclerView.setLayoutManager(layoutManager);
+        mailAdapter = new MailAdapter(this, mails, token, "admin", mProgressDialog, email);
+        recyclerView.setAdapter(mailAdapter);
 
         // SetOnRefreshListener on SwipeRefreshLayout
         swipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override
             public void onRefresh() {
                 swipeRefreshLayout.setRefreshing(false);
-                getAllDrivers();
+                getAllPackages();
             }
         });
 
-        getAllDrivers();
+        getAllPackages();
     }
 
-    private void getAllDrivers() {
-        Call<List<User>> call = adminClient.getDrivers(token);
+    private void getAllPackages() {
+        Call<List<Mail>> call = adminClient.getAllPackages(token);
 
         //Show Progress
-        mProgressDialog.setMessage("Loading Drivers..");
+        mProgressDialog.setMessage("Loading Packages..");
         mProgressDialog.show();
 
-        call.enqueue(new Callback<List<User>>() {
+        call.enqueue(new Callback<List<Mail>>() {
             @Override
-            public void onResponse(Call<List<User>> call, Response<List<User>> response) {
-                drivers = response.body();
+            public void onResponse(Call<List<Mail>> call, Response<List<Mail>> response) {
+                mails = response.body();
                 System.out.println(response);
                 System.out.println(response.body());
                 //Handle null pointer errors
-                if(drivers != null){
-                    LinearLayoutManager layoutManager = new LinearLayoutManager(AdminDriverListActivity.this);
-                    recyclerView.setLayoutManager(layoutManager);
-                    driverListAdapter = new DriverListAdapter(AdminDriverListActivity.this, drivers, token ,"admin", mProgressDialog);
-                    recyclerView.setAdapter(driverListAdapter);
-                    driverListAdapter.setDrivers(drivers);
-                }else {
-                    Toast.makeText(AdminDriverListActivity.this, "Something went wrong" + response.toString(), Toast.LENGTH_SHORT).show();
+                if (mails != null) {
+                    mailAdapter.setMails(mails);
+                } else {
+                    Toast.makeText(AdminPackageListActivity.this, "Something went wrong" + response.toString(), Toast.LENGTH_SHORT).show();
                 }
                 mProgressDialog.dismiss();
             }
 
             @Override
-            public void onFailure(Call<List<User>> call, Throwable t) {
-                Toast.makeText(AdminDriverListActivity.this, "Something went Wrong!" + t.toString(), Toast.LENGTH_SHORT).show();
+            public void onFailure(Call<List<Mail>> call, Throwable t) {
+                Toast.makeText(AdminPackageListActivity.this, "Something went Wrong!" + t.toString(), Toast.LENGTH_SHORT).show();
                 mProgressDialog.dismiss();
             }
         });
@@ -148,7 +147,7 @@ public class AdminDriverListActivity extends AppCompatActivity implements Naviga
     @Override
     public boolean onNavigationItemSelected(@NonNull MenuItem item) {
         //Handle side drawer navigation
-        NavHandler.handleAdminNav(item, AdminDriverListActivity.this);
+        NavHandler.handleAdminNav(item, AdminPackageListActivity.this);
 
         //close navigation drawer
         mDrawerLayout.closeDrawer(GravityCompat.START);

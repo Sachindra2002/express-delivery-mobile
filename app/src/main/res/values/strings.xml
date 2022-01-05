@@ -8,6 +8,7 @@
     <string name="logo">Logo</string>
     <string name="settings">Settings</string>
     <string name="home">Home</string>
+    <string name="local_stored_shipments">Local Stored Shipments</string>
     <string name="shipments">Shipments</string>
     <string name="centers">Service Centers</string>
     <string name="drivers">Drivers</string>

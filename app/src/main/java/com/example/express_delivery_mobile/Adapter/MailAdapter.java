@@ -401,17 +401,6 @@ public class MailAdapter extends RecyclerView.Adapter<MailAdapter.ViewHolder> im
                             }
                         });
 
-//                        dropDate.setOnClickListener(new View.OnClickListener() {
-//
-//                            @Override
-//                            public void onClick(View v) {
-//                                // TODO Auto-generated method stub
-//                                new DatePickerDialog(context, date, myCalendar
-//                                        .get(Calendar.YEAR), myCalendar.get(Calendar.MONTH),
-//                                        myCalendar.get(Calendar.DAY_OF_MONTH)).show();
-//                            }
-//                        });
-
 
                         mBuilder.setPositiveButton("Assign Driver", new DialogInterface.OnClickListener() {
                             @Override
@@ -425,6 +414,15 @@ public class MailAdapter extends RecyclerView.Adapter<MailAdapter.ViewHolder> im
                     }
                 });
             }
+
+        }else if(userRole.equalsIgnoreCase("admin")){
+            holder._senderName.setText("Customer");
+            holder.senderName.setText(String.format(filteredMails.get(position).getUser().getFirstName() + " " + filteredMails.get(position).getUser().getLastName()));
+            holder.status.setText(filteredMails.get(position).getStatus());
+            holder.description.setText(filteredMails.get(position).getDescription());
+            holder.type.setText(filteredMails.get(position).getParcelType());
+            holder.weight.setText(filteredMails.get(position).getWeight() + "KG");
+            holder.status.setTextColor(Color.parseColor("#00B832"));
 
         }
 

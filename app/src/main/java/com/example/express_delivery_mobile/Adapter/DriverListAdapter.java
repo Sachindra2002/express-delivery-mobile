@@ -166,7 +166,7 @@ public class DriverListAdapter extends RecyclerView.Adapter<DriverListAdapter.Vi
                     Intent intent = new Intent(context, AdminDriverProfileActivity.class);
                     intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
 
-                    if(filteredDrivers.get(position).getDriverDetail().getVehicle() != null){
+                    if (filteredDrivers.get(position).getDriverDetail().getVehicle() != null) {
                         intent.putExtra("driver_name", filteredDrivers.get(position).getFirstName() + " " + filteredDrivers.get(position).getLastName());
                         intent.putExtra("driver_telephone", filteredDrivers.get(position).getPhoneNumber());
                         intent.putExtra("driver_dob", filteredDrivers.get(position).getDriverDetail().getDob());
@@ -179,7 +179,7 @@ public class DriverListAdapter extends RecyclerView.Adapter<DriverListAdapter.Vi
                         intent.putExtra("center", filteredDrivers.get(position).getServiceCentre().getCentre());
                         intent.putExtra("center_address", filteredDrivers.get(position).getServiceCentre().getAddress());
                         intent.putExtra("driver_id", filteredDrivers.get(position).getDriverDetail().getDriverId());
-                    }else{
+                    } else {
                         intent.putExtra("driver_name", filteredDrivers.get(position).getFirstName() + " " + filteredDrivers.get(position).getLastName());
                         intent.putExtra("driver_telephone", filteredDrivers.get(position).getPhoneNumber());
                         intent.putExtra("driver_dob", filteredDrivers.get(position).getDriverDetail().getDob());

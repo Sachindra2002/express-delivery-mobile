@@ -3,6 +3,7 @@
     <item android:title="APPLICATION">
         <menu>
             <item android:title="@string/home" android:icon="@drawable/ic_baseline_home_24" android:id="@+id/nav_home"/>
+            <item android:title="@string/local_stored_shipments" android:icon="@drawable/nav_boxes" android:id="@+id/nav_local_packages"/>
         </menu>
     </item>
     <item android:title="ACCOUNT">

@@ -1,9 +1,13 @@
 package com.example.express_delivery_mobile.Util;
 
 import android.content.Context;
+import android.content.Intent;
 import android.view.MenuItem;
 
+import com.example.express_delivery_mobile.AdminActivity;
 import com.example.express_delivery_mobile.R;
+import com.example.express_delivery_mobile.ServiceCenterListActivity;
+import com.example.express_delivery_mobile.ViewLocalStoragePackagesActivity;
 
 public class NavHandler {
 
@@ -24,6 +28,11 @@ public class NavHandler {
                 AuthHandler.logout(context);
                 break;
             }
+            case R.id.nav_local_packages: {
+                Intent intent = new Intent(context, ViewLocalStoragePackagesActivity.class);
+                intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                context.startActivity(intent);
+            }
         }
     }
 
@@ -43,6 +52,12 @@ public class NavHandler {
                 //Logout Button
                 AuthHandler.logout(context);
                 break;
+            }
+
+            case R.id.nav_centers: {
+                Intent intent = new Intent(context, ServiceCenterListActivity.class);
+                intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                context.startActivity(intent);
             }
         }
     }

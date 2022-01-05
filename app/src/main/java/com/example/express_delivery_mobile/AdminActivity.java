@@ -39,6 +39,7 @@ public class AdminActivity extends AppCompatActivity implements NavigationView.O
     private CardView viewAgents;
     private CardView viewCenters;
     private CardView viewDisputes;
+    private CardView viewPackages;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -110,6 +111,16 @@ public class AdminActivity extends AppCompatActivity implements NavigationView.O
             @Override
             public void onClick(View view) {
                 Intent intent = new Intent(AdminActivity.this, DisputesActivity.class);
+                intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                startActivity(intent);
+            }
+        });
+
+        viewPackages = findViewById(R.id.new_shipments);
+        viewPackages.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent = new Intent(AdminActivity.this, AdminPackageListActivity.class);
                 intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
                 startActivity(intent);
             }

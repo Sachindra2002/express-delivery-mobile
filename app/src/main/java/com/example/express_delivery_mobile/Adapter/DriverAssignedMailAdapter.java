@@ -3,9 +3,11 @@ package com.example.express_delivery_mobile.Adapter;
 import android.annotation.SuppressLint;
 import android.app.AlertDialog;
 import android.app.ProgressDialog;
+import android.content.ContentValues;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.database.sqlite.SQLiteException;
 import android.os.Build;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -22,6 +24,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.express_delivery_mobile.DriverActivity;
 import com.example.express_delivery_mobile.Model.Mail;
+import com.example.express_delivery_mobile.Provider.AddPackageToLocalStorage;
 import com.example.express_delivery_mobile.R;
 import com.example.express_delivery_mobile.Service.DriverClient;
 import com.example.express_delivery_mobile.Service.RetrofitClientInstance;
@@ -114,6 +117,13 @@ public class DriverAssignedMailAdapter extends RecyclerView.Adapter<DriverAssign
                     acceptOrRejectPackage(mails.get(position).getMailId());
                 }
             });
+            holder.itemView.setOnLongClickListener(new View.OnLongClickListener() {
+                @Override
+                public boolean onLongClick(View view) {
+                    bookmarkPackage(mails.get(position));
+                    return false;
+                }
+            });
         } else if (mails.get(position).getTransportationStatus().contains("Drop Off")) {
             holder.name.setText(mails.get(position).getReceiverFirstName() + " " + mails.get(position).getReceiverLastName());
             holder.transportationStatus.setText(mails.get(position).getTransportationStatus());
@@ -128,6 +138,54 @@ public class DriverAssignedMailAdapter extends RecyclerView.Adapter<DriverAssign
             });
         }
 
+    }
+
+    private void bookmarkPackage(Mail mail) {
+        MaterialAlertDialogBuilder builder = new MaterialAlertDialogBuilder(context);
+        builder.setTitle("Add to local Storage " + mail.getMailId());
+
+        //When "Accept" button is clicked
+        builder.setPositiveButton("Add", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialogInterface, int i) {
+                addToLocalStorage(mail);
+            }
+        });
+
+        builder.show();
+    }
+
+    private void addToLocalStorage(Mail mail) {
+        // class to add values in the database
+        ContentValues values = new ContentValues();
+
+        // Create values
+        values.put(AddPackageToLocalStorage.MAIL_ID, mail.getMailId());
+        values.put(AddPackageToLocalStorage.DRIVER_ID, mail.getDriverDetail().getDriverId());
+        values.put(AddPackageToLocalStorage.DRIVER_EMAIL, mail.getDriverDetail().getUser().getEmail());
+        values.put(AddPackageToLocalStorage.CUSTOMER_NAME, mail.getUser().getFirstName() + " " + mail.getUser().getLastName());
+        values.put(AddPackageToLocalStorage.CUSTOMER_CONTACT, mail.getUser().getPhoneNumber());
+        values.put(AddPackageToLocalStorage.CUSTOMER_EMAIL, mail.getUser().getEmail());
+        values.put(AddPackageToLocalStorage.TRANSPORTATION_STATUS, mail.getTransportationStatus());
+        values.put(AddPackageToLocalStorage.PACKAGE_STATUS, mail.getStatus());
+        values.put(AddPackageToLocalStorage.PICKUP_ADDRESS, mail.getPickupAddress());
+        values.put(AddPackageToLocalStorage.DROP_OFF_ADDRESS, mail.getReceiverAddress());
+        values.put(AddPackageToLocalStorage.WEIGHT, mail.getWeight());
+        values.put(AddPackageToLocalStorage.PARCEL_TYPE, mail.getParcelType());
+        values.put(AddPackageToLocalStorage.PAYMENT_METHOD, mail.getPaymentMethod());
+        values.put(AddPackageToLocalStorage.TOTAL_COST, mail.getTotalCost());
+
+        try {
+
+            // inserting into database through content URI
+            context.getContentResolver().insert(AddPackageToLocalStorage.CONTENT_URI, values);
+
+            // displaying a toast message
+            Toast.makeText(context, "Added to storage!", Toast.LENGTH_LONG).show();
+
+        } catch (SQLiteException ex) {
+            Toast.makeText(context, "Already Added!", Toast.LENGTH_LONG).show();
+        }
     }
 
     @Override

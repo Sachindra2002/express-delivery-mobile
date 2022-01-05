@@ -1,10 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="com.example.express_delivery_mobile">
+
     <uses-permission android:name="android.permission.INTERNET" />
-    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE"/>
-    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE"/>
-    <uses-permission android:name="android.permission.CALL_PHONE"/>
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
+    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
+    <uses-permission android:name="android.permission.CALL_PHONE" />
+
     <application
         android:allowBackup="true"
         android:icon="@mipmap/ic_launcher"
@@ -13,6 +15,13 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.Express_Delivery_Mobile"
         android:usesCleartextTraffic="${usesCleartextTraffic}">
+
+        <provider
+            android:name=".Provider.AddPackageToLocalStorage"
+            android:authorities="com.example.express_delivery_mobile.Provider"
+            android:enabled="true"
+            android:exported="true" />
+
         <activity android:name=".LoginActivity" />
         <activity android:name=".RegistrationActivity" />
         <activity android:name=".AddDriverActivity" />
@@ -34,7 +43,12 @@
         <activity android:name=".ServiceCenterListActivity" />
         <activity android:name=".DisputesActivity" />
         <activity android:name=".ViewInquiryActivity" />
-        <activity android:name=".MainActivity"
+        <activity android:name=".ViewDisputeActivity" />
+        <activity android:name=".ViewServiceCenterActivity" />
+        <activity android:name=".AdminPackageListActivity" />
+        <activity android:name=".ViewLocalStoragePackagesActivity" />
+        <activity
+            android:name=".MainActivity"
             android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />

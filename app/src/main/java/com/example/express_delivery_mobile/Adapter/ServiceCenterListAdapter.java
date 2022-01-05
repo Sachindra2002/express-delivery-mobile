@@ -2,6 +2,7 @@ package com.example.express_delivery_mobile.Adapter;
 
 import android.app.ProgressDialog;
 import android.content.Context;
+import android.content.Intent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -13,8 +14,10 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.DiffUtil;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.example.express_delivery_mobile.AgentDriverProfileActivity;
 import com.example.express_delivery_mobile.Model.ServiceCentre;
 import com.example.express_delivery_mobile.R;
+import com.example.express_delivery_mobile.ViewServiceCenterActivity;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -127,7 +130,13 @@ public class ServiceCenterListAdapter extends RecyclerView.Adapter<ServiceCenter
         holder.itemView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-
+                Intent intent = new Intent(context, ViewServiceCenterActivity.class);
+                intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                intent.putExtra("center_id", filteredCenters.get(position).getCentreId());
+                intent.putExtra("center_name", filteredCenters.get(position).getCentre());
+                intent.putExtra("center_city", filteredCenters.get(position).getCity());
+                intent.putExtra("center_address", filteredCenters.get(position).getAddress());
+                context.startActivity(intent);
             }
         });
     }

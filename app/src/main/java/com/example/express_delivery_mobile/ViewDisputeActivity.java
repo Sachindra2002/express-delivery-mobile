@@ -21,6 +21,7 @@ import androidx.appcompat.widget.Toolbar;
 import androidx.core.view.GravityCompat;
 import androidx.drawerlayout.widget.DrawerLayout;
 
+import com.example.express_delivery_mobile.Model.Disputes;
 import com.example.express_delivery_mobile.Model.Inquiry;
 import com.example.express_delivery_mobile.Service.AdminClient;
 import com.example.express_delivery_mobile.Service.RetrofitClientInstance;
@@ -33,8 +34,8 @@ import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
-public class ViewInquiryActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener {
-    TextView customerName, customerEmail, customerContact, inquiryType, inquiry, date, inquiryId;
+public class ViewDisputeActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener {
+    TextView customerName, customerEmail, customerContact, disputeType, dispute, date, disputeId, mailId;
     Button respond;
     EditText response;
 
@@ -56,31 +57,40 @@ public class ViewInquiryActivity extends AppCompatActivity implements Navigation
         super.onCreate(savedInstanceState);
 
         //Check if authorization token is valid
-        String result = AuthHandler.validate(ViewInquiryActivity.this, "admin");
+        String result = AuthHandler.validate(ViewDisputeActivity.this, "admin");
 
         if (result != null) {
             if (result.equals("unauthorized") || result.equals("expired")) return;
         }
 
         //Load layout only after authorization
-        setContentView(R.layout.activity_view_inquiry);
+        setContentView(R.layout.activity_view_dispute);
 
         customerName = findViewById(R.id.customer_name);
         customerEmail = findViewById(R.id.customer_email);
         customerContact = findViewById(R.id.contact);
-        inquiryType = findViewById(R.id.type);
-        inquiry = findViewById(R.id.inquiry);
+        disputeType = findViewById(R.id.type);
+        dispute = findViewById(R.id.dispute);
         date = findViewById(R.id.date);
-        inquiryId = findViewById(R.id.inquiry_id);
+        disputeId = findViewById(R.id.dispute_id);
+        mailId = findViewById(R.id.mail_id);
         respond = findViewById(R.id.respond_button);
         response = findViewById(R.id.response);
 
-        inquiryId.setText("Inquiry ID #" + getIntent().getStringExtra("inquiry_id"));
+        respond.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                handleResponse();
+            }
+        });
+
+        disputeId.setText("Dispute ID #" + getIntent().getStringExtra("dispute_id"));
+        mailId.setText(getIntent().getStringExtra("mail_id"));
         customerName.setText(getIntent().getStringExtra("customer_name"));
         customerEmail.setText(getIntent().getStringExtra("customer_email"));
         customerContact.setText(getIntent().getStringExtra("customer_contact"));
-        inquiryType.setText(getIntent().getStringExtra("inquiry_type"));
-        inquiry.setText(getIntent().getStringExtra("inquiry"));
+        disputeType.setText(getIntent().getStringExtra("dispute_type"));
+        dispute.setText(getIntent().getStringExtra("dispute"));
         date.setText(getIntent().getStringExtra("date"));
 
         //Retrieve JWT Token
@@ -89,13 +99,6 @@ public class ViewInquiryActivity extends AppCompatActivity implements Navigation
         email = sharedPreferences.getString("email", null);
         firstName = sharedPreferences.getString("firstName", null);
         lastName = sharedPreferences.getString("lastName", null);
-
-        respond.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                handleResponse();
-            }
-        });
 
         //Setup toolbar
         mToolbar = findViewById(R.id.toolbar);
@@ -127,11 +130,11 @@ public class ViewInquiryActivity extends AppCompatActivity implements Navigation
         if (TextUtils.isEmpty(_response)) {
             Toast.makeText(this, "Please enter valid data!", Toast.LENGTH_SHORT).show();
         } else {
-            Inquiry inquiry = new Inquiry();
-            inquiry.setInquiryId(Integer.parseInt(getIntent().getStringExtra("inquiry_id")));
-            inquiry.setResponse(_response);
+            Disputes disputes = new Disputes();
+            disputes.setDisputeId(Integer.parseInt(getIntent().getStringExtra("dispute_id")));
+            disputes.setResponse(_response);
 
-            Call<ResponseBody> call = adminClient.respondInquiry(token, inquiry);
+            Call<ResponseBody> call = adminClient.respondDispute(token, disputes);
 
             //Show progress
             mProgressDialog.setMessage("Getting things ready...");
@@ -144,19 +147,19 @@ public class ViewInquiryActivity extends AppCompatActivity implements Navigation
 
                     //200 status code
                     if (response.code() == 200) {
-                        Toast.makeText(ViewInquiryActivity.this, "Successfully Responded", Toast.LENGTH_SHORT).show();
-                        Intent intent = new Intent(ViewInquiryActivity.this, DisputesActivity.class);
+                        Toast.makeText(ViewDisputeActivity.this, "Successfully Responded", Toast.LENGTH_SHORT).show();
+                        Intent intent = new Intent(ViewDisputeActivity.this, DisputesActivity.class);
                         intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
                         startActivity(intent);
                     } else {
-                        Toast.makeText(ViewInquiryActivity.this, "Something went wrong!", Toast.LENGTH_SHORT).show();
+                        Toast.makeText(ViewDisputeActivity.this, "Something went wrong!", Toast.LENGTH_SHORT).show();
                     }
                 }
 
                 @Override
                 public void onFailure(Call<ResponseBody> call, Throwable t) {
                     mProgressDialog.dismiss();
-                    Toast.makeText(ViewInquiryActivity.this, "Something! went wrong" + t.toString(), Toast.LENGTH_SHORT).show();
+                    Toast.makeText(ViewDisputeActivity.this, "Something! went wrong" + t.toString(), Toast.LENGTH_SHORT).show();
                 }
             });
         }
@@ -165,7 +168,7 @@ public class ViewInquiryActivity extends AppCompatActivity implements Navigation
     @Override
     public boolean onNavigationItemSelected(@NonNull MenuItem item) {
         //Handle side drawer navigation
-        NavHandler.handleAdminNav(item, ViewInquiryActivity.this);
+        NavHandler.handleAdminNav(item, ViewDisputeActivity.this);
 
         //close navigation drawer
         mDrawerLayout.closeDrawer(GravityCompat.START);

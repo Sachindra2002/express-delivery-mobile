@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <menu xmlns:android="http://schemas.android.com/apk/res/android">
-    <item android:title="APPLICATION">
+    <item android:title="Express Delivery - ADMIN">
         <menu>
             <item
                 android:id="@+id/nav_home"
@@ -8,23 +8,23 @@
                 android:title="@string/home" />
             <item
                 android:id="@+id/nav_shipments"
-                android:icon="@drawable/ic_baseline_home_24"
+                android:icon="@drawable/nav_boxes"
                 android:title="@string/shipments" />
             <item
                 android:id="@+id/nav_centers"
-                android:icon="@drawable/ic_baseline_home_24"
+                android:icon="@drawable/nav_warehouse"
                 android:title="@string/centers" />
             <item
                 android:id="@+id/nav_drivers"
-                android:icon="@drawable/ic_baseline_home_24"
+                android:icon="@drawable/nav_people"
                 android:title="@string/drivers" />
             <item
                 android:id="@+id/nav_agents"
-                android:icon="@drawable/ic_baseline_home_24"
+                android:icon="@drawable/nav_agents"
                 android:title="@string/agents" />
             <item
                 android:id="@+id/nav_disputes"
-                android:icon="@drawable/ic_baseline_home_24"
+                android:icon="@drawable/nav_disputes"
                 android:title="@string/disputes" />
         </menu>
     </item>
