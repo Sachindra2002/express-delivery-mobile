@@ -74,7 +74,7 @@ public class AgentListActivity extends AppCompatActivity implements NavigationVi
         //Setup toolbar
         mToolbar = findViewById(R.id.toolbar);
         setSupportActionBar(mToolbar);
-        getSupportActionBar().setTitle(null);
+        getSupportActionBar().setTitle("Agents");
 
         //Setup navigation drawer
         mDrawerLayout = findViewById(R.id.drawer_layout);

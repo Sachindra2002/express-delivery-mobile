@@ -3,6 +3,7 @@ package com.example.express_delivery_mobile.Adapter;
 import android.annotation.SuppressLint;
 import android.app.ProgressDialog;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -10,19 +11,30 @@ import android.view.ViewGroup;
 import android.widget.Filter;
 import android.widget.Filterable;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.DiffUtil;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.example.express_delivery_mobile.AdminDriverListActivity;
 import com.example.express_delivery_mobile.AdminDriverProfileActivity;
 import com.example.express_delivery_mobile.AgentDriverProfileActivity;
+import com.example.express_delivery_mobile.AgentListActivity;
 import com.example.express_delivery_mobile.Model.User;
 import com.example.express_delivery_mobile.R;
+import com.example.express_delivery_mobile.Service.AdminClient;
+import com.example.express_delivery_mobile.Service.RetrofitClientInstance;
 import com.example.express_delivery_mobile.TrackPackageActivity;
+import com.google.android.material.dialog.MaterialAlertDialogBuilder;
 
 import java.util.ArrayList;
 import java.util.List;
+
+import okhttp3.ResponseBody;
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
 
 public class DriverListAdapter extends RecyclerView.Adapter<DriverListAdapter.ViewHolder> implements Filterable {
     private Context context;
@@ -33,6 +45,8 @@ public class DriverListAdapter extends RecyclerView.Adapter<DriverListAdapter.Vi
     private String email;
 
     private ProgressDialog mProgressDialog;
+
+    AdminClient adminClient = RetrofitClientInstance.getRetrofitInstance().create(AdminClient.class);
 
     public DriverListAdapter(Context context, List<User> drivers, String token, String userRole, ProgressDialog mProgressDialog) {
         this.context = context;
@@ -198,10 +212,57 @@ public class DriverListAdapter extends RecyclerView.Adapter<DriverListAdapter.Vi
             holder.itemView.setOnLongClickListener(new View.OnLongClickListener() {
                 @Override
                 public boolean onLongClick(View view) {
+                    handleRemoveDriver(filteredDrivers.get(position));
                     return false;
                 }
             });
         }
+    }
+
+    private void handleRemoveDriver(User user) {
+        MaterialAlertDialogBuilder builder = new MaterialAlertDialogBuilder(context);
+        builder.setTitle("Remove " + user.getFirstName() + " " + user.getLastName());
+
+        //When "Remove" button is clicked
+        builder.setNegativeButton("Remove Driver", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialogInterface, int i) {
+                removeDriver(user);
+            }
+        });
+
+        builder.show();
+    }
+
+    private void removeDriver(User user) {
+        Call<ResponseBody> call = adminClient.deleteDriver(token, user);
+
+        //Show progress
+        mProgressDialog.setMessage("Removing Driver...");
+        mProgressDialog.show();
+
+        call.enqueue(new Callback<ResponseBody>() {
+            @Override
+            public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
+                mProgressDialog.dismiss();
+
+                //200 status code
+                if (response.code() == 200) {
+                    Toast.makeText(context, "Driver removed successfully", Toast.LENGTH_SHORT).show();
+                    Intent intent = new Intent(context, AdminDriverListActivity.class);
+                    intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                    context.startActivity(intent);
+                } else {
+                    Toast.makeText(context, "Something went wrong!", Toast.LENGTH_SHORT).show();
+                }
+            }
+
+            @Override
+            public void onFailure(Call<ResponseBody> call, Throwable t) {
+                mProgressDialog.dismiss();
+                Toast.makeText(context, "Something! went wrong" + t.toString(), Toast.LENGTH_SHORT).show();
+            }
+        });
     }
 
     @Override

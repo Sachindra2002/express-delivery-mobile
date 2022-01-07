@@ -130,10 +130,6 @@ public class AgentDriverProfileActivity extends AppCompatActivity implements Nav
         documents = new ArrayList<>();
         recyclerView = findViewById(R.id.recycler_view);
         swipeRefreshLayout = (SwipeRefreshLayout) findViewById(R.id.swipe);
-        LinearLayoutManager layoutManager = new LinearLayoutManager(this);
-        recyclerView.setLayoutManager(layoutManager);
-        driverDocumentsAdapter = new DriverDocumentsAdapter(this, documents, token ,"agent", email, mProgressDialog);
-        recyclerView.setAdapter(driverDocumentsAdapter);
 
         // SetOnRefreshListener on SwipeRefreshLayout
         swipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
@@ -162,6 +158,10 @@ public class AgentDriverProfileActivity extends AppCompatActivity implements Nav
                 System.out.println(response.body());
                 //Handle null pointer errors
                 if(documents != null){
+                    LinearLayoutManager layoutManager = new LinearLayoutManager(AgentDriverProfileActivity.this);
+                    recyclerView.setLayoutManager(layoutManager);
+                    driverDocumentsAdapter = new DriverDocumentsAdapter(AgentDriverProfileActivity.this, documents, token ,"agent", email, mProgressDialog);
+                    recyclerView.setAdapter(driverDocumentsAdapter);
                     driverDocumentsAdapter.setDocuments(documents);
                 }else {
                     Toast.makeText(AgentDriverProfileActivity.this, "Something went wrong" + response.toString(), Toast.LENGTH_SHORT).show();

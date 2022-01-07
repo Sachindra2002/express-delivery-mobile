@@ -20,8 +20,10 @@ import androidx.recyclerview.widget.RecyclerView;
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
 import com.example.express_delivery_mobile.Adapter.DriverListAdapter;
+import com.example.express_delivery_mobile.Adapter.VehicleListAdapter;
 import com.example.express_delivery_mobile.Model.User;
-import com.example.express_delivery_mobile.Service.AgentClient;
+import com.example.express_delivery_mobile.Model.Vehicle;
+import com.example.express_delivery_mobile.Service.AdminClient;
 import com.example.express_delivery_mobile.Service.RetrofitClientInstance;
 import com.example.express_delivery_mobile.Util.AuthHandler;
 import com.example.express_delivery_mobile.Util.NavHandler;
@@ -34,7 +36,7 @@ import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
-public class AgentDriverListActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener{
+public class VehicleListActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener {
     private Toolbar mToolbar;
     private DrawerLayout mDrawerLayout;
     private NavigationView mNavigationView;
@@ -42,28 +44,28 @@ public class AgentDriverListActivity extends AppCompatActivity implements Naviga
     private SearchView searchView;
 
     private RecyclerView recyclerView;
-    private DriverListAdapter driverListAdapter;
+    private VehicleListAdapter vehicleListAdapter;
     private SwipeRefreshLayout swipeRefreshLayout;
 
-    private List<User> drivers;
+    private List<Vehicle> vehicles;
     private String token;
     private String email;
 
-    private AgentClient agentClient = RetrofitClientInstance.getRetrofitInstance().create(AgentClient.class);
-
+    private AdminClient adminClient = RetrofitClientInstance.getRetrofitInstance().create(AdminClient.class);
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
         //Check if authorization token is valid
-        String result = AuthHandler.validate(AgentDriverListActivity.this, "agent");
+        String result = AuthHandler.validate(VehicleListActivity.this, "admin");
 
         if (result != null) {
             if (result.equals("unauthorized") || result.equals("expired")) return;
         }
 
         //Load layout
-        setContentView(R.layout.activity_driver_list);
+        setContentView(R.layout.activity_view_vehicles);
 
         //Retrieve JWT Token
         SharedPreferences sharedPreferences = getSharedPreferences("auth_preferences", Context.MODE_PRIVATE);
@@ -73,7 +75,7 @@ public class AgentDriverListActivity extends AppCompatActivity implements Naviga
         //Setup toolbar
         mToolbar = findViewById(R.id.toolbar);
         setSupportActionBar(mToolbar);
-        getSupportActionBar().setTitle(null);
+        getSupportActionBar().setTitle("Vehicles");
 
         //Setup navigation drawer
         mDrawerLayout = findViewById(R.id.drawer_layout);
@@ -93,53 +95,53 @@ public class AgentDriverListActivity extends AppCompatActivity implements Naviga
         mActionBarDrawerToggle.syncState();
         mNavigationView.setNavigationItemSelectedListener(this);
 
-        //Setup mail list
-        drivers = new ArrayList<>();
+        //Setup driver list
+        vehicles = new ArrayList<>();
         recyclerView = findViewById(R.id.recycler_view);
         swipeRefreshLayout = (SwipeRefreshLayout) findViewById(R.id.swipe);
+
 
         // SetOnRefreshListener on SwipeRefreshLayout
         swipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override
             public void onRefresh() {
                 swipeRefreshLayout.setRefreshing(false);
-                getAllDrivers();
+                getAllVehicles();
             }
         });
 
-        getAllDrivers();
+        getAllVehicles();
     }
 
-    private void getAllDrivers() {
-        Call<List<User>> call = agentClient.getDrivers(token);
+    private void getAllVehicles() {
+        Call<List<Vehicle>> call = adminClient.getAllVehicles(token);
 
         //Show Progress
-        mProgressDialog.setMessage("Loading Drivers..");
+        mProgressDialog.setMessage("Loading Vehicles..");
         mProgressDialog.show();
 
-        call.enqueue(new Callback<List<User>>() {
+        call.enqueue(new Callback<List<Vehicle>>() {
             @Override
-            public void onResponse(Call<List<User>> call, Response<List<User>> response) {
-                drivers = response.body();
+            public void onResponse(Call<List<Vehicle>> call, Response<List<Vehicle>> response) {
+                vehicles = response.body();
                 System.out.println(response);
                 System.out.println(response.body());
                 //Handle null pointer errors
-                if(drivers != null){
-                    LinearLayoutManager layoutManager = new LinearLayoutManager(AgentDriverListActivity.this);
+                if (vehicles != null) {
+                    LinearLayoutManager layoutManager = new LinearLayoutManager(VehicleListActivity.this);
                     recyclerView.setLayoutManager(layoutManager);
-                    driverListAdapter = new DriverListAdapter(AgentDriverListActivity.this, drivers, token ,"agent", mProgressDialog);
-                    recyclerView.setAdapter(driverListAdapter);
-                    driverListAdapter.setDrivers(drivers);
-
-                }else {
-                    Toast.makeText(AgentDriverListActivity.this, "Something went wrong" + response.toString(), Toast.LENGTH_SHORT).show();
+                    vehicleListAdapter = new VehicleListAdapter(VehicleListActivity.this, vehicles, token, "admin", mProgressDialog);
+                    recyclerView.setAdapter(vehicleListAdapter);
+                    vehicleListAdapter.setVehicles(vehicles);
+                } else {
+                    Toast.makeText(VehicleListActivity.this, "Something went wrong" + response.toString(), Toast.LENGTH_SHORT).show();
                 }
                 mProgressDialog.dismiss();
             }
 
             @Override
-            public void onFailure(Call<List<User>> call, Throwable t) {
-                Toast.makeText(AgentDriverListActivity.this, "Something went Wrong!" + t.toString(), Toast.LENGTH_SHORT).show();
+            public void onFailure(Call<List<Vehicle>> call, Throwable t) {
+                Toast.makeText(VehicleListActivity.this, "Something went Wrong!" + t.toString(), Toast.LENGTH_SHORT).show();
                 mProgressDialog.dismiss();
             }
         });
@@ -148,7 +150,7 @@ public class AgentDriverListActivity extends AppCompatActivity implements Naviga
     @Override
     public boolean onNavigationItemSelected(@NonNull MenuItem item) {
         //Handle side drawer navigation
-        NavHandler.handleAgentNav(item, AgentDriverListActivity.this);
+        NavHandler.handleAdminNav(item, VehicleListActivity.this);
 
         //close navigation drawer
         mDrawerLayout.closeDrawer(GravityCompat.START);
@@ -159,8 +161,10 @@ public class AgentDriverListActivity extends AppCompatActivity implements Naviga
     public void onPointerCaptureChanged(boolean hasCapture) {
 
     }
+
     @Override
     public void onBackPressed() {
         super.onBackPressed();
     }
+
 }

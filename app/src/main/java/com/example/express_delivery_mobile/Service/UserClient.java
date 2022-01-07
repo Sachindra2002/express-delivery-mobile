@@ -1,5 +1,6 @@
 package com.example.express_delivery_mobile.Service;
 
+import com.example.express_delivery_mobile.Model.ChangePasswordRequest;
 import com.example.express_delivery_mobile.Model.LoginCredentials;
 import com.example.express_delivery_mobile.Model.User;
 
@@ -23,4 +24,8 @@ public interface UserClient {
     //Register
     @POST("register")
     Call<ResponseBody> register(@Body User user);
+
+    //Change Password
+    @POST("auth/change-password")
+    Call<ResponseBody> changePassword(@Header("Authorization") String token, @Body ChangePasswordRequest changePasswordRequest);
 }

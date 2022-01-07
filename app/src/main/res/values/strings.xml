@@ -15,6 +15,9 @@
     <string name="agents">Agents</string>
     <string name="logout">Logout</string>
     <string name="disputes">Disputes</string>
+    <string name="vehicles">Vehicles</string>
+    <string name="add_agent">Add Agent</string>
+    <string name="add_driver">Add Driver</string>
     <string name="open_nav_drawer">OPEN_NAV_BAR</string>
     <string name="close_nav_drawer">CLOSE_NAV_BAR</string>
     <string name="track_package">Track Package</string>

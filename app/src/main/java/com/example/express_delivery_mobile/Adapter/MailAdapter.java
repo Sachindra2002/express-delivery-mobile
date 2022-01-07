@@ -35,6 +35,7 @@ import com.example.express_delivery_mobile.R;
 import com.example.express_delivery_mobile.Service.AgentClient;
 import com.example.express_delivery_mobile.Service.RetrofitClientInstance;
 import com.example.express_delivery_mobile.TrackPackageActivity;
+import com.example.express_delivery_mobile.ViewPackageAdminActivity;
 import com.google.android.material.dialog.MaterialAlertDialogBuilder;
 
 import org.json.JSONObject;
@@ -76,7 +77,7 @@ public class MailAdapter extends RecyclerView.Adapter<MailAdapter.ViewHolder> im
     private ProgressDialog mProgressDialog;
     private Spinner spinner;
 
-    //Mail Retrofit client
+    //Agent Retrofit client
     AgentClient agentClient = RetrofitClientInstance.getRetrofitInstance().create(AgentClient.class);
 
     final Calendar myCalendar = Calendar.getInstance();
@@ -184,7 +185,7 @@ public class MailAdapter extends RecyclerView.Adapter<MailAdapter.ViewHolder> im
     @Override
     public void onBindViewHolder(@NonNull MailAdapter.ViewHolder holder, @SuppressLint("RecyclerView") final int position) {
 
-        if (userRole.contains("customer")) {
+        if (userRole.equalsIgnoreCase("customer")) {
             if (filteredMails.get(position).getReceiverEmail().equals(email)) {
                 holder.senderName.setText(String.format(filteredMails.get(position).getUser().getFirstName() + " " + filteredMails.get(position).getUser().getLastName()));
                 if (filteredMails.get(position).getStatus().contains("Driver Accepted")) {
@@ -255,7 +256,6 @@ public class MailAdapter extends RecyclerView.Adapter<MailAdapter.ViewHolder> im
                             if (filteredMails.get(position).getDriverDetail() != null) {
                                 intent.putExtra("driverFirstName", filteredMails.get(position).getDriverDetail().getUser().getFirstName());
                                 intent.putExtra("driverLastName", filteredMails.get(position).getDriverDetail().getUser().getLastName());
-                                intent.putExtra("driverFirstName", filteredMails.get(position).getDriverDetail().getUser().getFirstName());
                                 intent.putExtra("driverVehicleNumber", filteredMails.get(position).getDriverDetail().getVehicle().getVehicleNumber());
                                 intent.putExtra("driverMobile", filteredMails.get(position).getDriverDetail().getUser().getPhoneNumber());
                                 intent.putExtra("status", filteredMails.get(position).getStatus());
@@ -324,7 +324,7 @@ public class MailAdapter extends RecyclerView.Adapter<MailAdapter.ViewHolder> im
             } else if (filteredMails.get(position).getStatus().contains("Rejected")) {
                 holder.status.setTextColor(Color.parseColor("#F41F1F"));
             }
-        } else if (userRole.contains("agent")) {
+        } else if (userRole.equalsIgnoreCase("agent")) {
             holder._senderName.setText("Customer");
             holder.senderName.setText(String.format(filteredMails.get(position).getUser().getFirstName() + " " + filteredMails.get(position).getUser().getLastName()));
             holder.status.setText(filteredMails.get(position).getStatus());
@@ -373,7 +373,6 @@ public class MailAdapter extends RecyclerView.Adapter<MailAdapter.ViewHolder> im
 
                         setupDriverDropdown();
 
-//                        pickDate = (EditText) v.findViewById(R.id.pick_date);
                         dropDate = (EditText) v.findViewById(R.id.drop_date);
 
                         DatePickerDialog.OnDateSetListener date = new DatePickerDialog.OnDateSetListener() {
@@ -401,7 +400,6 @@ public class MailAdapter extends RecyclerView.Adapter<MailAdapter.ViewHolder> im
                             }
                         });
 
-
                         mBuilder.setPositiveButton("Assign Driver", new DialogInterface.OnClickListener() {
                             @Override
                             public void onClick(DialogInterface dialogInterface, int i) {
@@ -415,7 +413,7 @@ public class MailAdapter extends RecyclerView.Adapter<MailAdapter.ViewHolder> im
                 });
             }
 
-        }else if(userRole.equalsIgnoreCase("admin")){
+        } else if (userRole.equalsIgnoreCase("admin")) {
             holder._senderName.setText("Customer");
             holder.senderName.setText(String.format(filteredMails.get(position).getUser().getFirstName() + " " + filteredMails.get(position).getUser().getLastName()));
             holder.status.setText(filteredMails.get(position).getStatus());
@@ -423,6 +421,60 @@ public class MailAdapter extends RecyclerView.Adapter<MailAdapter.ViewHolder> im
             holder.type.setText(filteredMails.get(position).getParcelType());
             holder.weight.setText(filteredMails.get(position).getWeight() + "KG");
             holder.status.setTextColor(Color.parseColor("#00B832"));
+            holder.itemView.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    Intent intent = new Intent(context, ViewPackageAdminActivity.class);
+                    intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                    if (filteredMails.get(position).getDriverDetail() != null) {
+                        intent.putExtra("mail_id", filteredMails.get(position).getMailId());
+                        intent.putExtra("package_description", filteredMails.get(position).getDescription());
+                        intent.putExtra("created_at", filteredMails.get(position).getCreatedAt().getTime());
+                        intent.putExtra("package_status", filteredMails.get(position).getStatus());
+                        intent.putExtra("drop_off_date", filteredMails.get(position).getDropOffDate());
+                        intent.putExtra("pick_up_date", filteredMails.get(position).getDate());
+                        intent.putExtra("weight", filteredMails.get(position).getWeight());
+                        intent.putExtra("parcel_type", filteredMails.get(position).getParcelType());
+                        intent.putExtra("receiver_name", filteredMails.get(position).getReceiverFirstName() + " " + filteredMails.get(position).getReceiverLastName());
+                        intent.putExtra("receiver_contact", filteredMails.get(position).getReceiverPhoneNumber());
+                        intent.putExtra("receiver_email", filteredMails.get(position).getReceiverEmail());
+                        intent.putExtra("payment_method", filteredMails.get(position).getPaymentMethod());
+                        intent.putExtra("total_cost", filteredMails.get(position).getTotalCost());
+                        intent.putExtra("pieces", filteredMails.get(position).getPieces());
+                        intent.putExtra("pick_up_address", filteredMails.get(position).getPickupAddress());
+                        intent.putExtra("drop_off_address", filteredMails.get(position).getReceiverAddress());
+                        intent.putExtra("customer_name", filteredMails.get(position).getUser().getFirstName() + " " + filteredMails.get(position).getUser().getLastName());
+                        intent.putExtra("customer_contact", filteredMails.get(position).getUser().getPhoneNumber());
+                        intent.putExtra("center_name", filteredMails.get(position).getServiceCentre().getCentre());
+                        intent.putExtra("center_address", filteredMails.get(position).getServiceCentre().getAddress());
+                        intent.putExtra("driver_name", filteredMails.get(position).getDriverDetail().getUser().getFirstName() + " " + filteredMails.get(position).getDriverDetail().getUser().getLastName());
+                        intent.putExtra("driver_contact", filteredMails.get(position).getDriverDetail().getUser().getPhoneNumber());
+                    } else {
+                        intent.putExtra("mail_id", filteredMails.get(position).getMailId());
+                        intent.putExtra("package_description", filteredMails.get(position).getDescription());
+                        intent.putExtra("created_at", filteredMails.get(position).getCreatedAt().getTime());
+                        intent.putExtra("package_status", filteredMails.get(position).getStatus());
+                        intent.putExtra("drop_off_date", filteredMails.get(position).getDropOffDate());
+                        intent.putExtra("pick_up_date", filteredMails.get(position).getDate());
+                        intent.putExtra("weight", filteredMails.get(position).getWeight());
+                        intent.putExtra("parcel_type", filteredMails.get(position).getParcelType());
+                        intent.putExtra("receiver_name", filteredMails.get(position).getReceiverFirstName() + " " + filteredMails.get(position).getReceiverLastName());
+                        intent.putExtra("receiver_contact", filteredMails.get(position).getReceiverPhoneNumber());
+                        intent.putExtra("receiver_email", filteredMails.get(position).getReceiverEmail());
+                        intent.putExtra("payment_method", filteredMails.get(position).getPaymentMethod());
+                        intent.putExtra("total_cost", filteredMails.get(position).getTotalCost());
+                        intent.putExtra("pieces", filteredMails.get(position).getPieces());
+                        intent.putExtra("pick_up_address", filteredMails.get(position).getPickupAddress());
+                        intent.putExtra("drop_off_address", filteredMails.get(position).getReceiverAddress());
+                        intent.putExtra("customer_name", filteredMails.get(position).getUser().getFirstName() + " " + filteredMails.get(position).getUser().getLastName());
+                        intent.putExtra("customer_contact", filteredMails.get(position).getUser().getPhoneNumber());
+                        intent.putExtra("center_name", filteredMails.get(position).getServiceCentre().getCentre());
+                        intent.putExtra("center_address", filteredMails.get(position).getServiceCentre().getAddress());
+                    }
+
+                    context.startActivity(intent);
+                }
+            });
 
         }
 
@@ -431,7 +483,6 @@ public class MailAdapter extends RecyclerView.Adapter<MailAdapter.ViewHolder> im
     private void handleAssignDriver(int mailId) {
 
         _driverId = spinner.getSelectedItem().toString();
-//        pickupDate = pickDate.getText().toString();
         dropOffDate = dropDate.getText().toString();
         driverId = driver_ids.get(drivers.indexOf(_driverId));
 
@@ -440,7 +491,6 @@ public class MailAdapter extends RecyclerView.Adapter<MailAdapter.ViewHolder> im
         Mail mail = new Mail();
         mail.setMailId(mailId);
         mail.setDropOffDate(dropOffDate);
-//        mail.setDropOffDate(dropOffDate);
         mail.setDriverDetail(driverDetail);
 
         Call<ResponseBody> call = agentClient.assignDriver(token, mail);

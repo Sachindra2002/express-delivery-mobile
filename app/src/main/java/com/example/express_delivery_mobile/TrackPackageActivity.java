@@ -87,7 +87,7 @@ public class TrackPackageActivity extends AppCompatActivity implements Navigatio
         call_driver = findViewById(R.id.call_driver);
 
         Date d = new Date();
-        d.setTime(getIntent().getLongExtra("date", -1));
+        d.setTime(getIntent().getLongExtra("created_at", -1));
 
         created_at.setText("Order placed on " + d);
         tracking_id.setText("Tracking ID #" + getIntent().getIntExtra("trackId", 0));

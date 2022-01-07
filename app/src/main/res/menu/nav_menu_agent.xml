@@ -1,4 +1,32 @@
 <?xml version="1.0" encoding="utf-8"?>
 <menu xmlns:android="http://schemas.android.com/apk/res/android">
+    <item android:title="Express Delivery - ADMIN">
+        <menu>
+            <item
+                android:id="@+id/nav_home_admin"
+                android:icon="@drawable/ic_baseline_home_24"
+                android:title="@string/home" />
+            <item
+                android:id="@+id/nav_shipments_agent"
+                android:icon="@drawable/nav_boxes"
+                android:title="@string/shipments" />
+            <item
+                android:id="@+id/nav_drivers"
+                android:icon="@drawable/nav_people"
+                android:title="@string/drivers" />
 
+        </menu>
+    </item>
+    <item android:title="ACCOUNT">
+        <menu>
+            <item
+                android:id="@+id/nav_settings_admin"
+                android:icon="@drawable/ic_baseline_settings_24"
+                android:title="@string/settings" />
+            <item
+                android:id="@+id/nav_logout"
+                android:icon="@drawable/ic_log_out"
+                android:title="@string/logout" />
+        </menu>
+    </item>
 </menu>

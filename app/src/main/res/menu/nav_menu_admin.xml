@@ -3,11 +3,11 @@
     <item android:title="Express Delivery - ADMIN">
         <menu>
             <item
-                android:id="@+id/nav_home"
+                android:id="@+id/nav_home_admin"
                 android:icon="@drawable/ic_baseline_home_24"
                 android:title="@string/home" />
             <item
-                android:id="@+id/nav_shipments"
+                android:id="@+id/nav_shipments_admin"
                 android:icon="@drawable/nav_boxes"
                 android:title="@string/shipments" />
             <item
@@ -19,19 +19,32 @@
                 android:icon="@drawable/nav_people"
                 android:title="@string/drivers" />
             <item
+                android:id="@+id/nav_add_driver"
+                android:icon="@drawable/nav_add_driver"
+                android:title="@string/add_driver" />
+            <item
                 android:id="@+id/nav_agents"
                 android:icon="@drawable/nav_agents"
                 android:title="@string/agents" />
             <item
+                android:id="@+id/nav_add_agent"
+                android:icon="@drawable/nav_add_agent"
+                android:title="@string/add_agent" />
+            <item
                 android:id="@+id/nav_disputes"
                 android:icon="@drawable/nav_disputes"
                 android:title="@string/disputes" />
+
+            <item
+                android:id="@+id/nav_vehicles"
+                android:icon="@drawable/nav_vehicles"
+                android:title="@string/vehicles" />
         </menu>
     </item>
     <item android:title="ACCOUNT">
         <menu>
             <item
-                android:id="@+id/nav_settings"
+                android:id="@+id/nav_settings_admin"
                 android:icon="@drawable/ic_baseline_settings_24"
                 android:title="@string/settings" />
             <item

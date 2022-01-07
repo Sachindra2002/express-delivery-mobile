@@ -39,6 +39,10 @@ public interface AgentClient {
     @GET("get-accepted-packages-agent")
     Call<List<Mail>> getAllAcceptedMails(@Header("Authorization") String token);
 
+    //Get accepted packages by agent
+    @GET("get-transit-packages-agent")
+    Call<List<Mail>> getAllTransitMails(@Header("Authorization") String token);
+
     //Assign driver to package
     @POST("assign-driver")
     Call<ResponseBody> assignDriver(@Header("Authorization") String token, @Body Mail mail);

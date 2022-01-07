@@ -34,6 +34,10 @@ public interface AdminClient {
     @POST("add-driver")
     Call<ResponseBody> addDriver(@Header("Authorization") String token, @Body User user);
 
+    //Add Driver
+    @POST("add-agent")
+    Call<ResponseBody> addAgent(@Header("Authorization") String token, @Body User user);
+
     //Get list of drivers
     @GET("get-drivers-admin")
     Call<List<User>> getDrivers(@Header("Authorization") String token);
@@ -85,4 +89,37 @@ public interface AdminClient {
     //Get all packages
     @GET("get-all-packages")
     Call<List<Mail>> getAllPackages(@Header("Authorization") String token);
+
+    //Delete agent
+    @POST("delete-agent")
+    Call<ResponseBody> deleteAgent(@Header("Authorization") String token, @Body User user);
+
+    //Delete agent
+    @POST("delete-driver")
+    Call<ResponseBody> deleteDriver(@Header("Authorization") String token, @Body User user);
+
+    //Update agent service center
+    @POST("update-center-agent")
+    Call<ResponseBody> updateCenterAgent(@Header("Authorization") String token, @Body User user);
+
+    //Get all vehicles
+    @GET("vehicles")
+    Call<List<Vehicle>> getAllVehicles(@Header("Authorization") String token);
+
+    //Set vehicle available
+    @POST("set-vehicle-available")
+    Call<ResponseBody> setVehicleAvailable(@Header("Authorization") String token, @Body Vehicle vehicle);
+
+    //Set vehicle Unavailable
+    @POST("set-vehicle-unavailable")
+    Call<ResponseBody> setVehicleUnavailable(@Header("Authorization") String token, @Body Vehicle vehicle);
+
+    //Set vehicle Blacklisted
+    @POST("set-vehicle-blacklist")
+    Call<ResponseBody> setVehicleBlacklist(@Header("Authorization") String token, @Body Vehicle vehicle);
+
+    //Remove vehicle Blacklisted
+    @POST("remove-vehicle-blacklist")
+    Call<ResponseBody> removeVehicleBlacklist(@Header("Authorization") String token, @Body Vehicle vehicle);
+
 }

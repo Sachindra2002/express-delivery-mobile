@@ -47,6 +47,12 @@
         <activity android:name=".ViewServiceCenterActivity" />
         <activity android:name=".AdminPackageListActivity" />
         <activity android:name=".ViewLocalStoragePackagesActivity" />
+        <activity android:name=".ViewPackageAdminActivity" />
+        <activity android:name=".AddAgentActivity" />
+        <activity android:name=".VehicleListActivity" />
+        <activity android:name=".EditAdminDetailsActivity" />
+        <activity android:name=".TransitListActivity" />
+        <activity android:name=".NewShipmentsActivity" />
         <activity
             android:name=".MainActivity"
             android:exported="true">
