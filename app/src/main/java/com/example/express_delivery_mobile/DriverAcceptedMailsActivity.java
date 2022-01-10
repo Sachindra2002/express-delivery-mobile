@@ -66,7 +66,7 @@ public class DriverAcceptedMailsActivity extends AppCompatActivity implements Na
         //Setup toolbar
         mToolbar = findViewById(R.id.toolbar);
         setSupportActionBar(mToolbar);
-        getSupportActionBar().setTitle(null);
+        getSupportActionBar().setTitle("Your Schedule");
 
         //Setup navigation drawer
         mDrawerLayout = findViewById(R.id.drawer_layout);
@@ -94,6 +94,7 @@ public class DriverAcceptedMailsActivity extends AppCompatActivity implements Na
         tabLayout.addTab(tabLayout.newTab().setText("Started"));
         tabLayout.addTab(tabLayout.newTab().setText("Picked up"));
         tabLayout.addTab(tabLayout.newTab().setText("In Transit"));
+        tabLayout.addTab(tabLayout.newTab().setText("Out for Delivery"));
         tabLayout.addTab(tabLayout.newTab().setText("Delivered"));
 
         tabLayout.addOnTabSelectedListener(new TabLayout.OnTabSelectedListener() {

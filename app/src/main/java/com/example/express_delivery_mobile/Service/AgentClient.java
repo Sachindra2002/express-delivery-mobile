@@ -54,4 +54,8 @@ public interface AgentClient {
     //Download driver document
     @GET("download/{fileName}")
     Call<ResponseBody> downloadDriverDocument(@Header("Authorization") String token, @Path("fileName") String fileName);
+
+    //Change driver
+    @POST("change-driver")
+    Call<ResponseBody> changeDriver(@Header("Authorization") String token, @Body Mail mail);
 }

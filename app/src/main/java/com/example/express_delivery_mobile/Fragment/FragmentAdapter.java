@@ -20,12 +20,18 @@ public class FragmentAdapter extends FragmentStateAdapter {
                 return new DriverStartedMailsFragment();
             case 2:
                 return new DriverPickedupMailsFragment();
+            case 3:
+                return new DriverTransitMailsFragment();
+            case 4:
+                return new DriverOutForDeliveryFragment();
+            case 5:
+                return new DriverDeliveredMailsFragment();
         }
         return new DriverAcceptedMailsFragment();
     }
 
     @Override
     public int getItemCount() {
-        return 3;
+        return 6;
     }
 }

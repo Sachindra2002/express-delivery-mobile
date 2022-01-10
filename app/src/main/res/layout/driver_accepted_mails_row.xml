@@ -135,16 +135,49 @@
                 android:text="4KG"
                 android:textColor="@color/black" />
 
-<!--            <Button-->
-<!--                android:id="@+id/start_button"-->
-<!--                android:layout_width="match_parent"-->
-<!--                android:layout_height="50dp"-->
-<!--                android:layout_below="@id/weight"-->
-<!--                android:layout_alignParentRight="true"-->
-<!--                android:layout_marginLeft="150dp"-->
-<!--                android:layout_marginRight="30dp"-->
-<!--                android:text="Start Now"-->
-<!--                android:textColor="@color/green1" />-->
+            <TextView
+                android:id="@+id/_payment_method"
+                android:layout_width="180dp"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/_weight"
+                android:layout_marginLeft="15dp"
+                android:padding="5dp"
+                android:text="Payment Method"
+                android:textColor="@android:color/darker_gray" />
+
+            <TextView
+                android:id="@+id/payment_method"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/_weight"
+                android:layout_alignParentRight="true"
+                android:layout_marginRight="30dp"
+                android:gravity="right"
+                android:padding="5dp"
+                android:text="Cash"
+                android:textColor="@color/black" />
+
+            <TextView
+                android:id="@+id/_total_price"
+                android:layout_width="180dp"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/_payment_method"
+                android:layout_marginLeft="15dp"
+                android:padding="5dp"
+                android:text="Total Price"
+                android:textColor="@android:color/darker_gray" />
+
+            <TextView
+                android:id="@+id/total_price"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/_payment_method"
+                android:layout_alignParentRight="true"
+                android:layout_marginRight="30dp"
+                android:gravity="right"
+                android:padding="5dp"
+                android:text="1300 LKR"
+                android:textColor="@color/black" />
 
         </RelativeLayout>
 

@@ -225,11 +225,48 @@ public class DriverAssignedMailAdapter extends RecyclerView.Adapter<DriverAssign
         builder.setNegativeButton("Reject", new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
-                dialog.cancel();
+                handleReject(id);
             }
         });
 
         builder.show();
+    }
+
+    private void handleReject(int id) {
+        Call<ResponseBody> call = driverClient.rejectPackage(token, id);
+
+        //Show progress
+        mProgressDialog.setMessage("Rejecting...");
+        mProgressDialog.show();
+
+        call.enqueue(new Callback<ResponseBody>() {
+            @Override
+            public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
+                //Successfully accepted
+                if (response.code() == 200) {
+                    Toast.makeText(context, "successfully rejected", Toast.LENGTH_SHORT).show();
+
+                    //Direct to homepage
+                    Intent intent = new Intent(context, DriverActivity.class);
+                    intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                    context.startActivity(intent);
+                } else {
+                    try {
+                        //Capture and display specific messages
+                        JSONObject object = new JSONObject(response.errorBody().string());
+                        Toast.makeText(context, object.getString("message"), Toast.LENGTH_SHORT).show();
+                    } catch (Exception e) {
+                        Toast.makeText(context, "An error occurred", Toast.LENGTH_SHORT).show();
+                    }
+                }
+                mProgressDialog.show();
+            }
+
+            @Override
+            public void onFailure(Call<ResponseBody> call, Throwable t) {
+                Toast.makeText(context, "Something went wrong!", Toast.LENGTH_SHORT).show();
+            }
+        });
     }
 
     private void handleAccept(int mailId) {

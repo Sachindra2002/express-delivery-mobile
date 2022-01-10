@@ -46,18 +46,25 @@
         <entry key="..\:/Express Delivery/Express_Delivery_Mobile/app/src/main/res/layout/activity_view_inquiry.xml" value="0.3625" />
         <entry key="..\:/Express Delivery/Express_Delivery_Mobile/app/src/main/res/layout/activity_view_local_packages.xml" value="0.3625" />
         <entry key="..\:/Express Delivery/Express_Delivery_Mobile/app/src/main/res/layout/activity_view_package_admin.xml" value="0.3625" />
+        <entry key="..\:/Express Delivery/Express_Delivery_Mobile/app/src/main/res/layout/activity_view_package_agent.xml" value="0.3625" />
+        <entry key="..\:/Express Delivery/Express_Delivery_Mobile/app/src/main/res/layout/activity_view_package_driver.xml" value="0.3625" />
         <entry key="..\:/Express Delivery/Express_Delivery_Mobile/app/src/main/res/layout/activity_view_service_center.xml" value="0.3625" />
         <entry key="..\:/Express Delivery/Express_Delivery_Mobile/app/src/main/res/layout/activity_view_vehicles.xml" value="0.3625" />
         <entry key="..\:/Express Delivery/Express_Delivery_Mobile/app/src/main/res/layout/agent_row.xml" value="0.3625" />
         <entry key="..\:/Express Delivery/Express_Delivery_Mobile/app/src/main/res/layout/assign_driver_dialog.xml" value="0.3625" />
+        <entry key="..\:/Express Delivery/Express_Delivery_Mobile/app/src/main/res/layout/change_center_dialog.xml" value="0.3625" />
+        <entry key="..\:/Express Delivery/Express_Delivery_Mobile/app/src/main/res/layout/change_driver_dialog.xml" value="0.3625" />
         <entry key="..\:/Express Delivery/Express_Delivery_Mobile/app/src/main/res/layout/dialog_chnage_center.xml" value="0.3625" />
         <entry key="..\:/Express Delivery/Express_Delivery_Mobile/app/src/main/res/layout/dispute_row.xml" value="0.3625" />
         <entry key="..\:/Express Delivery/Express_Delivery_Mobile/app/src/main/res/layout/driver_accepted_mails_row.xml" value="0.3625" />
         <entry key="..\:/Express Delivery/Express_Delivery_Mobile/app/src/main/res/layout/driver_documents_row.xml" value="0.3625" />
         <entry key="..\:/Express Delivery/Express_Delivery_Mobile/app/src/main/res/layout/driver_row.xml" value="0.3625" />
         <entry key="..\:/Express Delivery/Express_Delivery_Mobile/app/src/main/res/layout/fragment_driver_accepted_mails.xml" value="0.3625" />
+        <entry key="..\:/Express Delivery/Express_Delivery_Mobile/app/src/main/res/layout/fragment_driver_delivered_mails.xml" value="0.3484375" />
+        <entry key="..\:/Express Delivery/Express_Delivery_Mobile/app/src/main/res/layout/fragment_driver_out_for_delivery.xml" value="0.3625" />
         <entry key="..\:/Express Delivery/Express_Delivery_Mobile/app/src/main/res/layout/fragment_driver_pickedup_mails.xml" value="0.3625" />
         <entry key="..\:/Express Delivery/Express_Delivery_Mobile/app/src/main/res/layout/fragment_driver_started_mails.xml" value="0.3625" />
+        <entry key="..\:/Express Delivery/Express_Delivery_Mobile/app/src/main/res/layout/fragment_driver_transit_mails.xml" value="0.3625" />
         <entry key="..\:/Express Delivery/Express_Delivery_Mobile/app/src/main/res/layout/fragment_general_disputes.xml" value="0.3625" />
         <entry key="..\:/Express Delivery/Express_Delivery_Mobile/app/src/main/res/layout/fragment_package_disputes.xml" value="0.3625" />
         <entry key="..\:/Express Delivery/Express_Delivery_Mobile/app/src/main/res/layout/inquiry_row.xml" value="0.3625" />

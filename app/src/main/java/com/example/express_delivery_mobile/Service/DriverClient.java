@@ -6,6 +6,7 @@ import java.util.List;
 
 import okhttp3.ResponseBody;
 import retrofit2.Call;
+import retrofit2.http.Body;
 import retrofit2.http.GET;
 import retrofit2.http.Header;
 import retrofit2.http.POST;
@@ -29,9 +30,25 @@ public interface DriverClient {
     @GET("get-picked-up-packages")
     Call<List<Mail>> getAllPickedUpMails(@Header("Authorization") String token);
 
+    //Get list Transit packages
+    @GET("get-transit-packages-driver")
+    Call<List<Mail>> getAllTransitMails(@Header("Authorization") String token);
+
+    //Get out for delivery packages
+    @GET("get-out-for-delivery-packages-driver")
+    Call<List<Mail>> getOutForDeliveryMails(@Header("Authorization") String token);
+
+    //Get all delivered packages
+    @GET("get-delivered-packages-driver")
+    Call<List<Mail>> getDeliveredMails(@Header("Authorization") String token);
+
     //Accepted packages
     @POST("accept-package/{mailId}")
     Call<ResponseBody> acceptPackage(@Header("Authorization") String token, @Path("mailId") int mailId);
+
+    //Accepted packages
+    @POST("reject-package/{mailId}")
+    Call<ResponseBody> rejectPackage(@Header("Authorization") String token, @Path("mailId") int mailId);
 
     //Start package
     @POST("start-package/{mailId}")
@@ -40,4 +57,16 @@ public interface DriverClient {
     //confirm package pickup
     @POST("confirm-pickup-package/{mailId}")
     Call<ResponseBody> confirmPickupPackage(@Header("Authorization") String token, @Path("mailId") int mailId);
+
+    //confirm package delivered
+    @POST("confirm-delivered-package/{mailId}")
+    Call<ResponseBody> confirmPackageDelivered(@Header("Authorization") String token, @Path("mailId") int mailId);
+
+    //transit package to warehouse
+    @POST("transit-package")
+    Call<ResponseBody> transitPackage(@Header("Authorization") String token, @Body Mail mail);
+
+    //Start out for delivery
+    @POST("out-for-delivery")
+    Call<ResponseBody> startDelivery(@Header("Authorization") String token, @Body Mail mail);
 }
