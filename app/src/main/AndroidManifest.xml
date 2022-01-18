@@ -55,6 +55,7 @@
         <activity android:name=".NewShipmentsActivity" />
         <activity android:name=".ViewPackageAgentActivity" />
         <activity android:name=".ViewPackageDriverActivity" />
+        <activity android:name=".ViewAllPackagesActivity" />
         <activity
             android:name=".MainActivity"
             android:exported="true">

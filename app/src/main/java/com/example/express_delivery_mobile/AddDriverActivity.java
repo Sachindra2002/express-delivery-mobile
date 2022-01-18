@@ -34,6 +34,8 @@ import com.example.express_delivery_mobile.Util.AuthHandler;
 import com.example.express_delivery_mobile.Util.NavHandler;
 import com.google.android.material.navigation.NavigationView;
 
+import org.json.JSONObject;
+
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -232,7 +234,7 @@ public class AddDriverActivity extends AppCompatActivity implements NavigationVi
             call.enqueue(new Callback<ResponseBody>() {
                 @Override
                 public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
-                    mProgressDialog.dismiss();
+
                     //200 status code
                     if (response.code() == 200) {
                         Toast.makeText(AddDriverActivity.this, "Driver added successfully", Toast.LENGTH_SHORT).show();
@@ -240,8 +242,15 @@ public class AddDriverActivity extends AppCompatActivity implements NavigationVi
                         intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
                         startActivity(intent);
                     } else {
-                        Toast.makeText(AddDriverActivity.this, "Something went wrong!", Toast.LENGTH_SHORT).show();
+                        try {
+                            // Capture an display specific messages
+                            JSONObject obj = new JSONObject(response.errorBody().string());
+                            Toast.makeText(AddDriverActivity.this, obj.getString("message"), Toast.LENGTH_SHORT).show();
+                        } catch (Exception e) {
+                            Toast.makeText(AddDriverActivity.this, "An error occurred", Toast.LENGTH_SHORT).show();
+                        }
                     }
+                    mProgressDialog.dismiss();
                 }
 
                 @Override

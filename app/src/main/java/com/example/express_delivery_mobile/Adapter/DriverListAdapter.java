@@ -17,6 +17,7 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.DiffUtil;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.example.express_delivery_mobile.AddDriverActivity;
 import com.example.express_delivery_mobile.AdminDriverListActivity;
 import com.example.express_delivery_mobile.AdminDriverProfileActivity;
 import com.example.express_delivery_mobile.AgentDriverProfileActivity;
@@ -27,6 +28,8 @@ import com.example.express_delivery_mobile.Service.AdminClient;
 import com.example.express_delivery_mobile.Service.RetrofitClientInstance;
 import com.example.express_delivery_mobile.TrackPackageActivity;
 import com.google.android.material.dialog.MaterialAlertDialogBuilder;
+
+import org.json.JSONObject;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -112,7 +115,7 @@ public class DriverListAdapter extends RecyclerView.Adapter<DriverListAdapter.Vi
                         String searchString = charString.toLowerCase();
 
                         //Filter through fields and add to filtered list
-                        if (user.getEmail().contains(searchString)) {
+                        if (user.getEmail().contains(searchString) || String.valueOf(user.getDriverDetail().getDriverId()).contains(searchString)) {
                             filteredList.add(user);
                         }
                     }
@@ -253,7 +256,13 @@ public class DriverListAdapter extends RecyclerView.Adapter<DriverListAdapter.Vi
                     intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
                     context.startActivity(intent);
                 } else {
-                    Toast.makeText(context, "Something went wrong!", Toast.LENGTH_SHORT).show();
+                    try {
+                        // Capture an display specific messages
+                        JSONObject obj = new JSONObject(response.errorBody().string());
+                        Toast.makeText(context, obj.getString("message"), Toast.LENGTH_SHORT).show();
+                    } catch (Exception e) {
+                        Toast.makeText(context, "An error occurred", Toast.LENGTH_SHORT).show();
+                    }
                 }
             }
 

@@ -125,7 +125,7 @@ public class AgentListAdapter extends RecyclerView.Adapter<AgentListAdapter.View
                             filteredList.add(user);
                         }
                     }
-                    filteredList = filteredList;
+                    filteredAgents = filteredList;
                 }
                 FilterResults filterResults = new FilterResults();
                 filterResults.values = filteredAgents;

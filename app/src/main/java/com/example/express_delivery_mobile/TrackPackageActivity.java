@@ -1,8 +1,11 @@
 package com.example.express_delivery_mobile;
 
+import android.annotation.SuppressLint;
 import android.app.ProgressDialog;
 import android.content.Context;
+import android.content.Intent;
 import android.content.SharedPreferences;
+import android.net.Uri;
 import android.os.Bundle;
 import android.view.MenuItem;
 import android.view.View;
@@ -57,6 +60,7 @@ public class TrackPackageActivity extends AppCompatActivity implements Navigatio
 
     }
 
+    @SuppressLint("SetTextI18n")
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -86,6 +90,15 @@ public class TrackPackageActivity extends AppCompatActivity implements Navigatio
         ll6 = findViewById(R.id.ll6);
         call_driver = findViewById(R.id.call_driver);
 
+        call_driver.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent = new Intent(Intent.ACTION_DIAL);
+                intent.setData(Uri.parse("tel:" + getIntent().getStringExtra("driverMobile")));
+                startActivity(intent);
+            }
+        });
+
         Date d = new Date();
         d.setTime(getIntent().getLongExtra("created_at", -1));
 
@@ -109,24 +122,24 @@ public class TrackPackageActivity extends AppCompatActivity implements Navigatio
         StateProgressBar stateProgressBar = (StateProgressBar) findViewById(R.id.your_state_progress_bar_id);
 
 
-        if (getIntent().getStringExtra("status") != null && getIntent().getStringExtra("status").equalsIgnoreCase("Driver Accepted")) {
+        if (getIntent().getStringExtra("status") != null && getIntent().getStringExtra("status").equalsIgnoreCase("Processing")) {
+
             stateProgressBar.setStateDescriptionData(descriptionData);
             stateProgressBar.setForegroundColor(ContextCompat.getColor(this, R.color.yellow));
             stateProgressBar.setStateDescriptionColor(ContextCompat.getColor(this, R.color.black));
             stateProgressBar.setCurrentStateDescriptionColor(ContextCompat.getColor(this, R.color.yellow));
-
             stateProgressBar.enableAnimationToCurrentState(true);
-
             stateProgressBar.setCurrentStateNumber(StateProgressBar.StateNumber.ONE);
-        } else if (getIntent().getStringExtra("status") != null && getIntent().getStringExtra("status").equalsIgnoreCase("Processing")) {
+
+        } else if (getIntent().getStringExtra("status") != null && getIntent().getStringExtra("status").equalsIgnoreCase("Accepted")) {
+
             stateProgressBar.setStateDescriptionData(descriptionData);
             stateProgressBar.setForegroundColor(ContextCompat.getColor(this, R.color.yellow));
             stateProgressBar.setStateDescriptionColor(ContextCompat.getColor(this, R.color.black));
             stateProgressBar.setCurrentStateDescriptionColor(ContextCompat.getColor(this, R.color.yellow));
-
             stateProgressBar.enableAnimationToCurrentState(true);
-
             stateProgressBar.setCurrentStateNumber(StateProgressBar.StateNumber.ONE);
+
         } else if (getIntent().getStringExtra("status") != null && getIntent().getStringExtra("status").equalsIgnoreCase("Assigned")) {
             stateProgressBar.setStateDescriptionData(descriptionData);
             stateProgressBar.setForegroundColor(ContextCompat.getColor(this, R.color.yellow));
@@ -136,6 +149,60 @@ public class TrackPackageActivity extends AppCompatActivity implements Navigatio
             stateProgressBar.enableAnimationToCurrentState(true);
 
             stateProgressBar.setCurrentStateNumber(StateProgressBar.StateNumber.ONE);
+        } else if (getIntent().getStringExtra("status") != null && getIntent().getStringExtra("status").equalsIgnoreCase("Driver Accepted")) {
+
+            stateProgressBar.setStateDescriptionData(descriptionData);
+            stateProgressBar.setForegroundColor(ContextCompat.getColor(this, R.color.yellow));
+            stateProgressBar.setStateDescriptionColor(ContextCompat.getColor(this, R.color.black));
+            stateProgressBar.setCurrentStateDescriptionColor(ContextCompat.getColor(this, R.color.yellow));
+            stateProgressBar.enableAnimationToCurrentState(true);
+            stateProgressBar.setCurrentStateNumber(StateProgressBar.StateNumber.ONE);
+
+        } else if (getIntent().getStringExtra("status") != null && getIntent().getStringExtra("status").equalsIgnoreCase("Delivery Started")) {
+
+            stateProgressBar.setStateDescriptionData(descriptionData);
+            stateProgressBar.setForegroundColor(ContextCompat.getColor(this, R.color.yellow));
+            stateProgressBar.setStateDescriptionColor(ContextCompat.getColor(this, R.color.black));
+            stateProgressBar.setCurrentStateDescriptionColor(ContextCompat.getColor(this, R.color.yellow));
+            stateProgressBar.enableAnimationToCurrentState(true);
+            stateProgressBar.setCurrentStateNumber(StateProgressBar.StateNumber.ONE);
+
+        } else if (getIntent().getStringExtra("status") != null && getIntent().getStringExtra("status").equalsIgnoreCase("Package picked up")) {
+
+            stateProgressBar.setStateDescriptionData(descriptionData);
+            stateProgressBar.setForegroundColor(ContextCompat.getColor(this, R.color.yellow));
+            stateProgressBar.setStateDescriptionColor(ContextCompat.getColor(this, R.color.black));
+            stateProgressBar.setCurrentStateDescriptionColor(ContextCompat.getColor(this, R.color.yellow));
+            stateProgressBar.enableAnimationToCurrentState(true);
+            stateProgressBar.setCurrentStateNumber(StateProgressBar.StateNumber.ONE);
+
+        } else if (getIntent().getStringExtra("status") != null && getIntent().getStringExtra("status").equalsIgnoreCase("In Transit")) {
+
+            stateProgressBar.setStateDescriptionData(descriptionData);
+            stateProgressBar.setForegroundColor(ContextCompat.getColor(this, R.color.yellow));
+            stateProgressBar.setStateDescriptionColor(ContextCompat.getColor(this, R.color.black));
+            stateProgressBar.setCurrentStateDescriptionColor(ContextCompat.getColor(this, R.color.yellow));
+            stateProgressBar.enableAnimationToCurrentState(true);
+            stateProgressBar.setCurrentStateNumber(StateProgressBar.StateNumber.TWO);
+
+        } else if (getIntent().getStringExtra("status") != null && getIntent().getStringExtra("status").equalsIgnoreCase("Out for Delivery")) {
+
+            stateProgressBar.setStateDescriptionData(descriptionData);
+            stateProgressBar.setForegroundColor(ContextCompat.getColor(this, R.color.yellow));
+            stateProgressBar.setStateDescriptionColor(ContextCompat.getColor(this, R.color.black));
+            stateProgressBar.setCurrentStateDescriptionColor(ContextCompat.getColor(this, R.color.yellow));
+            stateProgressBar.enableAnimationToCurrentState(true);
+            stateProgressBar.setCurrentStateNumber(StateProgressBar.StateNumber.THREE);
+
+        } else if (getIntent().getStringExtra("status") != null && getIntent().getStringExtra("status").equalsIgnoreCase("Delivered")) {
+
+            stateProgressBar.setStateDescriptionData(descriptionData);
+            stateProgressBar.setForegroundColor(ContextCompat.getColor(this, R.color.yellow));
+            stateProgressBar.setStateDescriptionColor(ContextCompat.getColor(this, R.color.black));
+            stateProgressBar.setCurrentStateDescriptionColor(ContextCompat.getColor(this, R.color.yellow));
+            stateProgressBar.enableAnimationToCurrentState(true);
+            stateProgressBar.setCurrentStateNumber(StateProgressBar.StateNumber.FOUR);
+
         } else if (getIntent().getStringExtra("status") != null && getIntent().getStringExtra("status").equalsIgnoreCase("Cancelled")) {
             stateProgressBar.setStateDescriptionData(descriptionData1);
             stateProgressBar.setForegroundColor(ContextCompat.getColor(this, R.color.yellow));
@@ -166,7 +233,7 @@ public class TrackPackageActivity extends AppCompatActivity implements Navigatio
         //Setup toolbar
         mToolbar = findViewById(R.id.toolbar);
         setSupportActionBar(mToolbar);
-        getSupportActionBar().setTitle(null);
+        getSupportActionBar().setTitle("Track Package");
 
         //Setup navigation drawer
         mDrawerLayout = findViewById(R.id.drawer_layout);

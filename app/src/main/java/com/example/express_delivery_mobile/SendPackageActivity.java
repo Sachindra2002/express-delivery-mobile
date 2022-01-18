@@ -37,6 +37,8 @@ import com.example.express_delivery_mobile.Util.AuthHandler;
 import com.example.express_delivery_mobile.Util.NavHandler;
 import com.google.android.material.navigation.NavigationView;
 
+import org.json.JSONObject;
+
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Locale;
@@ -276,7 +278,13 @@ public class SendPackageActivity extends AppCompatActivity implements Navigation
                         intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
                         startActivity(intent);
                     } else {
-                        Toast.makeText(SendPackageActivity.this, "Something went wrong!", Toast.LENGTH_SHORT).show();
+                        try {
+                            // Capture an display specific messages
+                            JSONObject obj = new JSONObject(response.errorBody().string());
+                            Toast.makeText(SendPackageActivity.this, obj.getString("message"), Toast.LENGTH_SHORT).show();
+                        } catch (Exception e) {
+                            Toast.makeText(SendPackageActivity.this, "An error occurred", Toast.LENGTH_SHORT).show();
+                        }
                     }
                 }
 

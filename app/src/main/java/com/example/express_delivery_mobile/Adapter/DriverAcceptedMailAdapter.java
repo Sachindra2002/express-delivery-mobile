@@ -141,6 +141,7 @@ public class DriverAcceptedMailAdapter extends RecyclerView.Adapter<DriverAccept
                     @Override
                     public void onClick(View view) {
                         startDelivery(filteredMails.get(position).getMailId());
+
                     }
                 });
                 holder.itemView.setOnLongClickListener(new View.OnLongClickListener() {
@@ -197,7 +198,8 @@ public class DriverAcceptedMailAdapter extends RecyclerView.Adapter<DriverAccept
                 holder.itemView.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View view) {
-                        pickupDelivery(filteredMails.get(position));
+                        pickupDelivery(filteredMails.get(holder.getAdapterPosition()));
+                        notifyItemChanged(0, filteredMails.size());
                     }
                 });
 
@@ -223,7 +225,8 @@ public class DriverAcceptedMailAdapter extends RecyclerView.Adapter<DriverAccept
                 holder.itemView.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View view) {
-                        transitPackage(filteredMails.get(position));
+                        transitPackage(filteredMails.get(holder.getAdapterPosition()));
+                        notifyItemChanged(0, filteredMails.size());
                     }
                 });
                 holder.itemView.setOnLongClickListener(new View.OnLongClickListener() {
@@ -257,6 +260,7 @@ public class DriverAcceptedMailAdapter extends RecyclerView.Adapter<DriverAccept
                     @Override
                     public void onClick(View view) {
                         handleOutForDelivery(filteredMails.get(position));
+                        notifyItemChanged(0, filteredMails.size());
                     }
                 });
             }
@@ -273,6 +277,7 @@ public class DriverAcceptedMailAdapter extends RecyclerView.Adapter<DriverAccept
                     @Override
                     public void onClick(View view) {
                         handleConfirmDelivery(filteredMails.get(position));
+                        notifyItemChanged(0, filteredMails.size());
                     }
                 });
             }

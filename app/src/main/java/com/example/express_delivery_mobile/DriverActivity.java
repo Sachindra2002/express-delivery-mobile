@@ -3,12 +3,16 @@ package com.example.express_delivery_mobile;
 import android.app.AlertDialog;
 import android.app.ProgressDialog;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.ArrayAdapter;
 import android.widget.ProgressBar;
+import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -26,20 +30,26 @@ import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
 import com.example.express_delivery_mobile.Adapter.DriverAssignedMailAdapter;
 import com.example.express_delivery_mobile.Adapter.MailAdapter;
+import com.example.express_delivery_mobile.Model.DriverDetail;
 import com.example.express_delivery_mobile.Model.Mail;
+import com.example.express_delivery_mobile.Model.User;
 import com.example.express_delivery_mobile.Service.DriverClient;
 import com.example.express_delivery_mobile.Service.RetrofitClientInstance;
 import com.example.express_delivery_mobile.Util.AuthHandler;
 import com.example.express_delivery_mobile.Util.NavHandler;
 import com.google.android.material.navigation.NavigationView;
 
+import org.json.JSONObject;
+
 import java.util.ArrayList;
 import java.util.List;
+
+import okhttp3.ResponseBody;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
-public class DriverActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener{
+public class DriverActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener {
     TextView home_name;
     private Toolbar mToolbar;
     private DrawerLayout mDrawerLayout;
@@ -47,6 +57,9 @@ public class DriverActivity extends AppCompatActivity implements NavigationView.
     private ProgressDialog mProgressDialog;
     private CardView acceptedMails;
     private CardView viewProfile;
+    private CardView driverStatus;
+    private CardView allPackages;
+    Spinner spinner;
 
     private List<Mail> mails;
 
@@ -95,6 +108,24 @@ public class DriverActivity extends AppCompatActivity implements NavigationView.
             }
         });
 
+        driverStatus = findViewById(R.id.driver_status);
+        driverStatus.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                changeDriverStatus();
+            }
+        });
+
+        allPackages = findViewById(R.id.driver_all_packages);
+        allPackages.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent = new Intent(DriverActivity.this, ViewAllPackagesActivity.class);
+                intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                startActivity(intent);
+            }
+        });
+
         //Retrieve JWT Token
         SharedPreferences sharedPreferences = getSharedPreferences("auth_preferences", Context.MODE_PRIVATE);
         token = "Bearer " + sharedPreferences.getString("auth_token", null);
@@ -135,7 +166,7 @@ public class DriverActivity extends AppCompatActivity implements NavigationView.
         swipeRefreshLayout = (SwipeRefreshLayout) findViewById(R.id.swipe);
         LinearLayoutManager layoutManager = new LinearLayoutManager(this);
         recyclerView.setLayoutManager(layoutManager);
-        driverAssignedMailAdapter = new DriverAssignedMailAdapter(this, mails, token ,"driver", mProgressDialog);
+        driverAssignedMailAdapter = new DriverAssignedMailAdapter(this, mails, token, "driver", mProgressDialog);
         recyclerView.setAdapter(driverAssignedMailAdapter);
 
         // SetOnRefreshListener on SwipeRefreshLayout
@@ -148,6 +179,61 @@ public class DriverActivity extends AppCompatActivity implements NavigationView.
         });
 
         getRecentAssignedMails();
+    }
+
+    private void changeDriverStatus() {
+        AlertDialog.Builder mBuilder = new AlertDialog.Builder(DriverActivity.this, R.style.MyAlertDialogTheme);
+        LayoutInflater inflater = (LayoutInflater) getApplicationContext().getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+        View v = inflater.inflate(R.layout.change_status_dialog, null);
+        mBuilder.setTitle("Update Status");
+        spinner = (Spinner) v.findViewById(R.id.status_spinner);
+        ArrayAdapter<CharSequence> adapter = ArrayAdapter.createFromResource(this, R.array.status, android.R.layout.simple_spinner_item);
+        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        spinner.setAdapter(adapter);
+        mBuilder.setPositiveButton("Update Status", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialogInterface, int i) {
+                updateDriverStatus();
+            }
+        });
+        mBuilder.setView(v);
+        AlertDialog dialog = mBuilder.create();
+        dialog.show();
+    }
+
+    private void updateDriverStatus() {
+        DriverDetail driverDetail = new DriverDetail();
+        driverDetail.setStatus(spinner.getSelectedItem().toString());
+
+        User user = new User();
+        user.setEmail(email);
+        user.setDriverDetail(driverDetail);
+        Call<ResponseBody> call = driverClient.updateStatus(token, user);
+
+        //Show progress
+        mProgressDialog.setMessage("Updating status...");
+        mProgressDialog.show();
+
+        call.enqueue(new Callback<ResponseBody>() {
+            @Override
+            public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
+                //Successfully accepted
+                if (response.code() == 200) {
+                    mProgressDialog.dismiss();
+                    Toast.makeText(DriverActivity.this, "successfully updated", Toast.LENGTH_SHORT).show();
+
+                } else {
+                    mProgressDialog.dismiss();
+                    Toast.makeText(DriverActivity.this, "An error occurred", Toast.LENGTH_SHORT).show();
+                }
+            }
+
+            @Override
+            public void onFailure(Call<ResponseBody> call, Throwable t) {
+                mProgressDialog.dismiss();
+                Toast.makeText(DriverActivity.this, "An error occurred", Toast.LENGTH_SHORT).show();
+            }
+        });
     }
 
     private void getRecentAssignedMails() {
@@ -164,9 +250,9 @@ public class DriverActivity extends AppCompatActivity implements NavigationView.
                 System.out.println(response);
                 System.out.println(response.body());
                 //Handle null pointer errors
-                if(mails != null){
+                if (mails != null) {
                     driverAssignedMailAdapter.setMails(mails);
-                }else {
+                } else {
                     Toast.makeText(DriverActivity.this, "Something went wrong" + response.toString(), Toast.LENGTH_SHORT).show();
                 }
                 mProgressDialog.dismiss();

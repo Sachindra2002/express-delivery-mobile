@@ -32,6 +32,8 @@ import com.example.express_delivery_mobile.Util.AuthHandler;
 import com.example.express_delivery_mobile.Util.NavHandler;
 import com.google.android.material.navigation.NavigationView;
 
+import org.json.JSONObject;
+
 import java.util.ArrayList;
 import java.util.List;
 import java.util.regex.Matcher;
@@ -168,7 +170,13 @@ public class AddAgentActivity extends AppCompatActivity implements NavigationVie
                         intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
                         startActivity(intent);
                     } else {
-                        Toast.makeText(AddAgentActivity.this, "Something went wrong!", Toast.LENGTH_SHORT).show();
+                        try {
+                            // Capture an display specific messages
+                            JSONObject obj = new JSONObject(response.errorBody().string());
+                            Toast.makeText(AddAgentActivity.this, obj.getString("message"), Toast.LENGTH_SHORT).show();
+                        } catch (Exception e) {
+                            Toast.makeText(AddAgentActivity.this, "An error occurred", Toast.LENGTH_SHORT).show();
+                        }
                     }
                 }
 

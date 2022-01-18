@@ -1,6 +1,7 @@
 package com.example.express_delivery_mobile.Service;
 
 import com.example.express_delivery_mobile.Model.Mail;
+import com.example.express_delivery_mobile.Model.User;
 
 import java.util.List;
 
@@ -42,6 +43,10 @@ public interface DriverClient {
     @GET("get-delivered-packages-driver")
     Call<List<Mail>> getDeliveredMails(@Header("Authorization") String token);
 
+    //Get all delivered packages
+    @GET("get-all-packages-driver")
+    Call<List<Mail>> getAllDriverPackages(@Header("Authorization") String token);
+
     //Accepted packages
     @POST("accept-package/{mailId}")
     Call<ResponseBody> acceptPackage(@Header("Authorization") String token, @Path("mailId") int mailId);
@@ -69,4 +74,8 @@ public interface DriverClient {
     //Start out for delivery
     @POST("out-for-delivery")
     Call<ResponseBody> startDelivery(@Header("Authorization") String token, @Body Mail mail);
+
+    //Update status
+    @POST("update-status")
+    Call<ResponseBody> updateStatus(@Header("Authorization") String token, @Body User user);
 }

@@ -39,6 +39,16 @@
         <item>Galle</item>
     </string-array>
 
+    <string-array name="status">
+        <item>Available</item>
+        <item>Unavailable</item>
+    </string-array>
+
+    <string-array name="dispute_types">
+        <item>Broken goods</item>
+        <item>Not received</item>
+    </string-array>
+
     <string-array name="type_of_parcel">
         <item>Small 20CM X 20CM</item>
         <item>Medium 45CM X 45CM</item>

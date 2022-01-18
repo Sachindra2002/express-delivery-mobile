@@ -81,6 +81,7 @@
                 android:gravity="center">
 
                 <androidx.cardview.widget.CardView
+                    android:id="@+id/driver_all_packages"
                     android:layout_width="150dp"
                     android:layout_height="150dp"
                     android:layout_margin="10dp"
@@ -193,6 +194,7 @@
                 </androidx.cardview.widget.CardView>
 
                 <androidx.cardview.widget.CardView
+                    android:id="@+id/driver_status"
                     android:layout_width="150dp"
                     android:layout_height="150dp"
                     android:layout_margin="10dp"

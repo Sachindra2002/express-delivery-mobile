@@ -1,5 +1,6 @@
 package com.example.express_delivery_mobile.Service;
 
+import com.example.express_delivery_mobile.Model.Disputes;
 import com.example.express_delivery_mobile.Model.Mail;
 
 import java.util.List;
@@ -30,4 +31,9 @@ public interface MailClient {
     //Cancel package request
     @POST("cancel-package/{mailId}")
     Call<ResponseBody> cancelPackage(@Header("Authorization") String token, @Path("mailId") int mailId);
+
+    //Open dispute
+    @POST("open-dispute")
+    Call<ResponseBody> openDispute(@Header("Authorization") String token, @Body Disputes disputes);
+
 }

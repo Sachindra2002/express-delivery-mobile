@@ -27,16 +27,23 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.DiffUtil;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.example.express_delivery_mobile.AgentAcceptedMailsActivity;
 import com.example.express_delivery_mobile.AgentActivity;
+import com.example.express_delivery_mobile.DriverActivity;
+import com.example.express_delivery_mobile.FromYouActivity;
+import com.example.express_delivery_mobile.Model.Disputes;
 import com.example.express_delivery_mobile.Model.DriverDetail;
 import com.example.express_delivery_mobile.Model.Mail;
 import com.example.express_delivery_mobile.Model.User;
 import com.example.express_delivery_mobile.R;
 import com.example.express_delivery_mobile.Service.AgentClient;
+import com.example.express_delivery_mobile.Service.MailClient;
 import com.example.express_delivery_mobile.Service.RetrofitClientInstance;
 import com.example.express_delivery_mobile.TrackPackageActivity;
+import com.example.express_delivery_mobile.TransitListActivity;
 import com.example.express_delivery_mobile.ViewPackageAdminActivity;
 import com.example.express_delivery_mobile.ViewPackageAgentActivity;
+import com.example.express_delivery_mobile.ViewPackageDriverActivity;
 import com.google.android.material.dialog.MaterialAlertDialogBuilder;
 
 import org.json.JSONObject;
@@ -77,9 +84,11 @@ public class MailAdapter extends RecyclerView.Adapter<MailAdapter.ViewHolder> im
 
     private ProgressDialog mProgressDialog;
     private Spinner spinner;
+    private EditText description;
 
     //Agent Retrofit client
     AgentClient agentClient = RetrofitClientInstance.getRetrofitInstance().create(AgentClient.class);
+    MailClient mailClient = RetrofitClientInstance.getRetrofitInstance().create(MailClient.class);
 
     final Calendar myCalendar = Calendar.getInstance();
 
@@ -157,7 +166,7 @@ public class MailAdapter extends RecyclerView.Adapter<MailAdapter.ViewHolder> im
                         String searchString = charString.toLowerCase();
 
                         //Filter through fields and add to filtered list
-                        if (mail.getDescription().contains(searchString) || String.valueOf(mail.getMailId()).contains(charString)) {
+                        if (String.valueOf(mail.getMailId()).contains(charString)) {
                             filteredList.add(mail);
                         }
                     }
@@ -189,12 +198,17 @@ public class MailAdapter extends RecyclerView.Adapter<MailAdapter.ViewHolder> im
         if (userRole.equalsIgnoreCase("customer")) {
             if (filteredMails.get(position).getReceiverEmail().equals(email)) {
                 holder.senderName.setText(String.format(filteredMails.get(position).getUser().getFirstName() + " " + filteredMails.get(position).getUser().getLastName()));
-                if (filteredMails.get(position).getStatus().contains("Driver Accepted")) {
-                    holder.itemView.setOnClickListener(new View.OnClickListener() {
-                        @Override
-                        public void onClick(View view) {
-                            Intent intent = new Intent(context, TrackPackageActivity.class);
-                            intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                holder.itemView.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+                        Intent intent = new Intent(context, TrackPackageActivity.class);
+                        intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                        if (filteredMails.get(position).getDriverDetail() != null) {
+                            intent.putExtra("driverFirstName", filteredMails.get(position).getDriverDetail().getUser().getFirstName());
+                            intent.putExtra("driverLastName", filteredMails.get(position).getDriverDetail().getUser().getLastName());
+                            intent.putExtra("driverFirstName", filteredMails.get(position).getDriverDetail().getUser().getFirstName());
+                            intent.putExtra("driverVehicleNumber", filteredMails.get(position).getDriverDetail().getVehicle().getVehicleNumber());
+                            intent.putExtra("driverMobile", filteredMails.get(position).getDriverDetail().getUser().getPhoneNumber());
                             intent.putExtra("status", filteredMails.get(position).getStatus());
                             intent.putExtra("created_at", filteredMails.get(position).getCreatedAt().getTime());
                             intent.putExtra("trackId", filteredMails.get(position).getMailTracking().getTrackingId());
@@ -204,108 +218,70 @@ public class MailAdapter extends RecyclerView.Adapter<MailAdapter.ViewHolder> im
                             intent.putExtra("weight", filteredMails.get(position).getWeight());
                             intent.putExtra("parcelType", filteredMails.get(position).getParcelType());
                             intent.putExtra("pieces", filteredMails.get(position).getPieces());
-                            intent.putExtra("driverFirstName", filteredMails.get(position).getDriverDetail().getUser().getFirstName());
-                            intent.putExtra("driverLastName", filteredMails.get(position).getDriverDetail().getUser().getLastName());
-                            intent.putExtra("driverFirstName", filteredMails.get(position).getDriverDetail().getUser().getFirstName());
-                            intent.putExtra("driverVehicleNumber", filteredMails.get(position).getDriverDetail().getVehicle().getVehicleNumber());
-                            intent.putExtra("driverMobile", filteredMails.get(position).getDriverDetail().getUser().getPhoneNumber());
-                            context.startActivity(intent);
+                        } else {
+                            intent.putExtra("status", filteredMails.get(position).getStatus());
+                            intent.putExtra("created_at", filteredMails.get(position).getCreatedAt().getTime());
+                            intent.putExtra("trackId", filteredMails.get(position).getMailTracking().getTrackingId());
+                            intent.putExtra("pickUpAddress", filteredMails.get(position).getPickupAddress());
+                            intent.putExtra("dropOffAddress", filteredMails.get(position).getReceiverAddress());
+                            intent.putExtra("description", filteredMails.get(position).getDescription());
+                            intent.putExtra("weight", filteredMails.get(position).getWeight());
+                            intent.putExtra("parcelType", filteredMails.get(position).getParcelType());
+                            intent.putExtra("pieces", filteredMails.get(position).getPieces());
                         }
-                    });
-                } else if (filteredMails.get(position).getStatus().contains("Cancelled")) {
-                    holder.itemView.setOnClickListener(new View.OnClickListener() {
-                        @Override
-                        public void onClick(View view) {
-                            Intent intent = new Intent(context, TrackPackageActivity.class);
-                            intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-                            if (filteredMails.get(position).getDriverDetail() != null) {
-                                intent.putExtra("driverFirstName", filteredMails.get(position).getDriverDetail().getUser().getFirstName());
-                                intent.putExtra("driverLastName", filteredMails.get(position).getDriverDetail().getUser().getLastName());
-                                intent.putExtra("driverFirstName", filteredMails.get(position).getDriverDetail().getUser().getFirstName());
-                                intent.putExtra("driverVehicleNumber", filteredMails.get(position).getDriverDetail().getVehicle().getVehicleNumber());
-                                intent.putExtra("driverMobile", filteredMails.get(position).getDriverDetail().getUser().getPhoneNumber());
-                                intent.putExtra("status", filteredMails.get(position).getStatus());
-                                intent.putExtra("created_at", filteredMails.get(position).getCreatedAt().getTime());
-                                intent.putExtra("trackId", filteredMails.get(position).getMailTracking().getTrackingId());
-                                intent.putExtra("pickUpAddress", filteredMails.get(position).getPickupAddress());
-                                intent.putExtra("dropOffAddress", filteredMails.get(position).getReceiverAddress());
-                                intent.putExtra("description", filteredMails.get(position).getDescription());
-                                intent.putExtra("weight", filteredMails.get(position).getWeight());
-                                intent.putExtra("parcelType", filteredMails.get(position).getParcelType());
-                                intent.putExtra("pieces", filteredMails.get(position).getPieces());
-                            } else {
-                                intent.putExtra("status", filteredMails.get(position).getStatus());
-                                intent.putExtra("created_at", filteredMails.get(position).getCreatedAt().getTime());
-                                intent.putExtra("trackId", filteredMails.get(position).getMailTracking().getTrackingId());
-                                intent.putExtra("pickUpAddress", filteredMails.get(position).getPickupAddress());
-                                intent.putExtra("dropOffAddress", filteredMails.get(position).getReceiverAddress());
-                                intent.putExtra("description", filteredMails.get(position).getDescription());
-                                intent.putExtra("weight", filteredMails.get(position).getWeight());
-                                intent.putExtra("parcelType", filteredMails.get(position).getParcelType());
-                                intent.putExtra("pieces", filteredMails.get(position).getPieces());
-                            }
-
-                            context.startActivity(intent);
-                        }
-                    });
-                } else if (filteredMails.get(position).getStatus().contains("Assigned")) {
-                    holder.itemView.setOnClickListener(new View.OnClickListener() {
-                        @Override
-                        public void onClick(View view) {
-                            Intent intent = new Intent(context, TrackPackageActivity.class);
-                            intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-                            if (filteredMails.get(position).getDriverDetail() != null) {
-                                intent.putExtra("driverFirstName", filteredMails.get(position).getDriverDetail().getUser().getFirstName());
-                                intent.putExtra("driverLastName", filteredMails.get(position).getDriverDetail().getUser().getLastName());
-                                intent.putExtra("driverVehicleNumber", filteredMails.get(position).getDriverDetail().getVehicle().getVehicleNumber());
-                                intent.putExtra("driverMobile", filteredMails.get(position).getDriverDetail().getUser().getPhoneNumber());
-                                intent.putExtra("status", filteredMails.get(position).getStatus());
-                                intent.putExtra("created_at", filteredMails.get(position).getCreatedAt().getTime());
-                                intent.putExtra("trackId", filteredMails.get(position).getMailTracking().getTrackingId());
-                                intent.putExtra("pickUpAddress", filteredMails.get(position).getPickupAddress());
-                                intent.putExtra("dropOffAddress", filteredMails.get(position).getReceiverAddress());
-                                intent.putExtra("description", filteredMails.get(position).getDescription());
-                                intent.putExtra("weight", filteredMails.get(position).getWeight());
-                                intent.putExtra("parcelType", filteredMails.get(position).getParcelType());
-                                intent.putExtra("pieces", filteredMails.get(position).getPieces());
-                            } else {
-                                intent.putExtra("status", filteredMails.get(position).getStatus());
-                                intent.putExtra("created_at", filteredMails.get(position).getCreatedAt().getTime());
-                                intent.putExtra("trackId", filteredMails.get(position).getMailTracking().getTrackingId());
-                                intent.putExtra("pickUpAddress", filteredMails.get(position).getPickupAddress());
-                                intent.putExtra("dropOffAddress", filteredMails.get(position).getReceiverAddress());
-                                intent.putExtra("description", filteredMails.get(position).getDescription());
-                                intent.putExtra("weight", filteredMails.get(position).getWeight());
-                                intent.putExtra("parcelType", filteredMails.get(position).getParcelType());
-                                intent.putExtra("pieces", filteredMails.get(position).getPieces());
-                            }
-
-                            context.startActivity(intent);
-                        }
-                    });
-                }
+                        context.startActivity(intent);
+                    }
+                });
             } else {
                 holder._senderName.setText("To");
                 holder.senderName.setText(String.format(filteredMails.get(position).getReceiverFirstName() + " " + filteredMails.get(position).getReceiverLastName()));
-                if (filteredMails.get(position).getStatus().contains("Processing")) {
+                if (filteredMails.get(position).getStatus().equalsIgnoreCase("Processing")) {
                     holder.itemView.setOnClickListener(new View.OnClickListener() {
                         @Override
                         public void onClick(View view) {
-                            packageOptions(filteredMails.get(position).getMailId());
+                            cancelOrTrackPackage(filteredMails.get(position));
                         }
                     });
-                } else if (filteredMails.get(position).getStatus().contains("Driver Accepted")) {
+                } else if (filteredMails.get(position).getStatus().equalsIgnoreCase("Delivered")) {
                     holder.itemView.setOnClickListener(new View.OnClickListener() {
                         @Override
                         public void onClick(View view) {
-                            packageOptions2(filteredMails.get(position).getMailId());
+                            trackOrOpenDispute(filteredMails.get(position));
                         }
                     });
-                } else if (filteredMails.get(position).getStatus().contains("Accepted")) {
+                } else {
                     holder.itemView.setOnClickListener(new View.OnClickListener() {
                         @Override
                         public void onClick(View view) {
-                            packageOptions2(filteredMails.get(position).getMailId());
+                            Intent intent = new Intent(context, TrackPackageActivity.class);
+                            intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                            if (filteredMails.get(position).getDriverDetail() != null) {
+                                intent.putExtra("driverFirstName", filteredMails.get(position).getDriverDetail().getUser().getFirstName());
+                                intent.putExtra("driverLastName", filteredMails.get(position).getDriverDetail().getUser().getLastName());
+                                intent.putExtra("driverFirstName", filteredMails.get(position).getDriverDetail().getUser().getFirstName());
+                                intent.putExtra("driverVehicleNumber", filteredMails.get(position).getDriverDetail().getVehicle().getVehicleNumber());
+                                intent.putExtra("driverMobile", filteredMails.get(position).getDriverDetail().getUser().getPhoneNumber());
+                                intent.putExtra("status", filteredMails.get(position).getStatus());
+                                intent.putExtra("created_at", filteredMails.get(position).getCreatedAt().getTime());
+                                intent.putExtra("trackId", filteredMails.get(position).getMailTracking().getTrackingId());
+                                intent.putExtra("pickUpAddress", filteredMails.get(position).getPickupAddress());
+                                intent.putExtra("dropOffAddress", filteredMails.get(position).getReceiverAddress());
+                                intent.putExtra("description", filteredMails.get(position).getDescription());
+                                intent.putExtra("weight", filteredMails.get(position).getWeight());
+                                intent.putExtra("parcelType", filteredMails.get(position).getParcelType());
+                                intent.putExtra("pieces", filteredMails.get(position).getPieces());
+                            } else {
+                                intent.putExtra("status", filteredMails.get(position).getStatus());
+                                intent.putExtra("created_at", filteredMails.get(position).getCreatedAt().getTime());
+                                intent.putExtra("trackId", filteredMails.get(position).getMailTracking().getTrackingId());
+                                intent.putExtra("pickUpAddress", filteredMails.get(position).getPickupAddress());
+                                intent.putExtra("dropOffAddress", filteredMails.get(position).getReceiverAddress());
+                                intent.putExtra("description", filteredMails.get(position).getDescription());
+                                intent.putExtra("weight", filteredMails.get(position).getWeight());
+                                intent.putExtra("parcelType", filteredMails.get(position).getParcelType());
+                                intent.putExtra("pieces", filteredMails.get(position).getPieces());
+                            }
+                            context.startActivity(intent);
                         }
                     });
                 }
@@ -412,7 +388,7 @@ public class MailAdapter extends RecyclerView.Adapter<MailAdapter.ViewHolder> im
                         dialog.show();
                     }
                 });
-            } else if(filteredMails.get(position).getStatus().equalsIgnoreCase("In Transit")){
+            } else if (filteredMails.get(position).getStatus().equalsIgnoreCase("In Transit")) {
                 holder.itemView.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View view) {
@@ -539,8 +515,245 @@ public class MailAdapter extends RecyclerView.Adapter<MailAdapter.ViewHolder> im
                 }
             });
 
+        } else if (userRole.equalsIgnoreCase("driver")) {
+            holder._senderName.setText("Customer");
+            holder.senderName.setText(String.format(filteredMails.get(position).getUser().getFirstName() + " " + filteredMails.get(position).getUser().getLastName()));
+            holder.status.setText(filteredMails.get(position).getStatus());
+            holder.description.setText(filteredMails.get(position).getDescription());
+            holder.type.setText(filteredMails.get(position).getParcelType());
+            holder.weight.setText(filteredMails.get(position).getWeight() + "KG");
+            holder.status.setTextColor(Color.parseColor("#00B832"));
+            holder.itemView.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    Intent intent = new Intent(context, ViewPackageDriverActivity.class);
+                    intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                    intent.putExtra("mail_id", filteredMails.get(position).getMailId());
+                    intent.putExtra("package_description", filteredMails.get(position).getDescription());
+                    intent.putExtra("created_at", filteredMails.get(position).getCreatedAt().getTime());
+                    intent.putExtra("package_status", filteredMails.get(position).getStatus());
+                    intent.putExtra("drop_off_date", filteredMails.get(position).getDropOffDate());
+                    intent.putExtra("pick_up_date", filteredMails.get(position).getDate());
+                    intent.putExtra("weight", filteredMails.get(position).getWeight());
+                    intent.putExtra("parcel_type", filteredMails.get(position).getParcelType());
+                    intent.putExtra("receiver_name", filteredMails.get(position).getReceiverFirstName() + " " + filteredMails.get(position).getReceiverLastName());
+                    intent.putExtra("receiver_contact", filteredMails.get(position).getReceiverPhoneNumber());
+                    intent.putExtra("receiver_email", filteredMails.get(position).getReceiverEmail());
+                    intent.putExtra("payment_method", filteredMails.get(position).getPaymentMethod());
+                    intent.putExtra("total_cost", filteredMails.get(position).getTotalCost());
+                    intent.putExtra("pieces", filteredMails.get(position).getPieces());
+                    intent.putExtra("pick_up_address", filteredMails.get(position).getPickupAddress());
+                    intent.putExtra("drop_off_address", filteredMails.get(position).getReceiverAddress());
+                    intent.putExtra("customer_name", filteredMails.get(position).getUser().getFirstName() + " " + filteredMails.get(position).getUser().getLastName());
+                    intent.putExtra("customer_contact", filteredMails.get(position).getUser().getPhoneNumber());
+                    intent.putExtra("center_name", filteredMails.get(position).getServiceCentre().getCentre());
+                    intent.putExtra("center_address", filteredMails.get(position).getServiceCentre().getAddress());
+                    intent.putExtra("driver_name", filteredMails.get(position).getDriverDetail().getUser().getFirstName() + " " + filteredMails.get(position).getDriverDetail().getUser().getLastName());
+                    intent.putExtra("driver_contact", filteredMails.get(position).getDriverDetail().getUser().getPhoneNumber());
+                    context.startActivity(intent);
+                }
+            });
         }
 
+    }
+
+    private void trackOrOpenDispute(Mail mail) {
+        MaterialAlertDialogBuilder builder = new MaterialAlertDialogBuilder(context);
+        builder.setTitle("Package ID #" + mail.getMailId());
+
+        //When "track" button is clicked
+        builder.setPositiveButton("Track", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialogInterface, int i) {
+                Intent intent = new Intent(context, TrackPackageActivity.class);
+                intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                if (mail.getDriverDetail() != null) {
+                    intent.putExtra("driverFirstName", mail.getDriverDetail().getUser().getFirstName());
+                    intent.putExtra("driverLastName", mail.getDriverDetail().getUser().getLastName());
+                    intent.putExtra("driverFirstName", mail.getDriverDetail().getUser().getFirstName());
+                    intent.putExtra("driverVehicleNumber", mail.getDriverDetail().getVehicle().getVehicleNumber());
+                    intent.putExtra("driverMobile", mail.getDriverDetail().getUser().getPhoneNumber());
+                    intent.putExtra("status", mail.getStatus());
+                    intent.putExtra("created_at", mail.getCreatedAt().getTime());
+                    intent.putExtra("trackId", mail.getMailTracking().getTrackingId());
+                    intent.putExtra("pickUpAddress", mail.getPickupAddress());
+                    intent.putExtra("dropOffAddress", mail.getReceiverAddress());
+                    intent.putExtra("description", mail.getDescription());
+                    intent.putExtra("weight", mail.getWeight());
+                    intent.putExtra("parcelType", mail.getParcelType());
+                    intent.putExtra("pieces", mail.getPieces());
+                } else {
+                    intent.putExtra("status", mail.getStatus());
+                    intent.putExtra("created_at", mail.getCreatedAt().getTime());
+                    intent.putExtra("trackId", mail.getMailTracking().getTrackingId());
+                    intent.putExtra("pickUpAddress", mail.getPickupAddress());
+                    intent.putExtra("dropOffAddress", mail.getReceiverAddress());
+                    intent.putExtra("description", mail.getDescription());
+                    intent.putExtra("weight", mail.getWeight());
+                    intent.putExtra("parcelType", mail.getParcelType());
+                    intent.putExtra("pieces", mail.getPieces());
+                }
+                context.startActivity(intent);
+            }
+        });
+
+        //When open dispute button is clicked
+        builder.setNegativeButton("Open Dispute", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                handleOpenDispute(mail);
+            }
+        });
+
+        builder.show();
+
+    }
+
+    private void handleOpenDispute(Mail mail) {
+        AlertDialog.Builder mBuilder = new AlertDialog.Builder(context, R.style.MyAlertDialogTheme);
+        LayoutInflater inflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+        View v = inflater.inflate(R.layout.open_dispute_dialog, null);
+        mBuilder.setTitle("Open Dispute");
+        spinner = (Spinner) v.findViewById(R.id.dispute_reason);
+        description = (EditText) v.findViewById(R.id.dispute_description);
+        ArrayAdapter<CharSequence> adapter = ArrayAdapter.createFromResource(context, R.array.dispute_types, android.R.layout.simple_spinner_item);
+        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        spinner.setAdapter(adapter);
+        mBuilder.setPositiveButton("Submit", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialogInterface, int i) {
+                openDispute(mail);
+            }
+        });
+        mBuilder.setView(v);
+        AlertDialog dialog = mBuilder.create();
+        dialog.show();
+
+    }
+
+    private void openDispute(Mail mail) {
+        String _dispute_type = spinner.getSelectedItem().toString();
+        String _description = description.getText().toString();
+
+        Mail newMail = new Mail();
+        newMail.setMailId(mail.getMailId());
+
+        Disputes disputes = new Disputes();
+        disputes.setDisputeType(_dispute_type);
+        disputes.setDescription(_description);
+        disputes.setMail(newMail);
+
+        Call<ResponseBody> call = mailClient.openDispute(token, disputes);
+
+        //Show progress
+        mProgressDialog.setMessage("Opening Dispute...");
+        mProgressDialog.show();
+
+        call.enqueue(new Callback<ResponseBody>() {
+            @Override
+            public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
+                //Successfully accepted
+                if (response.code() == 200) {
+                    mProgressDialog.dismiss();
+                    Toast.makeText(context, "successfully opened dispute", Toast.LENGTH_SHORT).show();
+
+                } else {
+                    mProgressDialog.dismiss();
+                    Toast.makeText(context, "An error occurred", Toast.LENGTH_SHORT).show();
+                }
+            }
+
+            @Override
+            public void onFailure(Call<ResponseBody> call, Throwable t) {
+                mProgressDialog.dismiss();
+                Toast.makeText(context, "An error occurred", Toast.LENGTH_SHORT).show();
+            }
+        });
+
+    }
+
+
+    private void cancelOrTrackPackage(Mail mail) {
+        MaterialAlertDialogBuilder builder = new MaterialAlertDialogBuilder(context);
+        builder.setTitle("Package ID #" + mail.getMailId());
+
+        //When "track" button is clicked
+        builder.setPositiveButton("Track", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialogInterface, int i) {
+                Intent intent = new Intent(context, TrackPackageActivity.class);
+                intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                if (mail.getDriverDetail() != null) {
+                    intent.putExtra("driverFirstName", mail.getDriverDetail().getUser().getFirstName());
+                    intent.putExtra("driverLastName", mail.getDriverDetail().getUser().getLastName());
+                    intent.putExtra("driverFirstName", mail.getDriverDetail().getUser().getFirstName());
+                    intent.putExtra("driverVehicleNumber", mail.getDriverDetail().getVehicle().getVehicleNumber());
+                    intent.putExtra("driverMobile", mail.getDriverDetail().getUser().getPhoneNumber());
+                    intent.putExtra("status", mail.getStatus());
+                    intent.putExtra("created_at", mail.getCreatedAt().getTime());
+                    intent.putExtra("trackId", mail.getMailTracking().getTrackingId());
+                    intent.putExtra("pickUpAddress", mail.getPickupAddress());
+                    intent.putExtra("dropOffAddress", mail.getReceiverAddress());
+                    intent.putExtra("description", mail.getDescription());
+                    intent.putExtra("weight", mail.getWeight());
+                    intent.putExtra("parcelType", mail.getParcelType());
+                    intent.putExtra("pieces", mail.getPieces());
+                } else {
+                    intent.putExtra("status", mail.getStatus());
+                    intent.putExtra("created_at", mail.getCreatedAt().getTime());
+                    intent.putExtra("trackId", mail.getMailTracking().getTrackingId());
+                    intent.putExtra("pickUpAddress", mail.getPickupAddress());
+                    intent.putExtra("dropOffAddress", mail.getReceiverAddress());
+                    intent.putExtra("description", mail.getDescription());
+                    intent.putExtra("weight", mail.getWeight());
+                    intent.putExtra("parcelType", mail.getParcelType());
+                    intent.putExtra("pieces", mail.getPieces());
+                }
+                context.startActivity(intent);
+            }
+        });
+
+        //When cancel button is clicked
+        builder.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                handleCancelPackage(mail);
+            }
+        });
+
+        builder.show();
+
+    }
+
+    private void handleCancelPackage(Mail mail) {
+        Call<ResponseBody> call = mailClient.cancelPackage(token, mail.getMailId());
+
+        //Show progress
+        mProgressDialog.setMessage("Cancelling Request...");
+        mProgressDialog.show();
+
+        call.enqueue(new Callback<ResponseBody>() {
+            @Override
+            public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
+                mProgressDialog.dismiss();
+
+                //200 status code
+                if (response.code() == 200) {
+                    Toast.makeText(context, "Dispute submitted successfully!", Toast.LENGTH_SHORT).show();
+                    Intent intent = new Intent(context, FromYouActivity.class);
+                    intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                    context.startActivity(intent);
+                } else {
+                    Toast.makeText(context, "Something went wrong!", Toast.LENGTH_SHORT).show();
+                }
+            }
+
+            @Override
+            public void onFailure(Call<ResponseBody> call, Throwable t) {
+                mProgressDialog.dismiss();
+                Toast.makeText(context, "Something! went wrong" + t.toString(), Toast.LENGTH_SHORT).show();
+            }
+        });
     }
 
     private void handleChangeDriver(Mail mail) {
@@ -588,8 +801,9 @@ public class MailAdapter extends RecyclerView.Adapter<MailAdapter.ViewHolder> im
                 mProgressDialog.dismiss();
 
                 //200 status code
-                if (response.code() == 201) {
-                    Intent intent = new Intent(context, AgentActivity.class);
+                if (response.code() == 200) {
+                    Toast.makeText(context, "Driver Changed Successfully", Toast.LENGTH_SHORT).show();
+                    Intent intent = new Intent(context, TransitListActivity.class);
                     intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
                     context.startActivity(intent);
                 } else {
@@ -631,8 +845,9 @@ public class MailAdapter extends RecyclerView.Adapter<MailAdapter.ViewHolder> im
                 mProgressDialog.dismiss();
 
                 //200 status code
-                if (response.code() == 201) {
-                    Intent intent = new Intent(context, AgentActivity.class);
+                if (response.code() == 200) {
+                    Toast.makeText(context, "Successfully Assigned", Toast.LENGTH_SHORT).show();
+                    Intent intent = new Intent(context, AgentAcceptedMailsActivity.class);
                     intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
                     context.startActivity(intent);
                 } else {
@@ -697,6 +912,7 @@ public class MailAdapter extends RecyclerView.Adapter<MailAdapter.ViewHolder> im
             public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
                 //Successfully accepted
                 if (response.code() == 200) {
+                    mProgressDialog.dismiss();
                     Toast.makeText(context, "successfully rejected", Toast.LENGTH_SHORT).show();
 
                     //Direct to homepage
@@ -717,6 +933,7 @@ public class MailAdapter extends RecyclerView.Adapter<MailAdapter.ViewHolder> im
 
             @Override
             public void onFailure(Call<ResponseBody> call, Throwable t) {
+                mProgressDialog.dismiss();
                 Toast.makeText(context, "Something went wrong!", Toast.LENGTH_SHORT).show();
             }
         });
@@ -764,43 +981,6 @@ public class MailAdapter extends RecyclerView.Adapter<MailAdapter.ViewHolder> im
         SimpleDateFormat sdf = new SimpleDateFormat(myFormat, Locale.US);
 
         dropDate.setText(sdf.format(myCalendar.getTime()));
-    }
-
-    private void packageOptions2(int mailId) {
-        MaterialAlertDialogBuilder builder = new MaterialAlertDialogBuilder(context);
-        builder.setTitle("Package : " + mailId);
-
-        //When "Track" button is clicked
-        builder.setPositiveButton("Track", new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(DialogInterface dialogInterface, int i) {
-            }
-        });
-
-
-        builder.show();
-    }
-
-    private void packageOptions(int mailId) {
-        MaterialAlertDialogBuilder builder = new MaterialAlertDialogBuilder(context);
-        builder.setTitle("Package : " + mailId);
-
-        //When "Track" button is clicked
-        builder.setPositiveButton("Track", new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(DialogInterface dialogInterface, int i) {
-            }
-        });
-
-        //When "Cancel" button is clicked
-        builder.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(DialogInterface dialog, int which) {
-                dialog.cancel();
-            }
-        });
-
-        builder.show();
     }
 
     @Override

@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:background="@color/yellow"
+    android:padding="20dp">
+
+    <Spinner
+        android:id="@+id/dispute_reason"
+        android:layout_width="match_parent"
+        android:background="@drawable/buttons"
+        android:layout_height="50dp" />
+
+    <EditText
+        android:id="@+id/dispute_description"
+        android:layout_marginTop="5dp"
+        android:layout_width="match_parent"
+        android:layout_height="100dp"
+        android:gravity="top"
+        android:textColor="@color/black"
+        android:hint="Description"
+        android:ems="10"
+        android:padding="10dp"
+        android:textColorHint="@color/black"
+        android:background="@drawable/buttons"/>
+
+</LinearLayout>
