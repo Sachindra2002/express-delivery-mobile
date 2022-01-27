@@ -366,15 +366,6 @@
 
         </androidx.cardview.widget.CardView>
 
-        <Button
-            android:layout_width="match_parent"
-            android:layout_height="50dp"
-            android:layout_below="@+id/card_3"
-            android:layout_marginLeft="60dp"
-            android:layout_marginTop="30dp"
-            android:layout_marginRight="60dp"
-            android:background="@drawable/buttons"
-            android:text="Settings" />
 
     </RelativeLayout>
 

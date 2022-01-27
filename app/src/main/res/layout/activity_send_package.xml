@@ -343,11 +343,41 @@
                 android:textColor="@color/black"
                 android:textColorHint="@color/black" />
 
+            <TextView
+                android:id="@+id/driver_center_list"
+                android:layout_width="match_parent"
+                android:layout_height="30dp"
+                android:layout_below="@id/total_cost"
+                android:layout_marginStart="20dp"
+                android:layout_marginTop="15dp"
+                android:layout_marginEnd="15dp"
+                android:layout_marginBottom="0dp"
+                android:gravity="left"
+                android:text="Select Nearest Service Center"
+                android:textColor="@color/black"
+                android:textSize="18sp"
+                android:textStyle="bold" />
+
+            <Spinner
+                android:id="@+id/center"
+                android:layout_width="match_parent"
+                android:layout_height="50dp"
+                android:layout_below="@+id/driver_center_list"
+                android:layout_marginStart="20dp"
+                android:layout_marginTop="5dp"
+                android:layout_marginEnd="20dp"
+                android:layout_marginBottom="5dp"
+                android:background="@drawable/input_field"
+                android:ems="10"
+                android:padding="10sp"
+                android:textColor="@color/black"
+                android:textColorHint="@color/black" />
+
             <Button
                 android:id="@+id/button_send_package"
                 android:layout_width="match_parent"
                 android:layout_height="45dp"
-                android:layout_below="@id/total_cost"
+                android:layout_below="@id/center"
                 android:layout_margin="40dp"
                 android:layout_marginStart="40dp"
                 android:layout_marginTop="40dp"

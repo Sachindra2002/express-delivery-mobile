@@ -2,13 +2,30 @@
 <menu xmlns:android="http://schemas.android.com/apk/res/android">
     <item android:title="APPLICATION">
         <menu>
-
+            <item
+                android:id="@+id/nav_home_customer"
+                android:icon="@drawable/ic_baseline_home_24"
+                android:title="@string/home" />
+            <item
+                android:id="@+id/nav_from_you"
+                android:icon="@drawable/nav_boxes"
+                android:title="From You" />
+            <item
+                android:id="@+id/nav_for_you"
+                android:icon="@drawable/nav_people"
+                android:title="For You" />
         </menu>
     </item>
     <item android:title="ACCOUNT">
         <menu>
-            <item android:title="@string/settings" android:icon="@drawable/ic_baseline_settings_24" android:id="@+id/nav_settings"/>
-            <item android:title="@string/logout" android:icon="@drawable/ic_log_out" android:id="@+id/nav_logout"/>
+            <item
+                android:id="@+id/nav_settings"
+                android:icon="@drawable/ic_baseline_settings_24"
+                android:title="Profile" />
+            <item
+                android:id="@+id/nav_logout"
+                android:icon="@drawable/ic_log_out"
+                android:title="@string/logout" />
         </menu>
     </item>
 </menu>

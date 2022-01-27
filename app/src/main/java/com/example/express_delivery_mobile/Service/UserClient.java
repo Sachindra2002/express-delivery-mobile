@@ -28,4 +28,8 @@ public interface UserClient {
     //Change Password
     @POST("auth/change-password")
     Call<ResponseBody> changePassword(@Header("Authorization") String token, @Body ChangePasswordRequest changePasswordRequest);
+
+    //Change Password
+    @POST("change-phone-number")
+    Call<ResponseBody> changePhoneNumber(@Header("Authorization") String token, @Body User user);
 }

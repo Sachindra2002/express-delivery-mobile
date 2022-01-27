@@ -11,8 +11,12 @@ import com.example.express_delivery_mobile.AdminDriverListActivity;
 import com.example.express_delivery_mobile.AdminPackageListActivity;
 import com.example.express_delivery_mobile.AgentDriverListActivity;
 import com.example.express_delivery_mobile.AgentListActivity;
+import com.example.express_delivery_mobile.CustomerProfileActivity;
 import com.example.express_delivery_mobile.DisputesActivity;
 import com.example.express_delivery_mobile.EditAdminDetailsActivity;
+import com.example.express_delivery_mobile.ForYouActivity;
+import com.example.express_delivery_mobile.FromYouActivity;
+import com.example.express_delivery_mobile.MainActivity;
 import com.example.express_delivery_mobile.NewShipmentsActivity;
 import com.example.express_delivery_mobile.R;
 import com.example.express_delivery_mobile.ServiceCenterListActivity;
@@ -26,6 +30,30 @@ public class NavHandler {
             case R.id.nav_logout: {
                 //Logout Button
                 AuthHandler.logout(context);
+                break;
+            }
+            case R.id.nav_for_you: {
+                Intent intent = new Intent(context, ForYouActivity.class);
+                intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                context.startActivity(intent);
+                break;
+            }
+            case R.id.nav_from_you: {
+                Intent intent = new Intent(context, FromYouActivity.class);
+                intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                context.startActivity(intent);
+                break;
+            }
+            case R.id.nav_settings: {
+                Intent intent = new Intent(context, CustomerProfileActivity.class);
+                intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                context.startActivity(intent);
+                break;
+            }
+            case R.id.nav_home_customer: {
+                Intent intent = new Intent(context, MainActivity.class);
+                intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                context.startActivity(intent);
                 break;
             }
         }

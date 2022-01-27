@@ -30,6 +30,8 @@ import androidx.core.view.GravityCompat;
 import androidx.drawerlayout.widget.DrawerLayout;
 
 import com.example.express_delivery_mobile.Model.Mail;
+import com.example.express_delivery_mobile.Model.ServiceCentre;
+import com.example.express_delivery_mobile.Service.AdminClient;
 import com.example.express_delivery_mobile.Service.DriverClient;
 import com.example.express_delivery_mobile.Service.MailClient;
 import com.example.express_delivery_mobile.Service.RetrofitClientInstance;
@@ -40,7 +42,9 @@ import com.google.android.material.navigation.NavigationView;
 import org.json.JSONObject;
 
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.List;
 import java.util.Locale;
 
 import okhttp3.ResponseBody;
@@ -50,7 +54,7 @@ import retrofit2.Response;
 
 public class SendPackageActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener {
     EditText receiverFirstName, receiverLastName, receiverPhoneNumber, receiverEmail, weight, pieces, _date, _time, description, receiverAddress, pickupAddress, totalCost;
-    Spinner receiverCity, typeOfParcel, paymentMethod;
+    Spinner receiverCity, typeOfParcel, paymentMethod, center;
     Button sendParcel;
 
     DatePickerDialog datePickerDialog;
@@ -60,6 +64,12 @@ public class SendPackageActivity extends AppCompatActivity implements Navigation
     private NavigationView mNavigationView;
     private ProgressDialog mProgressDialog;
 
+    //Dropdown attributes
+    private List<String> centers = new ArrayList<>();
+    private List<Integer> center_ids = new ArrayList<>();
+
+    private boolean centersLoaded;
+
     private String token;
     private String email;
     private String firstName;
@@ -67,6 +77,7 @@ public class SendPackageActivity extends AppCompatActivity implements Navigation
 
     //Mail Retrofit client
     MailClient mailClient = RetrofitClientInstance.getRetrofitInstance().create(MailClient.class);
+    AdminClient adminClient = RetrofitClientInstance.getRetrofitInstance().create(AdminClient.class);
     final Calendar myCalendar = Calendar.getInstance();
 
     @Override
@@ -100,6 +111,7 @@ public class SendPackageActivity extends AppCompatActivity implements Navigation
         typeOfParcel = findViewById(R.id.parcel_type);
         paymentMethod = findViewById(R.id.payment_method);
         sendParcel = findViewById(R.id.button_send_package);
+        center = findViewById(R.id.center);
         mProgressDialog = new ProgressDialog(this);
 
         ArrayAdapter<CharSequence> adapter = ArrayAdapter.createFromResource(this, R.array.receiver_city, android.R.layout.simple_spinner_item);
@@ -207,6 +219,12 @@ public class SendPackageActivity extends AppCompatActivity implements Navigation
 
         weight.addTextChangedListener(inputTextWatcher);
 
+        //Show progress
+        mProgressDialog.setMessage("Setting up form...");
+        mProgressDialog.show();
+
+        setupCenterDropdown();
+
     }
 
     private void calculateCost() {
@@ -235,7 +253,7 @@ public class SendPackageActivity extends AppCompatActivity implements Navigation
 
     private void submitParcel() {
         String _receiverFirstName, _receiverLastName, _receiverPhoneNumber, _receiverEmail, _weight, _pieces, __date, __time, _description, _receiverAddress,
-                _pickupAddress, _totalCost, _receiverCity, _typeOfParcel, _paymentMethod;
+                _pickupAddress, _totalCost, _receiverCity, _typeOfParcel, _paymentMethod, _center;
 
         _receiverFirstName = receiverFirstName.getText().toString();
         _receiverLastName = receiverLastName.getText().toString();
@@ -252,6 +270,7 @@ public class SendPackageActivity extends AppCompatActivity implements Navigation
         _receiverCity = receiverCity.getSelectedItem().toString();
         _typeOfParcel = typeOfParcel.getSelectedItem().toString();
         _paymentMethod = paymentMethod.getSelectedItem().toString();
+        _center = center.getSelectedItem().toString();
 
         if (TextUtils.isEmpty(_receiverFirstName) || TextUtils.isEmpty(_receiverLastName) || TextUtils.isEmpty(_receiverPhoneNumber) || TextUtils.isEmpty(_receiverEmail)
                 || TextUtils.isEmpty(_weight) || TextUtils.isEmpty(_pieces) || TextUtils.isEmpty(__date) || TextUtils.isEmpty(__time) || TextUtils.isEmpty(_description) ||
@@ -259,7 +278,27 @@ public class SendPackageActivity extends AppCompatActivity implements Navigation
             Toast.makeText(this, "Please enter valid data!", Toast.LENGTH_SHORT).show();
         } else {
             //Create mail object
-            Mail mail = new Mail(_pickupAddress, _receiverAddress, _receiverFirstName, _receiverLastName, _receiverPhoneNumber, _receiverEmail, _receiverCity, _typeOfParcel, _weight, _pieces, _paymentMethod, __date, __time, _totalCost, _description);
+            ServiceCentre serviceCentre = new ServiceCentre();
+            serviceCentre.setCentreId(center_ids.get(centers.indexOf(_center)));
+
+            Mail mail = new Mail();
+            mail.setReceiverFirstName(_receiverFirstName);
+            mail.setReceiverLastName(_receiverLastName);
+            mail.setReceiverPhoneNumber(_receiverPhoneNumber);
+            mail.setReceiverEmail(_receiverEmail);
+            mail.setWeight(_weight);
+            mail.setPieces(_pieces);
+            mail.setDate(__date);
+            mail.setTime(__time);
+            mail.setDescription(_description);
+            mail.setReceiverAddress(_receiverAddress);
+            mail.setPickupAddress(_pickupAddress);
+            mail.setTotalCost(_totalCost);
+            mail.setReceiverCity(_receiverCity);
+            mail.setParcelType(_typeOfParcel);
+            mail.setPaymentMethod(_paymentMethod);
+            mail.setServiceCentre(serviceCentre);
+
             Call<ResponseBody> call = mailClient.sendPackage(token, mail);
 
             //Show progress
@@ -297,6 +336,43 @@ public class SendPackageActivity extends AppCompatActivity implements Navigation
         }
 
 
+    }
+
+    private void setupCenterDropdown() {
+        Call<List<ServiceCentre>> call = adminClient.getServiceCenters(token);
+
+        call.enqueue(new Callback<List<ServiceCentre>>() {
+            @Override
+            public void onResponse(Call<List<ServiceCentre>> call, Response<List<ServiceCentre>> response) {
+                List<ServiceCentre> centerList = response.body();
+                if (centerList != null) {
+
+                    //Configure drop down
+                    for (ServiceCentre center : centerList) {
+                        centers.add(center.getCentre());
+                        center_ids.add(center.getCentreId());
+                    }
+
+                    //Set Adapter for dropdown
+                    ArrayAdapter<String> adapter = new ArrayAdapter<>(SendPackageActivity.this, android.R.layout.simple_spinner_item, centers);
+                    adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+                    center.setAdapter(adapter);
+                    centersLoaded = true;
+
+                    if (centersLoaded) mProgressDialog.dismiss();
+
+                } else {
+                    Toast.makeText(SendPackageActivity.this, "Something went wrong!", Toast.LENGTH_SHORT).show();
+                    mProgressDialog.dismiss();
+                }
+            }
+
+            @Override
+            public void onFailure(Call<List<ServiceCentre>> call, Throwable t) {
+                Toast.makeText(SendPackageActivity.this, "Something went wrong!", Toast.LENGTH_SHORT).show();
+                mProgressDialog.dismiss();
+            }
+        });
     }
 
     @Override

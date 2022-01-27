@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:background="@color/yellow"
+    android:padding="20dp">
+
+    <EditText
+        android:id="@+id/new_phone_number"
+        android:layout_width="match_parent"
+        android:background="@drawable/buttons"
+        android:gravity="top"
+        android:textColor="@color/black"
+        android:ems="10"
+        android:padding="10dp"
+        android:inputType="number"
+        android:textColorHint="@color/black"
+        android:hint="Enter new Phone number"
+        android:layout_height="50dp" />
+
+</LinearLayout>
