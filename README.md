@@ -8,5 +8,4 @@ Native android application for a courier/parcel delivery system
 
 ### Guest
 
-![guest](https://user-images.githubusercontent.com/52739523/155837757-788bca15-56fb-4807-a1e9-a5f30a580eee.png)
-
+![guest](https://user-images.githubusercontent.com/52739523/155849955-c4884b19-7a55-4892-8490-83a427a4a66e.png)
